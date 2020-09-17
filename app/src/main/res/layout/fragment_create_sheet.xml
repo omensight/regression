@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="createSheetViewModel"
+            type="com.alphemsoft.education.regression.viewmodel.CreateSheetViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/big_spacing"
+        android:layout_marginStart="@dimen/big_spacing"
+        android:layout_marginEnd="@dimen/big_spacing"
+        android:layout_marginTop="@dimen/big_spacing"
+        >
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/til_type"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            style="@style/App.Theme.AppCompatSpinner"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_label"
+            style="@style/App.Theme.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/til_type"
+            android:layout_marginTop="@dimen/big_spacing">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/regression_label"
+                android:inputType="textCapSentences"
+                android:text="@={createSheetViewModel.newSheet.name}"
+                app:emptyError="@{createSheetViewModel.newSheet.name}"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_x_label"
+            style="@style/App.Theme.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="@id/til_label"
+            app:layout_constraintRight_toRightOf="@id/til_label"
+            app:layout_constraintTop_toBottomOf="@id/til_label"
+            android:layout_marginTop="@dimen/big_spacing">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_x_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/regression_x_label"
+                android:inputType="textCapSentences"
+                android:text="@={createSheetViewModel.newSheet.xLabel}"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_y_label"
+            style="@style/App.Theme.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="@id/til_label"
+            app:layout_constraintRight_toRightOf="@id/til_label"
+            app:layout_constraintTop_toBottomOf="@id/til_x_label"
+            android:layout_marginTop="@dimen/big_spacing">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_y_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/regression_y_label"
+                android:inputType="textCapSentences"
+                android:text="@={createSheetViewModel.newSheet.yLabel}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

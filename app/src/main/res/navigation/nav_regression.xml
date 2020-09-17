@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_regression"
+    app:startDestination="@id/destination_sheet_list">
+
+    <fragment
+        android:id="@+id/destination_sheet_list"
+        android:name="com.alphemsoft.education.regression.ui.fragment.SheetListFragment"
+        android:label="SheetListFragment"
+        tools:layout="@layout/fragment_sheet_list">
+        <action
+            android:id="@+id/action_data_sheet_detail"
+            app:destination="@id/destination_data_sheet" />
+        <action
+            android:id="@+id/action_create_sheet"
+            app:destination="@id/destination_create_sheet" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_data_sheet"
+        android:name="com.alphemsoft.education.regression.ui.fragment.DataSheetFragment"
+        android:label="DataSheetFragment"
+        tools:layout="@layout/fragment_data_sheet">
+        <argument
+            android:name="sheetId"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_results"
+            app:destination="@id/destination_result" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_create_sheet"
+        android:name="com.alphemsoft.education.regression.ui.fragment.CreateSheetFragment"
+        android:label="CreateSheetFragment"
+        tools:layout="@layout/fragment_create_sheet">
+
+        <action
+            android:id="@+id/action_data_sheet_detail"
+            app:destination="@id/destination_data_sheet" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_result"
+        android:name="com.alphemsoft.education.regression.ui.fragment.ResultFragment"
+        android:label="ResultFragment"
+        tools:layout="@layout/fragment_results">
+        <argument
+            android:name="regressionId"
+            app:argType="long"
+            app:nullable="false"
+            />
+        <action
+            android:id="@+id/action_show_graph"
+            app:destination="@id/destination_show_graph" />
+    </fragment>
+    <fragment
+        android:id="@+id/destination_show_graph"
+        android:name="com.alphemsoft.education.regression.ui.fragment.GraphFragment"
+        android:label="GraphFragment"
+        tools:layout="@layout/fragment_graph">
+        <argument
+            android:name="sheetId"
+            app:argType="long"
+            app:nullable="false"/>
+    </fragment>
+</navigation>

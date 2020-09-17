@@ -1,0 +1,88 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+        <item name="colorPrimary">@color/primaryDarkColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
+        <item name="colorOnPrimary">#000</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">#004D40</item>
+        <item name="colorOnSecondary">#806410</item>
+        <item name="colorError">#F44336</item>
+        <item name="colorOnError">#810000</item>
+        <item name="colorSurface">#558c2f</item>
+        <item name="colorOnSurface">#252424</item><!-- -->
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorOnBackground">#000</item>
+        <item name="android:textColorPrimary">#000</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/primaryDarkColor</item>
+        <item name="actionModeCloseButtonStyle">@style/ActionModeCloseButtonStyle</item>
+        <item name="titleTextColor">@android:color/white</item>
+    </style>
+
+    <style name="ActionModeCloseButtonStyle" parent="TextAppearance.AppCompat.Button">
+        <item name="android:tint">@android:color/white</item>
+    </style>
+
+    <color name="background">#F3FFFFFF</color>
+    <color name="colorPrimaryVariant">#8B255E00</color>
+    <color name="titleTextAppearance">#fff</color>
+
+<!--    <color name="primaryColor">#558c2f</color>-->
+<!--    <color name="primaryLightColor">#85bc5c</color>-->
+<!--    <color name="primaryDarkColor">#255e00</color>-->
+<!--    <color name="secondaryColor">#F44336</color>-->
+<!--    <color name="secondaryLightColor">#E57373</color>-->
+<!--    <color name="secondaryDarkColor">#D32F2F</color>-->
+<!--    <color name="primaryTextColor">#99000000</color>-->
+<!--    <color name="secondaryTextColor">#6F000000</color>-->
+    <color name="primaryColor">#004C40</color>
+
+    <color name="primaryLightColor">#80e27e</color>
+
+    <color name="primaryDarkColor">#004C40</color>
+
+    <color name="secondaryColor">#2e7d32</color>
+
+    <color name="secondaryLightColor">#60ad5e</color>
+
+    <color name="secondaryDarkColor">#005005</color>
+
+    <color name="primaryTextColor">#000000</color>
+
+    <color name="secondaryTextColor">#ffffff</color>
+
+    <style name="App.Theme.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintTextColor">?colorPrimaryVariant</item>
+        <item name="boxStrokeColor">@color/material_text_input_layout_outline_box</item>
+        <item name="theme">@style/TextInputCursorColor</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">2dp</item>
+        <item name="android:textColor">#000</item>
+    </style>
+
+    <style name="App.Theme.AppCompatSpinner" parent="Widget.AppCompat.Spinner">
+        <item name="backgroundTint">?attr/colorPrimary</item>
+    </style>
+
+    <style name="App.Theme.MaterialToolbar" parent="Widget.MaterialComponents.Toolbar">
+        <item name="titleTextColor">@color/titleTextAppearance</item>
+    </style>
+
+    <style name="App.Theme.MaterialTextViewSingleChar" parent="Widget.MaterialComponents.TextView">
+        <item name="background">@drawable/drawable_circle</item>
+        <item name="backgroundTint">@color/color_item_sheet_type</item>
+        <item name="android:textColor">@color/primaryColor</item>
+    </style>
+
+    <style name="TextInputCursorColor" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="colorControlActivated">#008798</item>
+    </style>
+    
+    <style name="App.Theme.BottomSheetDialogFragment" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="colorPrimaryDark">?android:colorPrimaryDark</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+</resources>

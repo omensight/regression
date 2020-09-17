@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_add_data_point"
+        android:title="@string/add_new_data_point"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/action_add_bunch"
+        android:title="@string/action_add_empty_data_points"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_add_box"/>
+
+    <item android:id="@+id/action_select"
+        android:title="@string/select"
+        android:icon="@drawable/ic_select"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/action_select_all"
+        android:title="@string/select_all"
+        android:icon="@drawable/ic_select_all"
+        app:showAsAction="always"/>
+
+    <item android:id="@+id/action_sweep_all"
+        android:title="@string/action_sweep_all"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_sweep_outline"/>
+
+</menu>

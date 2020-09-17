@@ -1,0 +1,63 @@
+package com.alphemsoft.education.regression.ui.activity
+
+import android.os.Build
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import androidx.navigation.findNavController
+import androidx.navigation.ui.onNavDestinationSelected
+import com.alphemsoft.education.regression.R
+import com.alphemsoft.education.regression.ui.base.BaseAppCompatActivity
+import com.google.android.gms.ads.formats.UnifiedNativeAd
+import com.google.android.material.appbar.MaterialToolbar
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.main_activity.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+@AndroidEntryPoint
+class MainActivity : BaseAppCompatActivity(true) {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.main_activity)
+        setupToolbar()
+    }
+
+
+
+    private fun setupToolbar() {
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar_main)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            toolbar.elevation
+        }
+        setSupportActionBar(toolbar)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return item.onNavDestinationSelected(findNavController(R.id.main_nav_host_fragment))
+                || super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main,menu)
+        return true
+    }
+
+    private fun changeAdLooper(unifiedNativeAds: List<UnifiedNativeAd>) {
+        coroutineHandler.foregroundScope.launch {
+            unifiedNativeAds.forEach { ad->
+                if (unifiedNativeAds.isNotEmpty()){
+                    ad_template_view.setNativeAd(ad)
+                }
+                delay(1000*60)
+            }
+            loadAds()
+        }
+    }
+
+    override fun onAdsLoaded(unifiedNativeAds: MutableList<UnifiedNativeAd>, adsChanged: Boolean) {
+        super.onAdsLoaded(unifiedNativeAds, adsChanged)
+        changeAdLooper(unifiedNativeAds)
+    }
+}

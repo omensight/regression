@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">Paging Test</string>
+    <string name="date">Date</string>
+    <string name="settings">Settings</string>
+    <string name="regression_list">Regression list</string>
+    <string name="regression_data">Data</string>
+    <string name="regression_report">Report</string>
+    <string name="regression_new">New</string>
+    <string name="regression_label">Label</string>
+    <string name="regression_x_label">X label (Can be empty)</string>
+    <string name="regression_y_label">Y label (Can be empty)</string>
+    <string name="regression_create">Create</string>
+    <string name="text_error_empty_field">Empty field</string>
+    <string name="sheet_type_linear">Linear</string>
+    <string name="select">Select</string>
+    <string name="select_all">Select all</string>
+    <string name="action_sweep_all">Sweep all</string>
+    <string name="add_new_data_point">Add new data point</string>
+    <string name="action_delete_selected">Delete selected</string>
+    <string name="action_copy_to_another">Copy to another sheet</string>
+    <string name="action_add_empty_data_points">Add empty data points</string>
+    <string name="error_invalid">Invalid field</string>
+    <string name="hint_number_of_data_points">Data point number</string>
+    <string name="description_add_data_points">Add data points</string>
+    <string name="action_validate_data">Validate</string>
+    <string name="action_validate_and_save">Validate and save</string>
+    <string name="error_not_enough_entries">You must have at least 3 entries</string>
+    <string name="error_invalid_data_points">Invalid data please check it</string>
+    <string name="saved">Saved</string>
+    <string name="formula_fit_line">Fit line</string>
+    <string name="a">A</string>
+    <string name="b">B</string>
+    <string name="r">R</string>
+    <string name="square_of_r">Square of R</string>
+    <string name="n">N</string>
+    <string name="sXX">Sxx</string>
+    <string name="sYY">Syy</string>
+    <string name="sXY">Sxy</string>
+    <string name="x_average">X average</string>
+    <string name="y_average">Y average</string>
+    <string name="sum_of_x">Sum of X</string>
+    <string name="sum_of_y">Sum of Y</string>
+    <string name="sum_of_xy_products">Sum of X*Y products</string>
+    <string name="sum_of_squares_of_x">Sum of squares of X</string>
+    <string name="sum_of_squares_of_y">Sum of squares of Y</string>
+    <string name="ln_x_average">LnX Average</string>
+    <string name="ln_y_average">LnY Average</string>
+    <string name="sum_of_ln_x">Sum of LnX</string>
+    <string name="sum_of_ln_y">Sum of LnY</string>
+    <string name="sum_of_ln_x_ln_y_products">Sum of LnX*LnY</string>
+    <string name="formula_fit_line_linear">Fit line</string>
+    <string name="show_plot">Show graph</string>
+    <string name="original_data">Original data</string>
+
+
+    <string-array name="regression_types">
+        <item>Linear</item>
+        <item>Potential</item>
+    </string-array>
+</resources>
