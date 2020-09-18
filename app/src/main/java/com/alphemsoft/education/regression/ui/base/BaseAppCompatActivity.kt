@@ -7,8 +7,10 @@ import androidx.core.content.ContextCompat
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.coroutines.CoroutineHandler
 import com.alphemsoft.education.regression.ui.OnAdLoadedListener
+import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.Job
@@ -47,6 +49,35 @@ abstract class BaseAppCompatActivity(private val supportsNativeAds: Boolean = fa
                 }
             }
         }
+        adLoaderBuilder.withAdListener(object: AdListener() {
+            override fun onAdClosed() {
+                super.onAdClosed()
+            }
+
+            override fun onAdFailedToLoad(p0: LoadAdError?) {
+                super.onAdFailedToLoad(p0)
+            }
+
+            override fun onAdLeftApplication() {
+                super.onAdLeftApplication()
+            }
+
+            override fun onAdOpened() {
+                super.onAdOpened()
+            }
+
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+            }
+
+            override fun onAdClicked() {
+                super.onAdClicked()
+            }
+
+            override fun onAdImpression() {
+                super.onAdImpression()
+            }
+        })
         adLoader = adLoaderBuilder.build()
     }
 

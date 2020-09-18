@@ -1,5 +1,6 @@
 package com.alphemsoft.education.regression.ui.fragment
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -47,10 +48,20 @@ class GraphFragment : AbstractGraphFragment() {
                 }
                 val originalLineDataSet =
                     LineDataSet(originalEntries, getString(R.string.original_data))
-                val calculatedData = LineDataSet(calculatedEntries, getString(R.string.formula_fit_line))
-                originalLineDataSet.setCircleColor(ContextCompat.getColor(requireContext(),
-                    R.color.color_original_data))
-                val lineData = LineData(originalLineDataSet, calculatedData)
+                val calculatedDataSet = LineDataSet(calculatedEntries, getString(R.string.formula_fit_line))
+                originalLineDataSet.apply {
+                    setCircleColor(ContextCompat.getColor(requireContext(),
+                        R.color.color_original_data))
+                    color = ContextCompat.getColor(requireContext(),
+                        R.color.color_original_data)
+                }
+                calculatedDataSet.apply {
+                    color = ContextCompat.getColor(requireContext(),
+                        R.color.color_calculated_data)
+                    setCircleColor(Color.TRANSPARENT)
+                    circleHoleColor = Color.TRANSPARENT
+                }
+                val lineData = LineData(originalLineDataSet, calculatedDataSet)
                 dataBinding.lineChartGraph.data = lineData
                 dataBinding.lineChartGraph.invalidate()
             }

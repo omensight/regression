@@ -8,5 +8,6 @@
     <color name="color_item_sheet_date_creation">#EFC358</color>
     <color name="color_item_action">#B3E5FC</color>
     <color name="item_textfield_background">#26A69A</color>
-    <color name="color_original_data">#125663</color>
+    <color name="color_original_data">#673AB7</color>
+    <color name="color_calculated_data">#F44336</color>
 </resources>

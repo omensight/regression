@@ -95,16 +95,12 @@ class LinearRegression() : Regression {
     }
 
     override fun getCalculatedPoints(): List<Pair<Double, Double>> {
+        val sortedData = data.sortedBy { it.x }
         val result = ArrayList<Pair<Double, Double>>()
-        val firstPoint = data.first()
-        val lastPoint = data.last()
-        val distance = firstPoint.x?.minus(lastPoint.x!!)?.toDouble()?.absoluteValue
-        val step = distance?.div(100)
-        for (i in 0 until 100) {
-            step?.times(i)?.let { step ->
-                result.add(Pair(firstPoint.x?.toDouble()!!+step,simpleRegression.predict(firstPoint.x?.toDouble()!!+step)))
-            }
-        }
+        val firstPoint = sortedData.first().x!!.toDouble()
+        val lastPoint = sortedData.last().x!!.toDouble()
+        result.add(Pair(firstPoint,simpleRegression.predict(firstPoint)))
+        result.add(Pair(lastPoint,simpleRegression.predict(lastPoint)))
         return result
     }
 }
