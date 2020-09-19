@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_import_csv_data"
+        android:title="@string/action_import_csv_data"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_import"/>
     <item android:id="@+id/action_validate_and_save"
         android:title="@string/action_validate_and_save"
         android:icon="@drawable/ic_content_save"
         app:showAsAction="always"/>
+
 </menu>

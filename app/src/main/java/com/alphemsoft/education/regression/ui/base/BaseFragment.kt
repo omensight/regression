@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alphemsoft.education.regression.coroutines.CoroutineHandler
+import com.alphemsoft.education.regression.data.model.AdEntity
 import com.alphemsoft.education.regression.ui.OnAdLoadedListener
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import kotlinx.coroutines.Job
@@ -68,7 +69,7 @@ abstract class BaseFragment<VDB : ViewDataBinding, VM : ViewModel>(
 
 
     @CallSuper
-    override fun onAdsLoaded(unifiedNativeAds: MutableList<UnifiedNativeAd>, adsChanged: Boolean) {
-        require(supportsNativeAds){"Load native ads not supported"}
+    override fun onAdsLoaded(unifiedNativeAds: List<AdEntity>, adsChanged: Boolean) {
+        require(supportsNativeAds){"Load native ads not supported by fragment"}
     }
 }

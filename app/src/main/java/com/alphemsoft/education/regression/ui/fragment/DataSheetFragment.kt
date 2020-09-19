@@ -1,5 +1,6 @@
 package com.alphemsoft.education.regression.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.viewModels
@@ -8,7 +9,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alphemsoft.education.regression.BR
+import com.alphemsoft.education.regression.constants.PREMIUM_REQUEST_IMPORT_DATA
 import com.alphemsoft.education.regression.R
+import com.alphemsoft.education.regression.constants.RESULT_IMPORT_DATA
 import com.alphemsoft.education.regression.databinding.FragmentDataSheetBinding
 import com.alphemsoft.education.regression.ui.SimpleFieldModelUi
 import com.alphemsoft.education.regression.ui.adapter.DataPointAdapter
@@ -16,22 +19,30 @@ import com.alphemsoft.education.regression.ui.adapter.itemdecoration.DividerItem
 import com.alphemsoft.education.regression.ui.base.BaseFragment
 import com.alphemsoft.education.regression.viewmodel.DataSheetViewModel
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.internal.bu
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVParser
+import java.io.BufferedInputStream
+import java.io.BufferedReader
+import java.io.Reader
+import java.nio.charset.Charset
 import javax.inject.Inject
 
 abstract class BaseDataSheetFragment : BaseFragment<FragmentDataSheetBinding, DataSheetViewModel>(
     layoutId = R.layout.fragment_data_sheet,
     viewModelId = BR.data_sheet_viewmodel,
     menuResourceId = R.menu.menu_data_sheet_detail,
-    true
 )
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class DataSheetFragment : BaseDataSheetFragment() {
+class DataSheetFragment : BaseDataSheetFragment(),
+    PremiumFeatureDialogFragment.OnPremiumDecisionListener {
     override val viewModel: DataSheetViewModel by viewModels()
     val args: DataSheetFragmentArgs by navArgs()
     private var actionMode: ActionMode? = null
@@ -42,6 +53,7 @@ class DataSheetFragment : BaseDataSheetFragment() {
 
     lateinit var singleFieldDataSheetFragment: SingleFieldDataSheetFragment
 
+    @ExperimentalCoroutinesApi
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setUpAdapter()
@@ -58,9 +70,9 @@ class DataSheetFragment : BaseDataSheetFragment() {
         )
         singleFieldDataSheetFragment.setModelUi(modelUi)
         singleFieldDataSheetFragment.setSimpleFieldListener(object : SimpleFieldListener<Int>{
-            override fun onFieldFilled(numberOfEmptyDataPoints: Int) {
+            override fun onFieldFilled(field: Int) {
                 coroutineHandler.backgroundScope.launch {
-                    viewModel.addTemporaryPoints(numberOfEmptyDataPoints, args.sheetId)
+                    viewModel.addTemporaryPoints(field, args.sheetId)
                 }
             }
         })
@@ -86,10 +98,16 @@ class DataSheetFragment : BaseDataSheetFragment() {
                 }
                 true
             }
+            R.id.action_import_csv_data->{
+                val fragment = PremiumFeatureDialogFragment()
+                fragment.show(childFragmentManager, this, PREMIUM_REQUEST_IMPORT_DATA, R.string.action_import_csv_data)
+                true
+            }
             else -> false
         }
     }
 
+    @ExperimentalCoroutinesApi
     private fun setupContextMenu() {
         actionCallback = object : ActionMode.Callback {
             override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
@@ -194,6 +212,37 @@ class DataSheetFragment : BaseDataSheetFragment() {
             viewModel.getDataPointList(args.sheetId).collectLatest {
                 dataPointAdapter.addNewItems(it)
             }
+        }
+    }
+
+    override fun onCancelSelected(requestId: Int) {
+
+    }
+
+    override fun onGetASubscriptionSelected(requestId: Int) {
+
+    }
+
+    override fun onRewardedVideoWatched(requestId: Int) {
+        when(requestId){
+            PREMIUM_REQUEST_IMPORT_DATA ->{
+                val intent = Intent(Intent.ACTION_GET_CONTENT)
+                intent.type = "text/csv"
+                startActivityForResult(intent, RESULT_IMPORT_DATA)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val uri = data?.data
+        uri?.let { safeUri->
+            val inputStream = requireActivity().contentResolver.openInputStream(safeUri)
+            val csvParser = CSVParser.parse(inputStream, Charset.defaultCharset(), CSVFormat.EXCEL)
+            csvParser.iterator().forEach {
+
+            }
+
         }
     }
 

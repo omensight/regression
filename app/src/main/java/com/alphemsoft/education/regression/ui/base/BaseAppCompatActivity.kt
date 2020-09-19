@@ -3,20 +3,16 @@ package com.alphemsoft.education.regression.ui.base
 import android.os.Bundle
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.coroutines.CoroutineHandler
+import com.alphemsoft.education.regression.data.model.AdEntity
 import com.alphemsoft.education.regression.ui.OnAdLoadedListener
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.formats.UnifiedNativeAd
-import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 abstract class BaseAppCompatActivity(private val supportsNativeAds: Boolean = false): AppCompatActivity(),
     OnAdLoadedListener {
@@ -33,6 +29,10 @@ abstract class BaseAppCompatActivity(private val supportsNativeAds: Boolean = fa
             addAdLoadListener(this)
         }
         setupNativeAds()
+    }
+
+    override fun onStart() {
+        super.onStart()
         loadAds()
     }
 
@@ -44,35 +44,33 @@ abstract class BaseAppCompatActivity(private val supportsNativeAds: Boolean = fa
                 unifiedNativeAds.add(it)
             }
             if (!adLoader.isLoading){
+                val ads = unifiedNativeAds.map {
+                    AdEntity().apply {
+                        unifiedNativeAd = it
+                    }
+                }
                 adLoadedListeners.forEach {
-                    it.onAdsLoaded(unifiedNativeAds, true)
+                    it.onAdsLoaded(ads, true)
                 }
             }
         }
+
+
+
         adLoaderBuilder.withAdListener(object: AdListener() {
-            override fun onAdClosed() {
-                super.onAdClosed()
-            }
 
             override fun onAdFailedToLoad(p0: LoadAdError?) {
                 super.onAdFailedToLoad(p0)
-            }
-
-            override fun onAdLeftApplication() {
-                super.onAdLeftApplication()
-            }
-
-            override fun onAdOpened() {
-                super.onAdOpened()
+                adLoadedListeners.forEach {
+                    val listOfAds = listOf(AdEntity())
+                    it.onAdsLoaded(listOfAds, true)
+                }
             }
 
             override fun onAdLoaded() {
                 super.onAdLoaded()
             }
 
-            override fun onAdClicked() {
-                super.onAdClicked()
-            }
 
             override fun onAdImpression() {
                 super.onAdImpression()
@@ -90,11 +88,24 @@ abstract class BaseAppCompatActivity(private val supportsNativeAds: Boolean = fa
     }
 
     fun addAdLoadListener(adLoadedListener: OnAdLoadedListener){
-        adLoadedListeners.add(adLoadedListener)
+        if (!adLoadedListeners.contains(adLoadedListener)){
+            adLoadedListeners.add(adLoadedListener)
+            val ads = if (unifiedNativeAds.isEmpty()){
+                listOf(AdEntity())
+            }else{
+                unifiedNativeAds.map {
+                    AdEntity().apply {
+                        unifiedNativeAd = it
+                    }
+                }
+            }
+            adLoadedListener.onAdsLoaded(ads,false)
+        }
     }
 
     @CallSuper
-    override fun onAdsLoaded(unifiedNativeAds: MutableList<UnifiedNativeAd>, adsChanged: Boolean) {
+    override fun onAdsLoaded(unifiedNativeAds: List<AdEntity>, adsChanged: Boolean) {
         require(supportsNativeAds){"Load native ads not supported"}
     }
+
 }

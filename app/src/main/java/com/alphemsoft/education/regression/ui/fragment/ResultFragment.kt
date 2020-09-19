@@ -17,7 +17,6 @@ import com.alphemsoft.education.regression.ui.adapter.ResultAdapter
 import com.alphemsoft.education.regression.ui.adapter.itemdecoration.DividerItemDecoration
 import com.alphemsoft.education.regression.ui.base.BaseFragment
 import com.alphemsoft.education.regression.viewmodel.ResultViewModel
-import com.google.android.gms.ads.formats.UnifiedNativeAd
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,7 +25,8 @@ import javax.inject.Inject
 abstract class AbstractResultFragment : BaseFragment<FragmentResultsBinding, ResultViewModel>(
     layoutId = R.layout.fragment_results,
     viewModelId = BR.resultViewModel,
-    menuResourceId = R.menu.menu_result
+    menuResourceId = R.menu.menu_result,
+    true
 )
 
 @AndroidEntryPoint
@@ -40,17 +40,9 @@ class ResultFragment : AbstractResultFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupResultList()
-        setupDataPoints()
     }
 
-    private fun setupDataPoints() {
-        coroutineHandler.foregroundScope.launch {
-            refreshResultList()
-        }
-    }
-
-    private suspend fun refreshResultList() {
-        val unifiedNativeAds = getUnifiedNativeAds()
+    private suspend fun refreshResultList(unifiedNativeAds: List<AdEntity>) {
         if (unifiedNativeAds.isEmpty()) return
         val sheet: Sheet = viewModel.getSheet(args.regressionId)
         val regression = RegressionFactory.getRegression(sheet.type)
@@ -63,7 +55,7 @@ class ResultFragment : AbstractResultFragment() {
         results.forEachIndexed { index, result ->
             if (index % 5 == 0 && unifiedNativeAds.isNotEmpty() && index > 0) {
                 val adEntity = AdEntity()
-                adEntity.unifiedNativeAd = unifiedNativeAds[adIndex++]
+                adEntity.unifiedNativeAd = unifiedNativeAds[adIndex++].unifiedNativeAd
                 resultsWithAds.add(adEntity)
                 if (adIndex > unifiedNativeAds.size -1){
                     adIndex = 0
@@ -94,10 +86,10 @@ class ResultFragment : AbstractResultFragment() {
         }
     }
 
-    override fun onAdsLoaded(unifiedNativeAds: MutableList<UnifiedNativeAd>, adsChanged: Boolean) {
+    override fun onAdsLoaded(unifiedNativeAds: List<AdEntity>, adsChanged: Boolean) {
         super.onAdsLoaded(unifiedNativeAds, true)
         coroutineHandler.foregroundScope.launch {
-            refreshResultList()
+            refreshResultList(unifiedNativeAds)
         }
     }
 }

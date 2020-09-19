@@ -124,10 +124,14 @@ class PowerRegression : Regression {
         val lastPointX = ordered.last().x!!
         val distance = firstPointX.minus(lastPointX).toDouble().absoluteValue
         val step = distance.div(100)
-        for (i in 0 .. 99) {
+        for (i in 0 .. 100) {
             step.times(i).let { currentDistance->
-                val currentRealDistance = firstPointX.toDouble() + currentDistance
-                result.add(Pair(currentRealDistance, a*(currentDistance.pow(b))))
+                val x = firstPointX.toDouble() + currentDistance
+                var y = a * (currentDistance.pow(b))
+                if (y.isInfinite()){
+                    y = entries.map { it.y!!.toDouble() }.maxOrNull()!!
+                }
+                result.add(Pair(x, y))
             }
         }
         return result

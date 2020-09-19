@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minWidth="@dimen/min_dialog_width">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="@string/title_dialog_premium_feature"
+            android:background="@drawable/drawable_shape_title"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:padding="@dimen/big_spacing"
+            android:backgroundTint="@color/color_premium_dialog_title"/>
+
+        <View
+            android:id="@+id/view_background"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:background="@drawable/drawable_shape_content"
+            android:backgroundTint="@color/color_window_background"
+            />
+
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_show_ad_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="@string/description_show_reward_ads"
+            android:textColor="@color/color_primary_text_color"
+            android:elevation="5dp"
+            android:padding="@dimen/big_spacing"/>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/bt_cancel"
+            android:layout_width="32dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="@dimen/big_spacing"
+            app:layout_constraintTop_toTopOf="@id/tv_title"
+            app:layout_constraintRight_toRightOf="@id/tv_title"
+            app:layout_constraintBottom_toBottomOf="@id/tv_title"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            app:srcCompat="@drawable/ic_close_box"
+            app:layout_constraintDimensionRatio="1:1"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_watch_video"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/color_button_watch_video"
+            android:text="@string/watch_video"
+            app:iconSize="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/bt_subscribe"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/bt_subscribe"
+            app:layout_constraintTop_toBottomOf="@id/tv_show_ad_description"
+            android:textColor="@android:color/white"
+            android:textAlignment="textStart"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_subscribe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/bt_watch_video"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="@string/get_a_subscription"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_marginRight="@dimen/big_spacing"
+            android:layout_marginBottom="@dimen/big_spacing"
+            app:iconSize="16dp"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/color_button_get_a_subscription"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

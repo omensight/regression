@@ -51,10 +51,15 @@
     <string name="formula_fit_line_linear">Fit line</string>
     <string name="show_plot">Show graph</string>
     <string name="original_data">Original data</string>
+    <string name="title_dialog_premium_feature">Premium feature</string>
+    <string name="description_show_reward_ads">Enjoy of this and another premium features getting a premium subscription, or instead you can also watch a video.</string>
+    <string name="watch_video">Watch video</string>
+    <string name="get_a_subscription">Get a subscription</string>
+    <string name="action_import_csv_data">Import CSV</string>
 
 
     <string-array name="regression_types">
         <item>Linear</item>
-        <item>Potential</item>
+        <item>Power</item>
     </string-array>
 </resources>

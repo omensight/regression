@@ -2,6 +2,8 @@ package com.alphemsoft.education.regression
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.apache.commons.math3.stat.regression.MultipleLinearRegression
+import org.apache.commons.math3.stat.regression.OLSMultipleLinearRegression
 
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -21,4 +23,5 @@ class ExampleInstrumentedTest {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.alphemsoft.education.regression", appContext.packageName)
     }
+
 }

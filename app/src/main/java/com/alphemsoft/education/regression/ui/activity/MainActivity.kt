@@ -7,8 +7,9 @@ import android.view.MenuItem
 import androidx.navigation.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import com.alphemsoft.education.regression.R
+import com.alphemsoft.education.regression.data.model.AdEntity
 import com.alphemsoft.education.regression.ui.base.BaseAppCompatActivity
-import com.google.android.gms.ads.formats.UnifiedNativeAd
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.main_activity.*
@@ -19,6 +20,7 @@ import kotlinx.coroutines.launch
 class MainActivity : BaseAppCompatActivity(true) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        MobileAds.initialize(applicationContext) {}
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         setupToolbar()
@@ -44,11 +46,13 @@ class MainActivity : BaseAppCompatActivity(true) {
         return true
     }
 
-    private fun changeAdLooper(unifiedNativeAds: List<UnifiedNativeAd>) {
+    private fun changeAdLooper(unifiedNativeAds: List<AdEntity>) {
         coroutineHandler.foregroundScope.launch {
             unifiedNativeAds.forEach { ad->
                 if (unifiedNativeAds.isNotEmpty()){
-                    ad_template_view.setNativeAd(ad)
+                    ad.unifiedNativeAd?.let { nativeAd->
+                        ad_template_view.setNativeAd(nativeAd)
+                    }
                 }
                 delay(1000*60)
             }
@@ -56,7 +60,7 @@ class MainActivity : BaseAppCompatActivity(true) {
         }
     }
 
-    override fun onAdsLoaded(unifiedNativeAds: MutableList<UnifiedNativeAd>, adsChanged: Boolean) {
+    override fun onAdsLoaded(unifiedNativeAds: List<AdEntity>, adsChanged: Boolean) {
         super.onAdsLoaded(unifiedNativeAds, adsChanged)
         changeAdLooper(unifiedNativeAds)
     }

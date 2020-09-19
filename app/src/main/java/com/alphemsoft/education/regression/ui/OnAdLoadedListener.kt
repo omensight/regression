@@ -1,7 +1,7 @@
 package com.alphemsoft.education.regression.ui
 
-import com.google.android.gms.ads.formats.UnifiedNativeAd
+import com.alphemsoft.education.regression.data.model.AdEntity
 
 interface OnAdLoadedListener {
-    fun onAdsLoaded(unifiedNativeAds: MutableList<UnifiedNativeAd>, adsChanged: Boolean)
+    fun onAdsLoaded(unifiedNativeAds: List<AdEntity>, adsChanged: Boolean)
 }
