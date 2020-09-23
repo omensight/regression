@@ -7,6 +7,7 @@ object RegressionFactory {
         return when(regressionType){
             SheetType.LINEAR -> LinearRegression()
             SheetType.POWER -> PowerRegression()
+            SheetType.MULTIPLE_LINEAR -> TODO("Not implemented")
         }
     }
 }

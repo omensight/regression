@@ -1,25 +1,32 @@
 package com.alphemsoft.education.regression.data.regression
 
 import com.alphemsoft.education.regression.R
-import com.alphemsoft.education.regression.data.model.DataPoint
+import com.alphemsoft.education.regression.data.model.DataEntry
+import com.alphemsoft.education.regression.data.model.QuerySheetDataColumn
 import com.alphemsoft.education.regression.data.model.secondary.Result
 import com.alphemsoft.education.regression.extensions.roundedNumber
+import com.alphemsoft.education.regression.ui.datapresentation.DataLine
+import com.github.mikephil.charting.data.Entry
 import org.apache.commons.math3.stat.regression.SimpleRegression
-import kotlin.math.absoluteValue
 
-class LinearRegression() : Regression {
-
-    private lateinit var data: List<DataPoint>
+class LinearRegression : Regression {
+    private lateinit var data: List<QuerySheetDataColumn>
     private val simpleRegression = SimpleRegression()
+    private lateinit var xDataEntries: List<DataEntry>
+    private lateinit var yDataEntries: List<DataEntry>
 
     private var dataSettled = false
-    override suspend fun setData(data: List<DataPoint>) {
+    override suspend fun setData(querySheetDataColumns: List<QuerySheetDataColumn>) {
+        require(querySheetDataColumns.size == 2) { "Required a two size list" }
+        xDataEntries = querySheetDataColumns[0].dataEntries
+        yDataEntries = querySheetDataColumns[1].dataEntries
+        require(xDataEntries.size == yDataEntries.size) { "The entries list have not the same size" }
         simpleRegression.clear()
-        dataSettled = true
-        this.data = data
-        data.forEach {
-            simpleRegression.addData(it.x?.toDouble() ?: 0.0, it.y?.toDouble() ?: 0.0)
+        this.data = querySheetDataColumns
+        for (i in xDataEntries.indices){
+            simpleRegression.addData(xDataEntries[i].data?.toDouble() ?: 0.0, yDataEntries[i].data?.toDouble() ?: 0.0)
         }
+        dataSettled = true
     }
 
     override suspend fun getResults(decimals: Int): List<Result> {
@@ -28,13 +35,23 @@ class LinearRegression() : Regression {
         val regressionResults = simpleRegression.regress()
         val parameterEstimates = regressionResults.parameterEstimates
         val sign = if (parameterEstimates[1] > 0) '+' else '-'
-        val xAverage = data.map { it.x!!.toDouble() }.average()
-        val yAverage = data.map { it.y!!.toDouble() }.average()
-        val sumOfX = data.sumOf { it.x!!.toDouble() }
-        val sumOfY = data.sumOf { it.y!!.toDouble() }
-        val sumOfSquaresOfX = data.map { it.x?.times(it.x!!)?.toDouble()!! }.sum()
-        val sumOfSquaresOfY = data.map { it.y?.times(it.y!!)?.toDouble()!! }.sum()
-        val sumOfCrossXY = data.map { it.x?.times(it.y!!)?.toDouble()!! }.sum()
+        val xColumn = xDataEntries.map{
+            it.data!!.toDouble()
+        }
+
+        val yColumn = yDataEntries.map {
+            it.data!!.toDouble()
+        }
+
+        val xAverage = xColumn.average()
+        val yAverage = yColumn.average()
+        val sumOfX = xColumn.sum()
+        val sumOfY = yColumn.sum()
+        val sumOfSquaresOfX = xColumn.map { it.times(it) }.sum()
+        val sumOfSquaresOfY = yColumn.map { it.times(it) }.sum()
+        val sumOfCrossXY = xColumn.mapIndexed { i, x ->
+            x.times(yColumn[i])
+        }.sum()
         val sXX = sumOfSquaresOfX / simpleRegression.n - xAverage * xAverage
         val sYY = sumOfSquaresOfY / simpleRegression.n - yAverage * yAverage
         val sXY = sumOfCrossXY / simpleRegression.n - xAverage * yAverage
@@ -94,13 +111,18 @@ class LinearRegression() : Regression {
         return result
     }
 
-    override fun getCalculatedPoints(): List<Pair<Double, Double>> {
-        val sortedData = data.sortedBy { it.x }
-        val result = ArrayList<Pair<Double, Double>>()
-        val firstPoint = sortedData.first().x!!.toDouble()
-        val lastPoint = sortedData.last().x!!.toDouble()
-        result.add(Pair(firstPoint,simpleRegression.predict(firstPoint)))
-        result.add(Pair(lastPoint,simpleRegression.predict(lastPoint)))
-        return result
+    override suspend fun getGraphLines(): List<DataLine> {
+        val sortedData = xDataEntries.mapIndexed { i,x->
+            val y = yDataEntries[i].data!!
+            Entry(x.data!!.toFloat(), y.toFloat())
+        }.sortedBy { it.x }
+        val fitLine = ArrayList<Entry>()
+        val originalDataLine = DataLine(sortedData, R.string.original_data)
+        val firstPoint = sortedData.first().x.toDouble()
+        val lastPoint = sortedData.last().x.toDouble()
+        fitLine.add(Entry(firstPoint.toFloat(),simpleRegression.predict(firstPoint).toFloat()))
+        fitLine.add(Entry(lastPoint.toFloat(),simpleRegression.predict(lastPoint).toFloat()))
+        val fitDataLine = DataLine(fitLine, R.string.formula_fit_line)
+        return listOf(originalDataLine,fitDataLine)
     }
 }

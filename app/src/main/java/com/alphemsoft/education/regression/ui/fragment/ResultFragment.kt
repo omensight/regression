@@ -47,7 +47,7 @@ class ResultFragment : AbstractResultFragment() {
         val sheet: Sheet = viewModel.getSheet(args.regressionId)
         val regression = RegressionFactory.getRegression(sheet.type)
         val data = viewModel.getDataPoints(args.regressionId)
-        regression.setData(data)
+//        regression.setData(data)
 
         val results = regression.getResults(10)
         val resultsWithAds: MutableList<Any> = ArrayList()

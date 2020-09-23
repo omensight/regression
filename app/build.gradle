@@ -99,6 +99,9 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     api project(':nativetemplates')
 
+    //TableView
+    implementation 'com.evrencoskun.library:tableview:0.8.9.2'
+
 
     implementation 'org.apache.commons:commons-csv:1.8'
 

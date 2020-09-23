@@ -17,7 +17,10 @@ class DiffUtilComparatorCallback<T: Any>() {
         }
 
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-            return oldList[oldItemPosition] == newList[newItemPosition]
+            val oldItem = oldList[oldItemPosition]
+            val newItem = newList[newItemPosition]
+
+            return oldItem == newItem
         }
     }
 
@@ -25,4 +28,7 @@ class DiffUtilComparatorCallback<T: Any>() {
         val callback = getCallback(oldList, newList)
         return DiffUtil.calculateDiff(callback)
     }
+
+    fun List<*>.deepEquals(other : List<*>) =
+        this.size == other.size && this.mapIndexed { index, element -> element == other[index] }.all { it }
 }

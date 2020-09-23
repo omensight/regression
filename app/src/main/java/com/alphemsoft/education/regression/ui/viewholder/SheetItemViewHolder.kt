@@ -15,12 +15,12 @@ class SheetItemViewHolder(viewBinding: ItemSheetBinding, navController: NavContr
     ) {
     override fun bind(item: Sheet?) {
         item?.let {
-            mViewBinding.root.visibility = View.VISIBLE
-            mViewBinding.sheet = item
+            dataBinding.root.visibility = View.VISIBLE
+            dataBinding.sheet = item
         }?: kotlin.run {
-            mViewBinding.root.visibility = View.INVISIBLE
+            dataBinding.root.visibility = View.INVISIBLE
         }
-        mViewBinding.viewBackground.setOnClickListener {
+        dataBinding.viewBackground.setOnClickListener {
             item?.let {
                 val action = CreateSheetFragmentDirections.actionDataSheetDetail(it.id)
                 navController?.navigate(action)

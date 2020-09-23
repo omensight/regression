@@ -19,4 +19,4 @@ data class Sheet(
     var yLabel: String = "",
     @ColumnInfo(name = "created_on")
     val createdOn: Date
-)
+): DbEntity(id)

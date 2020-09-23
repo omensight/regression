@@ -1,9 +1,8 @@
-package com.alphemsoft.education.regression.module
+package com.alphemsoft.education.regression.di
 
 import android.content.Context
 import androidx.room.Room
 import com.alphemsoft.education.regression.data.RegressionDatabase
-import com.alphemsoft.education.regression.ui.comparators.DbEntityComparatorItemCallback
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,4 +25,7 @@ object DatabaseModule {
 
     @Provides
     fun providesSheetDao(db: RegressionDatabase) = db.sheetDao()
+
+    @Provides
+    fun providesSheetColumnDao(db:RegressionDatabase) = db.sheetColumnDao()
 }

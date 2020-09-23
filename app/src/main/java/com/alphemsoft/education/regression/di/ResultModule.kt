@@ -1,4 +1,4 @@
-package com.alphemsoft.education.regression.module
+package com.alphemsoft.education.regression.di
 
 import com.alphemsoft.education.regression.ui.adapter.ResultAdapter
 import dagger.Module

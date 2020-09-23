@@ -1,9 +1,11 @@
 package com.alphemsoft.education.regression.data.regression
 
 import com.alphemsoft.education.regression.R
-import com.alphemsoft.education.regression.data.model.DataPoint
+import com.alphemsoft.education.regression.data.model.QuerySheetDataColumn
 import com.alphemsoft.education.regression.data.model.secondary.Result
 import com.alphemsoft.education.regression.extensions.roundedNumber
+import com.alphemsoft.education.regression.ui.datapresentation.DataLine
+import com.github.mikephil.charting.data.Entry
 import org.apache.commons.math3.stat.regression.SimpleRegression
 import kotlin.math.absoluteValue
 import kotlin.math.ln
@@ -12,6 +14,9 @@ import kotlin.math.sqrt
 
 class PowerRegression : Regression {
 
+    private lateinit var data: List<QuerySheetDataColumn>
+    private lateinit var yDataColumn: QuerySheetDataColumn
+    private lateinit var xDataColumn: QuerySheetDataColumn
     private var squareOfR: Double = Double.NaN
     private var sumOfLnY: Double = Double.NaN
     private var sumOfLnX: Double = Double.NaN
@@ -31,23 +36,31 @@ class PowerRegression : Regression {
     private lateinit var lnXTimesLnYList: List<Double>
     private lateinit var lnYList: List<Double>
     private lateinit var lnXList: List<Double>
-    private lateinit var entries: List<DataPoint>
     private val simpleRegression = SimpleRegression()
     private var dataSettled: Boolean = false
 
     private lateinit var result: MutableList<Result>
 
 
-    override suspend fun setData(data: List<DataPoint>) {
-        entries = data
+    override suspend fun setData(querySheetDataColumns: List<QuerySheetDataColumn>) {
+        require(querySheetDataColumns.size == 2)
+        xDataColumn = querySheetDataColumns[0]
+        yDataColumn = querySheetDataColumns[1]
+        require(xDataColumn.dataEntries.size == yDataColumn.dataEntries.size)
+        data = querySheetDataColumns
         dataSettled = true
-        entries.forEach {
-            simpleRegression.addData(it.x!!.toDouble(), it.y!!.toDouble())
-        }
         result = ArrayList()
-        lnXList = entries.map { ln(it.x!!.toDouble()) }
-        lnYList = entries.map { ln(it.y!!.toDouble()) }
-        lnXTimesLnYList = entries.map { ln(it.x!!.toDouble()).times(ln(it.y!!.toDouble())) }
+        val xColumn = xDataColumn.dataEntries.map{
+            it.data!!.toDouble()
+        }
+        val yColumn = yDataColumn.dataEntries.map{
+            it.data!!.toDouble()
+        }
+        lnXList = xColumn.map { ln(it) }
+        lnYList = yColumn.map { ln(it) }
+        lnXTimesLnYList = lnXList.mapIndexed() { i,lnX->
+            lnX.times(lnYList[i])
+        }
         lnXAverage = lnXList.average()
         lnYAverage = lnYList.average()
         squaresOfLnXList = lnXList.map { it.pow(2) }
@@ -115,26 +128,30 @@ class PowerRegression : Regression {
         return result
     }
 
-    override fun getCalculatedPoints(): List<Pair<Double, Double>> {
-        val result = ArrayList<Pair<Double, Double>>()
-        val ordered = entries.sortedBy {
-            it.x
+
+    override suspend fun getGraphLines(): List<DataLine> {
+        val yEntries = yDataColumn.dataEntries
+        val originalEntries = xDataColumn.dataEntries.mapIndexed { i, x->
+            Entry(x.data!!.toFloat(), yEntries[i].data!!.toFloat())
         }
-        val firstPointX = ordered.first().x!!
-        val lastPointX = ordered.last().x!!
+        val firstPointX = originalEntries.first().x
+        val lastPointX = originalEntries.last().x
         val distance = firstPointX.minus(lastPointX).toDouble().absoluteValue
         val step = distance.div(100)
+        val fitLineEntries = ArrayList<Entry>()
         for (i in 0 .. 100) {
             step.times(i).let { currentDistance->
                 val x = firstPointX.toDouble() + currentDistance
                 var y = a * (currentDistance.pow(b))
                 if (y.isInfinite()){
-                    y = entries.map { it.y!!.toDouble() }.maxOrNull()!!
+                    y = yDataColumn.dataEntries.map { it.data!!.toDouble() }.maxOrNull()!!
                 }
-                result.add(Pair(x, y))
+                fitLineEntries.add(Entry(x.toFloat(), y.toFloat()))
             }
         }
-        return result
+        val originalDataLine = DataLine(originalEntries,R.string.original_data)
+        val fitDataLine = DataLine(fitLineEntries, R.string.formula_fit_line)
+        return listOf(originalDataLine,fitDataLine)
     }
 
 }

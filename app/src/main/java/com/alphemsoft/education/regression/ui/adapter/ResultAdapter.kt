@@ -7,12 +7,12 @@ import com.alphemsoft.education.regression.data.model.secondary.Result
 import com.alphemsoft.education.regression.databinding.ItemNativeAdBinding
 import com.alphemsoft.education.regression.databinding.ItemResultBinding
 import com.alphemsoft.education.regression.enums.SimpleContentViewType
-import com.alphemsoft.education.regression.ui.base.BaseEntityAdapter
+import com.alphemsoft.education.regression.ui.base.BaseAdapter
 import com.alphemsoft.education.regression.ui.base.BaseItemViewHolder
 import com.alphemsoft.education.regression.ui.viewholder.AdViewHolder
 import com.alphemsoft.education.regression.ui.viewholder.ResultItemViewHolder
 
-class ResultAdapter: BaseEntityAdapter<Any, BaseItemViewHolder<ViewDataBinding, Any>>() {
+class ResultAdapter: BaseAdapter<Any, BaseItemViewHolder<ViewDataBinding, Any>>() {
 
     override fun onCreateViewHolder(
         inflater: LayoutInflater,
