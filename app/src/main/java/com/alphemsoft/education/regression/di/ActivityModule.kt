@@ -1,4 +1,4 @@
-package com.alphemsoft.education.regression.module
+package com.alphemsoft.education.regression.di
 
 import android.app.Activity
 import androidx.navigation.NavController

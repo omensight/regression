@@ -1,7 +1,10 @@
 package com.alphemsoft.education.regression.ui.fragment
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.FragmentManager
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.databinding.FragmentWarnPremiumFeatureBinding
@@ -47,7 +50,13 @@ class PremiumFeatureDialogFragment : BaseDialogFragment<FragmentWarnPremiumFeatu
         rewardedAdCallback = object : RewardedAdCallback() {
             override fun onUserEarnedReward(rewardItem: RewardItem) {
                 super.onRewardedAdClosed()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.user_earned_reward),
+                    Toast.LENGTH_LONG
+                ).show()
                 onPremiumDecisionListener.onRewardedVideoWatched(requestId)
+
             }
 
             override fun onRewardedAdClosed() {
@@ -57,6 +66,11 @@ class PremiumFeatureDialogFragment : BaseDialogFragment<FragmentWarnPremiumFeatu
         }
 
         rewardedAdLoadCallback = object : RewardedAdLoadCallback() {
+
+            override fun onRewardedAdLoaded() {
+                dataBinding.btWatchVideo.isEnabled = true
+                super.onRewardedAdLoaded()
+            }
 
             override fun onRewardedAdFailedToLoad(p0: LoadAdError?) {
                 super.onRewardedAdFailedToLoad(p0)

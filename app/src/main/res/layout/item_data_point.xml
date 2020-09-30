@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="dataPoint"
-            type="com.alphemsoft.education.regression.data.model.DataPoint" />
+            type="com.alphemsoft.education.regression.data.model.SheetEntry" />
     </data>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="64dp"
+        android:id="@+id/cl_container">
 
         <View
             android:id="@+id/view_background"
@@ -23,17 +24,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:strokeWidth="5dp" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_position_number"
-            app:layout_constraintTop_toTopOf="@id/view_background"
-            app:layout_constraintBottom_toBottomOf="@id/view_background"
-            app:layout_constraintStart_toStartOf="@id/view_background"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1"
-            android:textColor="@color/primaryDarkColor"
-            android:layout_margin="@dimen/big_spacing"/>
-
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_middle"
             android:layout_width="wrap_content"
@@ -41,40 +31,31 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent=".5" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ti_x"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_x"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/big_spacing"
-            android:layout_marginLeft="@dimen/big_spacing"
-            android:layout_marginBottom="@dimen/small_spacing"
-            android:layout_marginEnd="@dimen/small_spacing"
-            android:layout_marginRight="@dimen/small_spacing"
-            app:layout_constraintBottom_toBottomOf="@id/view_background"
-            app:layout_constraintEnd_toStartOf="@id/guideline_middle"
-            app:layout_constraintStart_toEndOf="@id/tv_position_number"
-            app:layout_constraintTop_toTopOf="@+id/view_background"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:backgroundTint="@color/primaryDarkColor"
-            android:inputType="numberDecimal|numberSigned"
-            app:realValue="@={dataPoint.x}"/>
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/ti_y"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
             android:layout_marginStart="@dimen/small_spacing"
-            android:layout_marginLeft="@dimen/small_spacing"
+            android:layout_marginEnd="@dimen/small_spacing"
             android:layout_marginBottom="@dimen/small_spacing"
-            android:layout_marginEnd="@dimen/big_spacing"
-            android:layout_marginRight="@dimen/big_spacing"
             app:layout_constraintBottom_toBottomOf="@id/view_background"
-            app:layout_constraintEnd_toStartOf="@id/cb_selected"
-            app:layout_constraintStart_toEndOf="@id/guideline_middle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/view_background"
-            android:backgroundTint="@color/primaryDarkColor"
-            android:inputType="numberDecimal|numberSigned"
-            app:realValue="@={dataPoint.y}"/>
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ti_x"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:backgroundTint="@color/primaryDarkColor"
+                android:inputType="numberDecimal|numberSigned"
+                app:realValue="@={dataPoint.data}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
 
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/cb_selected"

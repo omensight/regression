@@ -1,7 +1,5 @@
 package com.alphemsoft.education.regression.ui.fragment
 
-import android.content.Context
-import android.graphics.Paint
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
@@ -9,10 +7,9 @@ import androidx.lifecycle.lifecycleScope
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.databinding.BottomSheetFragmentSingleFieldBinding
 import com.alphemsoft.education.regression.ui.SimpleFieldModelUi
-import com.alphemsoft.education.regression.ui.base.BaseBottomSheetDialogFragment
-import dagger.hilt.android.AndroidEntryPoint
+import com.alphemsoft.education.regression.ui.base.BaseSimpleBottomSheetDialogFragment
 
-class SingleFieldDataSheetFragment:BaseBottomSheetDialogFragment<BottomSheetFragmentSingleFieldBinding>(
+class SingleFieldDataSheetFragmentSimple:BaseSimpleBottomSheetDialogFragment<BottomSheetFragmentSingleFieldBinding>(
     R.layout.bottom_sheet_fragment_single_field
 ) {
 

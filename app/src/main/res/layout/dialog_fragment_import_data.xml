@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <variable
+            name="import_view_model"
+            type="com.alphemsoft.education.regression.viewmodel.DataSheetViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:minHeight="320sp">
+
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/drawable_shape_title"
+            android:backgroundTint="@color/color_premium_dialog_title"
+            android:padding="@dimen/big_spacing"
+            android:text="@string/title_dialog_premium_feature"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/view_background"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/drawable_shape_content"
+            android:backgroundTint="@color/color_window_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_imported_entries"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_import_message"
+            app:layout_constraintBottom_toTopOf="@id/bt_import"
+            app:layout_constraintLeft_toLeftOf="@id/view_background"
+            app:layout_constraintRight_toRightOf="@id/view_background"
+            android:layout_margin="@dimen/big_spacing" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_import"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/import_data"
+            app:layout_constraintBottom_toBottomOf="@id/view_background"
+            app:layout_constraintRight_toRightOf="@id/view_background"
+            style="@style/App.Theme.ButtonAccept"
+            android:layout_marginRight="@dimen/big_spacing"
+            android:layout_marginBottom="@dimen/big_spacing"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_cancel"
+            style="@style/App.Theme.ButtonCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@android:string/cancel"
+            app:layout_constraintBottom_toBottomOf="@+id/bt_import"
+            app:layout_constraintRight_toLeftOf="@id/bt_import"
+            app:layout_constraintTop_toTopOf="@+id/bt_import"
+            android:layout_marginEnd="@dimen/big_spacing"/>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_import_message"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            app:layout_constraintLeft_toLeftOf="@id/view_background"
+            app:layout_constraintRight_toRightOf="@id/view_background"
+            android:text="@string/import_data_message"
+            android:textColor="@color/primaryColor"
+            android:paddingStart="@dimen/big_spacing"
+            android:paddingEnd="@dimen/big_spacing"
+            android:paddingTop="@dimen/big_spacing" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

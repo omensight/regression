@@ -1,24 +1,30 @@
 package com.alphemsoft.education.regression.data.regression
 
 import com.alphemsoft.education.regression.R
-import com.alphemsoft.education.regression.data.model.DataPoint
+import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.data.model.secondary.Result
 import com.alphemsoft.education.regression.extensions.roundedNumber
+import com.alphemsoft.education.regression.helpers.IColumnMapper
+import com.alphemsoft.education.regression.helpers.BidimensionalColumnMapper
 import org.apache.commons.math3.stat.regression.SimpleRegression
-import kotlin.math.absoluteValue
 
-class LinearRegression() : Regression {
+class LinearRegression : Regression {
 
-    private lateinit var data: List<DataPoint>
+    private lateinit var data: List<Pair<Double, Double>>
+    private lateinit var xColumn: DoubleArray
+    private lateinit var yColumn: DoubleArray
     private val simpleRegression = SimpleRegression()
-
     private var dataSettled = false
-    override suspend fun setData(data: List<DataPoint>) {
+    override suspend fun setData(entryData: List<SheetEntry>) {
         simpleRegression.clear()
         dataSettled = true
-        this.data = data
+        val columnMapper: IColumnMapper = BidimensionalColumnMapper()
+        val entryColumns = columnMapper.getEntryColumns(entryData)
+        xColumn = entryColumns[0]
+        yColumn = entryColumns[1]
+        this.data = xColumn.zip(yColumn)
         data.forEach {
-            simpleRegression.addData(it.x?.toDouble() ?: 0.0, it.y?.toDouble() ?: 0.0)
+            simpleRegression.addData(it.first, it.second)
         }
     }
 
@@ -28,13 +34,14 @@ class LinearRegression() : Regression {
         val regressionResults = simpleRegression.regress()
         val parameterEstimates = regressionResults.parameterEstimates
         val sign = if (parameterEstimates[1] > 0) '+' else '-'
-        val xAverage = data.map { it.x!!.toDouble() }.average()
-        val yAverage = data.map { it.y!!.toDouble() }.average()
-        val sumOfX = data.sumOf { it.x!!.toDouble() }
-        val sumOfY = data.sumOf { it.y!!.toDouble() }
-        val sumOfSquaresOfX = data.map { it.x?.times(it.x!!)?.toDouble()!! }.sum()
-        val sumOfSquaresOfY = data.map { it.y?.times(it.y!!)?.toDouble()!! }.sum()
-        val sumOfCrossXY = data.map { it.x?.times(it.y!!)?.toDouble()!! }.sum()
+
+        val xAverage = xColumn.average()
+        val yAverage = yColumn.average()
+        val sumOfX = xColumn.sum()
+        val sumOfY = yColumn.sum()
+        val sumOfSquaresOfX = xColumn.map { it.times(it) }.sum()
+        val sumOfSquaresOfY =  yColumn.map { it.times(it) }.sum()
+        val sumOfCrossXY = data.map { it.first.times(it.second) }.sum()
         val sXX = sumOfSquaresOfX / simpleRegression.n - xAverage * xAverage
         val sYY = sumOfSquaresOfY / simpleRegression.n - yAverage * yAverage
         val sXY = sumOfCrossXY / simpleRegression.n - xAverage * yAverage
@@ -95,10 +102,9 @@ class LinearRegression() : Regression {
     }
 
     override fun getCalculatedPoints(): List<Pair<Double, Double>> {
-        val sortedData = data.sortedBy { it.x }
         val result = ArrayList<Pair<Double, Double>>()
-        val firstPoint = sortedData.first().x!!.toDouble()
-        val lastPoint = sortedData.last().x!!.toDouble()
+        val firstPoint = xColumn.first()
+        val lastPoint = xColumn.last()
         result.add(Pair(firstPoint,simpleRegression.predict(firstPoint)))
         result.add(Pair(lastPoint,simpleRegression.predict(lastPoint)))
         return result

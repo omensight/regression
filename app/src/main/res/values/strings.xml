@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Paging Test</string>
+    <string name="app_name">Regression</string>
     <string name="date">Date</string>
     <string name="settings">Settings</string>
     <string name="regression_list">Regression list</string>
@@ -17,7 +17,7 @@
     <string name="action_sweep_all">Sweep all</string>
     <string name="add_new_data_point">Add new data point</string>
     <string name="action_delete_selected">Delete selected</string>
-    <string name="action_copy_to_another">Copy to another sheet</string>
+    <string name="action_copy_to_another">Copy to another sheet</string>i
     <string name="action_add_empty_data_points">Add empty data points</string>
     <string name="error_invalid">Invalid field</string>
     <string name="hint_number_of_data_points">Data point number</string>
@@ -56,6 +56,9 @@
     <string name="watch_video">Watch video</string>
     <string name="get_a_subscription">Get a subscription</string>
     <string name="action_import_csv_data">Import CSV</string>
+    <string name="user_earned_reward">Thank you, now you can proceed</string>
+    <string name="import_data">Import</string>
+    <string name="import_data_message">The current data gonna be imported:</string>
 
 
     <string-array name="regression_types">

@@ -37,7 +37,7 @@ class GraphFragment : AbstractGraphFragment() {
         coroutineHandler.foregroundScope.launch {
             viewModel.getDataPointsFlow(args.sheetId).collectLatest { originalDataPoints ->
                 val originalEntries = originalDataPoints.map { dataPoint ->
-                    Entry(dataPoint.x!!.toFloat(), dataPoint.y!!.toFloat())
+                    Entry(dataPoint.data!!.toFloat(), dataPoint.y!!.toFloat())
                 }.sortedBy { it.x }
                 val sheet = viewModel.getSheet(args.sheetId)
                 val regression = RegressionFactory.getRegression(sheet.type)

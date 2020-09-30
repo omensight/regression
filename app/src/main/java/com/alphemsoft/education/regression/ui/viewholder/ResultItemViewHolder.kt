@@ -13,16 +13,16 @@ class ResultItemViewHolder(mViewBinding: ItemResultBinding) :
     BaseItemViewHolder<ItemResultBinding, Result>(mViewBinding) {
     override fun bind(item: Result?) {
         item?.let {
-            mViewBinding.tvTitle.text = context.getString(item.title)
-            val mathViewResult = mViewBinding.mathViewResult
+            mDataBinding.tvTitle.text = context.getString(item.title)
+            val mathViewResult = mDataBinding.mathViewResult
             mathViewResult.fontSize = 40f
             mathViewResult.textColor = Color.WHITE
             mathViewResult.textAlignment = MTMathView.MTTextAlignment.KMTTextAlignmentCenter
             mathViewResult.latex = item.formula
             mathViewResult.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
-            mViewBinding.mathViewContainer.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+            mDataBinding.mathViewContainer.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
             val resultWidth = mathViewResult.measuredWidth
-            val containerWidth = mViewBinding.mathViewContainer.measuredWidth
+            val containerWidth = mDataBinding.mathViewContainer.measuredWidth
             mathViewResult.measuredHeight
             (mathViewResult.layoutParams as FrameLayout.LayoutParams).gravity = if (resultWidth < containerWidth) {
                 Gravity.CENTER

@@ -14,7 +14,7 @@ class SheetLocalDataSource @Inject constructor(private val sheetDao: SheetDao) :
         )
     }
 
-    override suspend fun find(id: Long): Sheet {
+    override suspend fun find(id: Long): Sheet? {
         return sheetDao.findSheetById(id)
     }
 

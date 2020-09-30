@@ -3,32 +3,32 @@ package com.alphemsoft.education.regression.data.dao
 import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
-import com.alphemsoft.education.regression.data.model.DataPoint
+import com.alphemsoft.education.regression.data.model.SheetEntry
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface DataPointDao: BaseDao<DataPoint> {
+interface DataPointDao: BaseDao<SheetEntry> {
     @Query("""
-        SELECT data_points.* FROM data_points
+        SELECT sheet_entries.* FROM sheet_entries
         WHERE fk_sheet_id = :sheetId
     """)
-    fun findSheetDataPointSource(sheetId: Long): PagingSource<Int, DataPoint>
+    fun findSheetDataPointSource(sheetId: Long): PagingSource<Int, SheetEntry>
 
     @Query("""
-        SELECT data_points.* FROM data_points
+        SELECT sheet_entries.* FROM sheet_entries
         WHERE fk_sheet_id = :sheetId
     """)
-    suspend fun findSheetDataPoints(sheetId: Long): List<DataPoint>
+    suspend fun findSheetDataPoints(sheetId: Long): List<SheetEntry>
 
     @Query("""
-        SELECT data_points.* from data_points 
-        WHERE data_point_id = :dataPointId
+        SELECT sheet_entries.* from sheet_entries 
+        WHERE sheet_entry_id = :dataPointId
     """)
-    fun findById(dataPointId: Long): DataPoint
+    fun findById(dataPointId: Long): SheetEntry
 
     @Query("""
-        SELECT data_points.* from data_points 
+        SELECT sheet_entries.* from sheet_entries 
         WHERE fk_sheet_id = :sheetId
     """)
-    fun findDataPointsFlowById(sheetId: Long): Flow<List<DataPoint>>
+    fun findDataPointsFlowById(sheetId: Long): Flow<List<SheetEntry>>
 }

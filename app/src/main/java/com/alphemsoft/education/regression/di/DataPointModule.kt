@@ -1,16 +1,12 @@
-package com.alphemsoft.education.regression.module
+package com.alphemsoft.education.regression.di
 
-import android.content.Context
 import com.alphemsoft.education.regression.data.dao.DataPointDao
 import com.alphemsoft.education.regression.data.datasource.IDataPointLocalDataSource
 import com.alphemsoft.education.regression.data.datasource.base.DataPointLocalDataSource
-import com.alphemsoft.education.regression.ui.adapter.DataPointAdapter
-import com.alphemsoft.education.regression.ui.adapter.ResultAdapter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Singleton
 
 @Module

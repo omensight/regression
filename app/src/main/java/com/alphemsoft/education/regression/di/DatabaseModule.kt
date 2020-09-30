@@ -1,9 +1,8 @@
-package com.alphemsoft.education.regression.module
+package com.alphemsoft.education.regression.di
 
 import android.content.Context
 import androidx.room.Room
 import com.alphemsoft.education.regression.data.RegressionDatabase
-import com.alphemsoft.education.regression.ui.comparators.DbEntityComparatorItemCallback
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +16,9 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun providesRegressionDatabase(@ApplicationContext context: Context): RegressionDatabase {
-        return Room.databaseBuilder(context, RegressionDatabase::class.java, "regression.db")
+        val path = context.packageManager.getPackageInfo(context.packageName,0).applicationInfo.dataDir
+        val dbPath = "$path/regression.db"
+        return Room.databaseBuilder(context, RegressionDatabase::class.java, dbPath)
             .build()
     }
 

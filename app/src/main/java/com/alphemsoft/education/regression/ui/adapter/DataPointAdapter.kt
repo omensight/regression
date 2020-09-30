@@ -1,22 +1,18 @@
 package com.alphemsoft.education.regression.ui.adapter
 
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.databinding.ViewDataBinding
-import androidx.viewbinding.ViewBinding
-import com.alphemsoft.education.regression.data.model.DataPoint
+import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.databinding.ItemDataPointBinding
-import com.alphemsoft.education.regression.databinding.ItemNativeAdBinding
-import com.alphemsoft.education.regression.enums.SimpleContentViewType
 
 import com.alphemsoft.education.regression.ui.base.BaseEntityAdapter
-import com.alphemsoft.education.regression.ui.base.BaseItemViewHolder
-import com.alphemsoft.education.regression.ui.viewholder.AdViewHolder
 import com.alphemsoft.education.regression.ui.viewholder.DataPointItemViewHolder
 import javax.inject.Inject
 
 class DataPointAdapter @Inject constructor() :
-    BaseEntityAdapter<DataPoint, DataPointItemViewHolder>() {
+    BaseEntityAdapter<SheetEntry, DataPointItemViewHolder>() {
+    lateinit var metrics: DisplayMetrics
     var selectable: Boolean = false
         set(value) {
             field = value
@@ -29,8 +25,13 @@ class DataPointAdapter @Inject constructor() :
         viewType: Int
     ): DataPointItemViewHolder {
         val binding = ItemDataPointBinding.inflate(inflater,parent,false)
-        return DataPointItemViewHolder(binding)
+        return DataPointItemViewHolder(binding, metrics)
 
+    }
+
+    override fun onViewRecycled(holder: DataPointItemViewHolder) {
+        super.onViewRecycled(holder)
+        holder.lostFocus()
     }
 
 //    override fun getItemViewType(position: Int): Int {

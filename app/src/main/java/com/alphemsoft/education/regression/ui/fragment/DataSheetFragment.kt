@@ -2,24 +2,28 @@ package com.alphemsoft.education.regression.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuItem
+import android.webkit.MimeTypeMap
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alphemsoft.education.regression.BR
-import com.alphemsoft.education.regression.constants.PREMIUM_REQUEST_IMPORT_DATA
 import com.alphemsoft.education.regression.R
+import com.alphemsoft.education.regression.constants.PREMIUM_REQUEST_IMPORT_DATA
 import com.alphemsoft.education.regression.constants.RESULT_IMPORT_DATA
 import com.alphemsoft.education.regression.databinding.FragmentDataSheetBinding
+import com.alphemsoft.education.regression.extensions.displayMetrics
+import com.alphemsoft.education.regression.parser.CSVHelper
 import com.alphemsoft.education.regression.ui.SimpleFieldModelUi
 import com.alphemsoft.education.regression.ui.adapter.DataPointAdapter
 import com.alphemsoft.education.regression.ui.adapter.itemdecoration.DividerItemDecoration
 import com.alphemsoft.education.regression.ui.base.BaseFragment
 import com.alphemsoft.education.regression.viewmodel.DataSheetViewModel
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.play.core.internal.bu
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -27,10 +31,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVParser
-import java.io.BufferedInputStream
-import java.io.BufferedReader
-import java.io.Reader
-import java.nio.charset.Charset
+import java.io.File
+import java.io.FileReader
+import java.util.*
 import javax.inject.Inject
 
 abstract class BaseDataSheetFragment : BaseFragment<FragmentDataSheetBinding, DataSheetViewModel>(
@@ -48,10 +51,10 @@ class DataSheetFragment : BaseDataSheetFragment(),
     private var actionMode: ActionMode? = null
     private lateinit var actionCallback: ActionMode.Callback
 
-    @Inject
-    lateinit var dataPointAdapter: DataPointAdapter
+    @Inject lateinit var dataPointAdapter: DataPointAdapter
+    private val importEntriesDialogFragment =  ImportEntriesDialogFragment()
 
-    lateinit var singleFieldDataSheetFragment: SingleFieldDataSheetFragment
+    lateinit var singleFieldDataSheetFragment: SingleFieldDataSheetFragmentSimple
 
     @ExperimentalCoroutinesApi
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -62,7 +65,7 @@ class DataSheetFragment : BaseDataSheetFragment(),
     }
 
     private fun setupSingleFieldBottomSheet() {
-        singleFieldDataSheetFragment = SingleFieldDataSheetFragment()
+        singleFieldDataSheetFragment = SingleFieldDataSheetFragmentSimple()
         val modelUi = SimpleFieldModelUi(
             getString(R.string.action_add_empty_data_points),
             getString(R.string.hint_number_of_data_points),
@@ -81,7 +84,7 @@ class DataSheetFragment : BaseDataSheetFragment(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.action_validate_and_save->{
-                if (viewModel.dataPoints.value.size <3){
+                if (viewModel.dataEntries.value.size <3){
                     Snackbar.make(requireView(), getString(R.string.error_not_enough_entries), Snackbar.LENGTH_LONG).show()
                 }else{
                     coroutineHandler.backgroundScope.launch {
@@ -99,8 +102,9 @@ class DataSheetFragment : BaseDataSheetFragment(),
                 true
             }
             R.id.action_import_csv_data->{
-                val fragment = PremiumFeatureDialogFragment()
-                fragment.show(childFragmentManager, this, PREMIUM_REQUEST_IMPORT_DATA, R.string.action_import_csv_data)
+//                val fragment = PremiumFeatureDialogFragment()
+//                fragment.show(childFragmentManager, this, PREMIUM_REQUEST_IMPORT_DATA, R.string.action_import_csv_data)
+                onRewardedVideoWatched(PREMIUM_REQUEST_IMPORT_DATA)
                 true
             }
             else -> false
@@ -202,9 +206,11 @@ class DataSheetFragment : BaseDataSheetFragment(),
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             addItemDecoration(
                 DividerItemDecoration(
-                    16
+                    resources.getDimensionPixelSize(R.dimen.small_spacing)
                 )
             )
+            val metrics = requireActivity().displayMetrics()
+            dataPointAdapter.metrics = metrics
             adapter = dataPointAdapter
         }
 
@@ -227,7 +233,9 @@ class DataSheetFragment : BaseDataSheetFragment(),
         when(requestId){
             PREMIUM_REQUEST_IMPORT_DATA ->{
                 val intent = Intent(Intent.ACTION_GET_CONTENT)
-                intent.type = "text/csv"
+                val mimeTypeMap = MimeTypeMap.getSingleton()
+                intent.type = "*/*"
+//                intent.putExtra(Intent.EXTRA_MIME_TYPES,types)
                 startActivityForResult(intent, RESULT_IMPORT_DATA)
             }
         }
@@ -237,12 +245,28 @@ class DataSheetFragment : BaseDataSheetFragment(),
         super.onActivityResult(requestCode, resultCode, data)
         val uri = data?.data
         uri?.let { safeUri->
+            val mime = requireActivity().contentResolver.getType(uri)?:""
             val inputStream = requireActivity().contentResolver.openInputStream(safeUri)
-            val csvParser = CSVParser.parse(inputStream, Charset.defaultCharset(), CSVFormat.EXCEL)
-            csvParser.iterator().forEach {
+            val cachePath = requireActivity().externalCacheDir?.absoluteFile
+            val file = File(cachePath, UUID.randomUUID().toString())
+            file.outputStream().use {
+                inputStream?.copyTo(it)
+            }
+            val types = arrayOf("application/csv", "text/comma-separated-values", "text/csv", "text/plain")
+            if (types.contains(mime)){
 
             }
+            val csvReader = CSVParser.parse(FileReader(file), CSVFormat.DEFAULT)
+            val csvHelper = CSVHelper(csvReader)
 
+            val entries = csvHelper.sheetEntries
+            coroutineHandler.backgroundScope.launch {
+                viewModel.addImportEntries(entries)
+            }
+
+            importEntriesDialogFragment.show(
+                requireActivity().supportFragmentManager,
+                "ImportEntries")
         }
     }
 

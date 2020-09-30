@@ -15,5 +15,8 @@
     <color name="color_premium_dialog_title">#00796B</color>
     <color name="color_button_watch_video">#009688</color>
     <color name="color_button_get_a_subscription">#7C4DFF</color>
+    <color name="color_action_cancel">#F44336</color>
+    <color name="color_background_white">#efefef</color>
+    <color name="color_background_dark">#7f7f7f</color>
 
 </resources>

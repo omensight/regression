@@ -18,5 +18,7 @@ data class Sheet(
     @ColumnInfo(name = "y_label")
     var yLabel: String = "",
     @ColumnInfo(name = "created_on")
-    val createdOn: Date
+    val createdOn: Date,
+    @ColumnInfo(name = "width")
+    val width: Int
 )

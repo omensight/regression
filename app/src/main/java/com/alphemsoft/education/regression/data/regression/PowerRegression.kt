@@ -1,9 +1,10 @@
 package com.alphemsoft.education.regression.data.regression
 
 import com.alphemsoft.education.regression.R
-import com.alphemsoft.education.regression.data.model.DataPoint
+import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.data.model.secondary.Result
 import com.alphemsoft.education.regression.extensions.roundedNumber
+import com.alphemsoft.education.regression.helpers.BidimensionalColumnMapper
 import org.apache.commons.math3.stat.regression.SimpleRegression
 import kotlin.math.absoluteValue
 import kotlin.math.ln
@@ -31,23 +32,25 @@ class PowerRegression : Regression {
     private lateinit var lnXTimesLnYList: List<Double>
     private lateinit var lnYList: List<Double>
     private lateinit var lnXList: List<Double>
-    private lateinit var entries: List<DataPoint>
     private val simpleRegression = SimpleRegression()
     private var dataSettled: Boolean = false
+    private lateinit var xColumn: DoubleArray
+    private lateinit var yColumn: DoubleArray
 
     private lateinit var result: MutableList<Result>
 
 
-    override suspend fun setData(data: List<DataPoint>) {
-        entries = data
+    override suspend fun setData(entryData: List<SheetEntry>) {
         dataSettled = true
-        entries.forEach {
-            simpleRegression.addData(it.x!!.toDouble(), it.y!!.toDouble())
-        }
+
+        val columnMapper = BidimensionalColumnMapper()
+        val columns = columnMapper.getEntryColumns(entryData)
+        xColumn = columns[0]
+        yColumn = columns[1]
         result = ArrayList()
-        lnXList = entries.map { ln(it.x!!.toDouble()) }
-        lnYList = entries.map { ln(it.y!!.toDouble()) }
-        lnXTimesLnYList = entries.map { ln(it.x!!.toDouble()).times(ln(it.y!!.toDouble())) }
+        lnXList = xColumn.map { ln(it) }
+        lnYList = yColumn.map { ln(it) }
+        lnXTimesLnYList = lnXList.zip(lnYList).map { it.first*it.second }
         lnXAverage = lnXList.average()
         lnYAverage = lnYList.average()
         squaresOfLnXList = lnXList.map { it.pow(2) }
@@ -117,19 +120,19 @@ class PowerRegression : Regression {
 
     override fun getCalculatedPoints(): List<Pair<Double, Double>> {
         val result = ArrayList<Pair<Double, Double>>()
-        val ordered = entries.sortedBy {
-            it.x
+        val ordered = xColumn.zip(yColumn).sortedBy {
+            it.first
         }
-        val firstPointX = ordered.first().x!!
-        val lastPointX = ordered.last().x!!
-        val distance = firstPointX.minus(lastPointX).toDouble().absoluteValue
+        val firstPointX = ordered.first().first
+        val lastPointX = ordered.last().first
+        val distance = firstPointX.minus(lastPointX).absoluteValue
         val step = distance.div(100)
         for (i in 0 .. 100) {
             step.times(i).let { currentDistance->
-                val x = firstPointX.toDouble() + currentDistance
+                val x = firstPointX + currentDistance
                 var y = a * (currentDistance.pow(b))
                 if (y.isInfinite()){
-                    y = entries.map { it.y!!.toDouble() }.maxOrNull()!!
+                    y = ordered.map { it.second }.maxOrNull()!!
                 }
                 result.add(Pair(x, y))
             }

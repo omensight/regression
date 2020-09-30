@@ -1,4 +1,4 @@
-package com.alphemsoft.education.regression.module
+package com.alphemsoft.education.regression.di
 
 import com.alphemsoft.education.regression.data.dao.SheetDao
 import com.alphemsoft.education.regression.data.datasource.ISheetDataSource
