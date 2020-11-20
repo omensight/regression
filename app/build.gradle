@@ -98,8 +98,10 @@ dependencies {
     //MPAndroidChart
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     api project(':nativetemplates')
-
-
     implementation 'org.apache.commons:commons-csv:1.8'
+}
 
+def secretConfigFile = file("$projectDir/secret_config.gradle")
+if (secretConfigFile.exists()){
+    apply from: file("$projectDir/secret_config.gradle")
 }

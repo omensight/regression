@@ -6,7 +6,6 @@ import java.math.BigDecimal
 
 @Entity(
     tableName = "sheet_entries",
-    primaryKeys = ["sheet_entry_id", "fk_sheet_x_coordinate", "fk_sheet_y_coordinate"],
     foreignKeys = [ForeignKey(
         entity = Sheet::class,
         parentColumns = ["sheet_id"],
@@ -15,26 +14,26 @@ import java.math.BigDecimal
 )
 data class SheetEntry constructor(
     @ColumnInfo(name = "sheet_entry_id")
+    @PrimaryKey(autoGenerate = true)
     var id: Long = 0,
-
-    @ColumnInfo(name = "fk_sheet_x_coordinate")
-    val xCoordinate: Long = 0,
-
-    @ColumnInfo(name = "fk_sheet_y_coordinate")
-    val yCoordinate: Long = 0,
     @ColumnInfo(name = "fk_sheet_id")
     val fkSheetId: Long,
-    var data: BigDecimal? = null,
+    var x: BigDecimal? = null,
+    var y: BigDecimal? = null,
     @Ignore
-    var selected: Boolean
+    var selected: Boolean = false,
+    @Ignore
+    val tempHash: Long? = null,
+    @Ignore
+    var deleted: Boolean = false
 ) {
-    constructor(id: Long, xCoordinate: Long, yCoordinate: Long, fkSheetId: Long, data: BigDecimal) : this(
+    constructor(id: Long, fkSheetId: Long, x: BigDecimal, y: BigDecimal) : this(
         id,
-        xCoordinate,
-        yCoordinate,
         fkSheetId,
-        data,
+        x,
+        y,
         false
+
     )
 
     override fun equals(other: Any?): Boolean {
@@ -44,23 +43,24 @@ data class SheetEntry constructor(
         other as SheetEntry
 
         if (id != other.id) return false
-        if (xCoordinate != other.xCoordinate) return false
-        if (yCoordinate != other.yCoordinate) return false
         if (fkSheetId != other.fkSheetId) return false
-        if (data != other.data) return false
+        if (x != other.x) return false
+        if (y != other.y) return false
         if (selected != other.selected) return false
+        if (tempHash != other.tempHash) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = id.hashCode()
-        result = 31 * result + xCoordinate.hashCode()
-        result = 31 * result + yCoordinate.hashCode()
         result = 31 * result + fkSheetId.hashCode()
-        result = 31 * result + (data?.hashCode() ?: 0)
+        result = 31 * result + (x?.hashCode() ?: 0)
+        result = 31 * result + (y?.hashCode() ?: 0)
         result = 31 * result + selected.hashCode()
+        result = 31 * result + (tempHash?.hashCode() ?: 0)
         return result
     }
+
 
 }

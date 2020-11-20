@@ -3,6 +3,7 @@ package com.alphemsoft.education.regression.viewmodel
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -13,6 +14,9 @@ import com.alphemsoft.education.regression.data.model.Sheet
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import java.math.BigDecimal
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.random.Random
 
 @ExperimentalCoroutinesApi
 class DataSheetViewModel @ViewModelInject constructor(
@@ -21,11 +25,15 @@ class DataSheetViewModel @ViewModelInject constructor(
 ) : ViewModel() {
 
     @ExperimentalCoroutinesApi
-    val dataEntries: MutableStateFlow<MutableList<SheetEntry>> = MutableStateFlow(ArrayList())
+    val dataEntries: MutableLiveData<MutableList<SheetEntry>> = MutableLiveData(ArrayList())
 
-    val _importEntries: MutableLiveData<List<SheetEntry?>> = MutableLiveData()
+    private val _importEntries: MutableLiveData<List<SheetEntry?>> = MutableLiveData()
     val importEntries: MutableLiveData<List<SheetEntry?>>
         get() = _importEntries
+
+    suspend fun getSheet(sheetId: Long): Sheet? {
+        return sheetDataSource.find(sheetId)
+    }
 
     fun getAllSheets(): Flow<PagingData<Sheet>> {
         return sheetDataSource.findAll().flow.cachedIn(viewModelScope)
@@ -33,39 +41,51 @@ class DataSheetViewModel @ViewModelInject constructor(
 
     @ExperimentalCoroutinesApi
     suspend fun getDataPointList(sheetId: Long): Flow<List<SheetEntry>> {
-        dataEntries.value = ArrayList(dataPointDataSource.getDataPointList(sheetId))
-        return dataEntries
+        dataEntries.postValue(ArrayList(dataPointDataSource.getDataPointList(sheetId)))
+        return dataEntries.asFlow()
     }
 
     @ExperimentalCoroutinesApi
     suspend fun addTemporaryPoint(sheetId: Long) {
-        val value = dataEntries.value + SheetEntry(id = 0, fkSheetId = sheetId, null, null, false)
-        dataEntries.value = ArrayList(value)
+        val value = dataEntries.value
+        value?.add(SheetEntry(
+            0L,
+            sheetId,
+            null,
+            null,
+            false,
+            Date().time
+        ))
+        dataEntries.postValue(value)
     }
 
     @ExperimentalCoroutinesApi
     suspend fun sweepAll() {
         val value = ArrayList<SheetEntry>(dataEntries.value)
         value.forEach {
-            it.data = null
+            it.x = null
+            it.y = null
         }
-        dataEntries.value = ArrayList(value.filter { true })
+        dataEntries.postValue(value)
     }
 
     @ExperimentalCoroutinesApi
     suspend fun deleteSelected() {
         val value = ArrayList(dataEntries.value)
-        value.removeAll { it.selected }
-        dataEntries.value = value
+        value.filter { it.selected
+        }.forEach {
+            it.deleted = true
+        }
+        dataEntries.postValue(value)
     }
 
     @ExperimentalCoroutinesApi
     suspend fun selectNothing() {
         val value = dataEntries.value
-        value.filter { it.selected }.forEach {
+        value?.filter { it.selected }?.forEach {
             it.selected = false
         }
-        dataEntries.value = ArrayList(dataEntries.value)
+        dataEntries.postValue(dataEntries.value)
     }
 
     @ExperimentalCoroutinesApi
@@ -74,67 +94,60 @@ class DataSheetViewModel @ViewModelInject constructor(
         value.forEach {
             it.selected = true
         }
-        dataEntries.value = value
+        dataEntries.postValue(value)
     }
 
     suspend fun addTemporaryPoints(numberOfEmptyDataPoints: Int, sheetId: Long) {
         val value = ArrayList(dataEntries.value)
         for (i in 0 until numberOfEmptyDataPoints) {
-            value.add(SheetEntry(0, sheetId, null, null, false))
+            value.add(SheetEntry(0, sheetId, null, null, false, Random.nextLong()))
         }
-        dataEntries.value = value
+        dataEntries.postValue(value)
     }
 
     suspend fun validateAndSaveData(): Boolean {
         val value = dataEntries.value
-        val firstNullData = value.firstOrNull { dataPoint ->
-            dataPoint.data == null
+        val firstNullData = value?.firstOrNull { dataPoint ->
+            dataPoint.x == null || dataPoint.y == null
         }
         return firstNullData?.let {
             false
         } ?: run {
-            val existingEntities = value.filter {
+            value?.filter {
                 it.id != 0L
+            }?.let {
+                dataPointDataSource.update(it)
             }
-            val newEntities = value.filter {
+            value?.filter {
                 it.id == 0L
+            }?.let {
+                dataPointDataSource.insert(it)
             }
-            dataPointDataSource.insert(newEntities)
-            dataPointDataSource.update(existingEntities)
+            value?.filter {
+                it.deleted && it.id != 0L
+            }?.run {
+                dataPointDataSource.delete(this)
+            }
             true
         }
     }
 
-    suspend fun addTemporaryEntries(entries: List<Array<Double?>>, sheetId: Long){
-        val oldData = dataEntries.value
-        val last = oldData.lastOrNull()
-        val sheet = sheetDataSource.find(sheetId)
-        val startX = last?.xCoordinate?.plus(1) ?: 0
-
-        val newDataEntries = entries.map {
-            SheetEntry(0,sheetId, )
-        }
-        val newList = ArrayList(dataEntries.value)
-        newList.addAll(newDataEntries)
-        dataEntries.value = newList
-    }
-
-    fun addImportEntries(entryList: List<Array<Double?>>) {
-        val max = entryList.map { it.size }.maxOrNull()
-        val newEntries = ArrayList<SheetEntry?>()
-        max?.let {
-            for (currentEntryList in entryList){
-                for (i in 0 until max){
-                    try {
-                        val currentDouble = currentEntryList[i]
-                        val entry = SheetEntry(-1,-1,-1,-1, BigDecimal(currentDouble?:0.0))
-                        newEntries.add(entry)
-                    }catch (t: Throwable){
-                        newEntries.add(null)
-                    }
-                }
-            }
-        }
-        _importEntries.postValue(newEntries)
+    fun addImportedEntries(entryList: List<Pair<Double?, Double?>>) {
+//        val max = entryList.map { it.size }.maxOrNull()
+//        val newEntries = ArrayList<SheetEntry?>()
+//        max?.let {
+//            for (currentEntryList in entryList){
+//                for (i in 0 until max){
+//                    try {
+//                        val currentDouble = currentEntryList[i]
+//                        val entry = SheetEntry(-1,-1,-1,-1, BigDecimal(currentDouble?:0.0))
+//                        newEntries.add(entry)
+//                    }catch (t: Throwable){
+//                        newEntries.add(null)
+//                    }
+//                }
+//            }
+//        }
+//        _importEntries.postValue(newEntries)
     }
 }

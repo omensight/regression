@@ -2,8 +2,8 @@ package com.alphemsoft.education.regression.ui.comparators
 
 import androidx.recyclerview.widget.DiffUtil
 
-class DiffUtilComparatorCallback<T: Any>() {
-    private fun getCallback(oldList: List<T>, newList: List<T>) = object : DiffUtil.Callback(){
+open class DiffUtilComparatorCallback<T: Any>() {
+    protected open fun getCallback(oldList: List<T>, newList: List<T>) = object : DiffUtil.Callback(){
         override fun getOldListSize(): Int {
             return oldList.size
         }

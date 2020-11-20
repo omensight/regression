@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.alphemsoft.education.regression.BR
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.data.model.AdEntity
-import com.alphemsoft.education.regression.data.model.Sheet
 import com.alphemsoft.education.regression.databinding.FragmentResultsBinding
 import com.alphemsoft.education.regression.data.regression.RegressionFactory
 import com.alphemsoft.education.regression.ui.adapter.ResultAdapter
@@ -44,27 +43,29 @@ class ResultFragment : AbstractResultFragment() {
 
     private suspend fun refreshResultList(unifiedNativeAds: List<AdEntity>) {
         if (unifiedNativeAds.isEmpty()) return
-        val sheet: Sheet = viewModel.getSheet(args.regressionId)
-        val regression = RegressionFactory.getRegression(sheet.type)
-        val data = viewModel.getDataPoints(args.regressionId)
-        regression.setData(data)
+        val sheet = viewModel.getSheet(args.regressionId)
+        sheet?.let {
+            val regression = RegressionFactory.generateRegression(sheet.type)
+            val data = viewModel.getDataPoints(args.regressionId)
+            regression.setData(data)
 
-        val results = regression.getResults(10)
-        val resultsWithAds: MutableList<Any> = ArrayList()
-        var adIndex = 0
-        results.forEachIndexed { index, result ->
-            if (index % 5 == 0 && unifiedNativeAds.isNotEmpty() && index > 0) {
-                val adEntity = AdEntity()
-                adEntity.unifiedNativeAd = unifiedNativeAds[adIndex++].unifiedNativeAd
-                resultsWithAds.add(adEntity)
-                if (adIndex > unifiedNativeAds.size -1){
-                    adIndex = 0
+            val results = regression.getResults(5)
+            val resultsWithAds: MutableList<Any> = ArrayList()
+            var adIndex = 0
+            results.forEachIndexed { index, result ->
+                if (index % 5 == 0 && unifiedNativeAds.isNotEmpty() && index > 0) {
+                    val adEntity = AdEntity()
+                    adEntity.unifiedNativeAd = unifiedNativeAds[adIndex++].unifiedNativeAd
+                    resultsWithAds.add(adEntity)
+                    if (adIndex > unifiedNativeAds.size -1){
+                        adIndex = 0
+                    }
                 }
-            }
-            resultsWithAds.add(result)
+                resultsWithAds.add(result)
 
+            }
+            resultAdapter.addNewItems(resultsWithAds)
         }
-        resultAdapter.addNewItems(resultsWithAds)
     }
 
     private fun setupResultList() {

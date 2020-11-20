@@ -35,14 +35,5 @@ class ImportEntriesDialogFragment: BaseBottomSheetDialogFragment<DialogFragmentI
         }
     }
 
-    fun show(
-        manager: FragmentManager,
-        tag: String?
-    ) {
-        super.show(manager, tag)
-        importPairAdapter.addNewItems(importedPairs)
-
-    }
-
     override val viewModel: DataSheetViewModel by viewModels()
 }

@@ -9,9 +9,9 @@ import kotlin.math.max
 
 class CSVHelper(private val csvParser: CSVParser) {
 
-    private val _sheetEntries: MutableList<Array<Double?>> = ArrayList()
+    private val _sheetEntries: MutableList<Pair<Double?,Double?>> = ArrayList()
 
-    val sheetEntries: List<Array<Double?>>
+    val sheetEntries: List<Pair<Double?,Double?>>
         get() = _sheetEntries
 
     init {
@@ -23,11 +23,8 @@ class CSVHelper(private val csvParser: CSVParser) {
      */
     private fun fillDataEntries() {
         val iterator = csvParser.asSequence()
-        iterator.forEachIndexed { index, record ->
-            val array = record.map { stringNumber ->
-                stringNumber.toDoubleOrNull()
-            }.toTypedArray()
-            _sheetEntries.add(array)
+        iterator.forEach {
+            _sheetEntries.add(Pair(it[0].toDoubleOrNull(),it[1].toDoubleOrNull()))
         }
     }
 }

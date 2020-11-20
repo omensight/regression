@@ -8,7 +8,6 @@ import com.google.android.material.checkbox.MaterialCheckBox
 class CheckBoxBindings {
     companion object{
 
-
         @BindingAdapter("itemSelectedAttrChanged")
         @JvmStatic
         fun itemCheckedAttrChanged(checkBox: MaterialCheckBox, inverseBindingListener: InverseBindingListener){

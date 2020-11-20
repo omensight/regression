@@ -9,6 +9,7 @@ import android.webkit.MimeTypeMap
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alphemsoft.education.regression.BR
@@ -22,6 +23,7 @@ import com.alphemsoft.education.regression.ui.SimpleFieldModelUi
 import com.alphemsoft.education.regression.ui.adapter.DataPointAdapter
 import com.alphemsoft.education.regression.ui.adapter.itemdecoration.DividerItemDecoration
 import com.alphemsoft.education.regression.ui.base.BaseFragment
+import com.alphemsoft.education.regression.ui.divider.TestDivider
 import com.alphemsoft.education.regression.viewmodel.DataSheetViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -84,7 +86,7 @@ class DataSheetFragment : BaseDataSheetFragment(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.action_validate_and_save->{
-                if (viewModel.dataEntries.value.size <3){
+                if (viewModel.dataEntries.value?.size?:0 <3){
                     Snackbar.make(requireView(), getString(R.string.error_not_enough_entries), Snackbar.LENGTH_LONG).show()
                 }else{
                     coroutineHandler.backgroundScope.launch {
@@ -180,14 +182,22 @@ class DataSheetFragment : BaseDataSheetFragment(),
 
                 R.id.action_select -> {
                     dataPointAdapter.selectable = true
-                    actionMode = requireActivity().startActionMode(actionCallback)
+                    actionMode?.let{
+                        coroutineHandler.backgroundScope.launch {
+                            viewModel.selectNothing()
+                        }
+                    }?:run{
+                        actionMode = requireActivity().startActionMode(actionCallback)
+                    }
                 }
 
                 R.id.action_select_all -> {
                     coroutineHandler.foregroundScope.launch {
                         dataPointAdapter.selectable = true
                         viewModel.selectAll()
-                        actionMode = requireActivity().startActionMode(actionCallback)
+                        actionMode?:run{
+                            actionMode = requireActivity().startActionMode(actionCallback)
+                        }
                     }
                 }
 
@@ -202,21 +212,26 @@ class DataSheetFragment : BaseDataSheetFragment(),
 
     @ExperimentalCoroutinesApi
     private fun setUpAdapter() {
-        dataBinding.rvDataPoints.apply {
-            layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-            addItemDecoration(
-                DividerItemDecoration(
-                    resources.getDimensionPixelSize(R.dimen.small_spacing)
-                )
-            )
-            val metrics = requireActivity().displayMetrics()
-            dataPointAdapter.metrics = metrics
-            adapter = dataPointAdapter
-        }
-
         coroutineHandler.foregroundScope.launch {
-            viewModel.getDataPointList(args.sheetId).collectLatest {
-                dataPointAdapter.addNewItems(it)
+            val sheet = viewModel.getSheet(args.sheetId)
+            sheet?.let { safeSheet ->
+                dataBinding.rvDataPoints.apply {
+                    layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL,false)
+//                    addItemDecoration(
+//                        DividerItemDecoration(
+//                            resources.getDimensionPixelSize(R.dimen.small_spacing)
+//                        )
+//                    )
+                    val metrics = requireActivity().displayMetrics()
+                    dataPointAdapter.metrics = metrics
+                    adapter = dataPointAdapter
+                }
+
+                coroutineHandler.foregroundScope.launch {
+                    viewModel.getDataPointList(args.sheetId).collectLatest { it ->
+                        dataPointAdapter.addNewItems(it.filter {item-> !item.deleted })
+                    }
+                }
             }
         }
     }
@@ -261,7 +276,7 @@ class DataSheetFragment : BaseDataSheetFragment(),
 
             val entries = csvHelper.sheetEntries
             coroutineHandler.backgroundScope.launch {
-                viewModel.addImportEntries(entries)
+                viewModel.addImportedEntries(entries)
             }
 
             importEntriesDialogFragment.show(

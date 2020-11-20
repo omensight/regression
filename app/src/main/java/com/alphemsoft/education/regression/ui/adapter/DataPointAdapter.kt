@@ -7,11 +7,12 @@ import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.databinding.ItemDataPointBinding
 
 import com.alphemsoft.education.regression.ui.base.BaseEntityAdapter
+import com.alphemsoft.education.regression.ui.comparators.DataEntryComparator
 import com.alphemsoft.education.regression.ui.viewholder.DataPointItemViewHolder
 import javax.inject.Inject
 
 class DataPointAdapter @Inject constructor() :
-    BaseEntityAdapter<SheetEntry, DataPointItemViewHolder>() {
+    BaseEntityAdapter<SheetEntry, DataPointItemViewHolder>(DataEntryComparator()) {
     lateinit var metrics: DisplayMetrics
     var selectable: Boolean = false
         set(value) {
@@ -34,17 +35,10 @@ class DataPointAdapter @Inject constructor() :
         holder.lostFocus()
     }
 
-//    override fun getItemViewType(position: Int): Int {
-//        return if (items[position] is DataPoint){
-//            SimpleContentViewType.CONTENT.viewType
-//        }else{
-//            SimpleContentViewType.AD.viewType
-//        }
-//    }
-
     override fun onBindViewHolder(holder: DataPointItemViewHolder, position: Int) {
         holder.isSelectable = selectable
-        holder.bind(items[position])
+        val item = items[holder.adapterPosition]
+        holder.bind(item)
     }
 
 

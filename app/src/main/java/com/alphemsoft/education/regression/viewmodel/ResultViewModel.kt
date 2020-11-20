@@ -18,7 +18,7 @@ class ResultViewModel @ViewModelInject constructor(
         return dataPointLocalDataSource.getDataPointsFlow(sheetId)
     }
 
-    suspend fun getSheet(regressionId: Long): Sheet {
+    suspend fun getSheet(regressionId: Long): Sheet? {
         return sheetLocalDataSource.find(regressionId)
     }
 

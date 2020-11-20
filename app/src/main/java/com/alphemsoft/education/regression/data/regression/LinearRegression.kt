@@ -2,10 +2,9 @@ package com.alphemsoft.education.regression.data.regression
 
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.data.model.SheetEntry
+import com.alphemsoft.education.regression.data.model.secondary.LineData
 import com.alphemsoft.education.regression.data.model.secondary.Result
 import com.alphemsoft.education.regression.extensions.roundedNumber
-import com.alphemsoft.education.regression.helpers.IColumnMapper
-import com.alphemsoft.education.regression.helpers.BidimensionalColumnMapper
 import org.apache.commons.math3.stat.regression.SimpleRegression
 
 class LinearRegression : Regression {
@@ -18,14 +17,17 @@ class LinearRegression : Regression {
     override suspend fun setData(entryData: List<SheetEntry>) {
         simpleRegression.clear()
         dataSettled = true
-        val columnMapper: IColumnMapper = BidimensionalColumnMapper()
-        val entryColumns = columnMapper.getEntryColumns(entryData)
-        xColumn = entryColumns[0]
-        yColumn = entryColumns[1]
+        val sortedData = entryData.sortedBy { it.x }
+        xColumn = sortedData.map { it.x?.toDouble()?:0.0 }.toDoubleArray()
+        yColumn = sortedData.map { it.y?.toDouble()?:0.0 }.toDoubleArray()
         this.data = xColumn.zip(yColumn)
         data.forEach {
             simpleRegression.addData(it.first, it.second)
         }
+    }
+
+    override suspend fun getOriginalDataLine(): LineData {
+        return LineData(R.string.original_data,data.sortedBy { it.first })
     }
 
     override suspend fun getResults(decimals: Int): List<Result> {
@@ -47,7 +49,7 @@ class LinearRegression : Regression {
         val sXY = sumOfCrossXY / simpleRegression.n - xAverage * yAverage
 
         result.add(Result(R.string.formula_fit_line_linear,
-            "$$\\hat y = ${parameterEstimates[0]} $sign ${parameterEstimates[1]}x $$",
+            "$$\\hat y = ${parameterEstimates[0].roundedNumber(decimals)} $sign ${parameterEstimates[1].roundedNumber(decimals)}x $$",
             null))
         result.add(Result(R.string.a,
             "$$ A = \\bar {y} - B \\bar x = ${parameterEstimates[0].roundedNumber(decimals)}$$",
@@ -101,12 +103,13 @@ class LinearRegression : Regression {
         return result
     }
 
-    override fun getCalculatedPoints(): List<Pair<Double, Double>> {
-        val result = ArrayList<Pair<Double, Double>>()
+    override suspend fun getCalculatedLines(): List<LineData>{
+        val dataEntries = ArrayList<Pair<Double, Double>>()
         val firstPoint = xColumn.first()
         val lastPoint = xColumn.last()
-        result.add(Pair(firstPoint,simpleRegression.predict(firstPoint)))
-        result.add(Pair(lastPoint,simpleRegression.predict(lastPoint)))
-        return result
+        dataEntries.add(Pair(firstPoint,simpleRegression.predict(firstPoint)))
+        dataEntries.add(Pair(lastPoint,simpleRegression.predict(lastPoint)))
+        val lineData = LineData(R.string.formula_fit_line, dataEntries.sortedBy { it.first })
+        return listOf(lineData)
     }
 }

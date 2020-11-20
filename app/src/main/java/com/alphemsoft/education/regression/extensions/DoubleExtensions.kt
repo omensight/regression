@@ -11,7 +11,7 @@ fun Double.roundedNumber(decimalPositions: Int): String {
         val exp = formattedNumber.substring(ePosition + 1)
         exp.toIntOrNull()?.let {
             formattedNumber = if (it != 0) {
-                "${number}E10^{${exp}}"
+                "${number} \\times 10^{${exp}}"
             } else {
                 number
             }

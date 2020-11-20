@@ -2,6 +2,8 @@ package com.alphemsoft.education.regression.ui.viewholder
 
 import android.util.DisplayMetrics
 import android.view.View
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.databinding.ItemDataPointBinding
@@ -15,17 +17,19 @@ class DataPointItemViewHolder(
 ) {
     override fun bind(item: SheetEntry?) {
         mDataBinding.dataPoint = item
-        mDataBinding.cbSelected.visibility =  if (isSelectable){
-            View.VISIBLE
-        }else{
-            View.GONE
+        mDataBinding.position = absoluteAdapterPosition + 1
+        val backgroundColor =
+            if (absoluteAdapterPosition % 2 == 0)
+                ContextCompat.getColor(context, R.color.color_data_even_position)
+            else
+                ContextCompat.getColor(context, R.color.color_data_odd_position)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            mDataBinding.viewBackground.background.setTint(backgroundColor)
         }
-        metrics?.widthPixels?.let {
-            val spacing = context.resources.getDimensionPixelSize(R.dimen.small_spacing)
-            val holderWidth = it - spacing * 2
-            if (mDataBinding.clContainer.layoutParams.width != holderWidth){
-                mDataBinding.clContainer.layoutParams.width = holderWidth
-            }
+        mDataBinding.cbSelected.visibility = if (isSelectable) {
+            View.VISIBLE
+        } else {
+            View.GONE
         }
     }
 

@@ -2,9 +2,9 @@ package com.alphemsoft.education.regression.data.regression
 
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.data.model.SheetEntry
+import com.alphemsoft.education.regression.data.model.secondary.LineData
 import com.alphemsoft.education.regression.data.model.secondary.Result
 import com.alphemsoft.education.regression.extensions.roundedNumber
-import com.alphemsoft.education.regression.helpers.BidimensionalColumnMapper
 import org.apache.commons.math3.stat.regression.SimpleRegression
 import kotlin.math.absoluteValue
 import kotlin.math.ln
@@ -36,31 +36,29 @@ class PowerRegression : Regression {
     private var dataSettled: Boolean = false
     private lateinit var xColumn: DoubleArray
     private lateinit var yColumn: DoubleArray
-
+    private var n: Int = 0
     private lateinit var result: MutableList<Result>
 
 
     override suspend fun setData(entryData: List<SheetEntry>) {
         dataSettled = true
-
-        val columnMapper = BidimensionalColumnMapper()
-        val columns = columnMapper.getEntryColumns(entryData)
-        xColumn = columns[0]
-        yColumn = columns[1]
+        n = entryData.size
+        xColumn = entryData.map { it.x!!.toDouble() }.toDoubleArray()
+        yColumn = entryData.map { it.y!!.toDouble() }.toDoubleArray()
         result = ArrayList()
         lnXList = xColumn.map { ln(it) }
         lnYList = yColumn.map { ln(it) }
         lnXTimesLnYList = lnXList.zip(lnYList).map { it.first*it.second }
         lnXAverage = lnXList.average()
         lnYAverage = lnYList.average()
-        squaresOfLnXList = lnXList.map { it.pow(2) }
-        squaresOfLnYList = lnYList.map { it.pow(2) }
+        squaresOfLnXList = lnXList.map { it*it }
+        squaresOfLnYList = lnYList.map { it*it }
         sumOfSquaresOfLnX = squaresOfLnXList.sum()
         sumOfSquaresOfLnY = squaresOfLnYList.sum()
         sumOfLnXLnYProduct = lnXTimesLnYList.sum()
-        sXX = sumOfSquaresOfLnX / simpleRegression.n - lnXAverage.pow(2)
-        sYY = sumOfSquaresOfLnY / simpleRegression.n - lnYAverage.pow(2)
-        sXY = sumOfLnXLnYProduct / simpleRegression.n - lnXAverage * lnYAverage
+        sXX = (sumOfSquaresOfLnX / n) - lnXAverage.pow(2)
+        sYY = sumOfSquaresOfLnY / n - lnYAverage.pow(2)
+        sXY = sumOfLnXLnYProduct / n - lnXAverage * lnYAverage
         sumOfLnX = lnXList.sum()
         sumOfLnY = lnYList.sum()
         b = sXY / sXX
@@ -72,72 +70,139 @@ class PowerRegression : Regression {
     override suspend fun getResults(decimals: Int): List<Result> {
         result.add(Result(R.string.formula_fit_line, "$$ y = Ax^B $$", sYY))
 
-        result.add(Result(R.string.formula_fit_line,
-            "$$ y = ${a.roundedNumber(decimals)}x^{${b.roundedNumber(decimals)}}$$",
-            null))
+        result.add(
+            Result(
+                R.string.formula_fit_line,
+                "$$ y = ${a.roundedNumber(decimals)}x^{${b.roundedNumber(decimals)}}$$",
+                null
+            )
+        )
 
-        result.add(Result(R.string.a,
-            "$$ A = e^{\\overline{lny}-B\\overline{lnx}} = ${a.roundedNumber(decimals)}$$",
-            a))
-        result.add(Result(R.string.b,
-            "$$ B = \\frac{Sxy}{Sxx} = ${b.roundedNumber(decimals)}$$",
-            b))
-        result.add(Result(R.string.r,
-            "$$ R = \\frac{Sxy}{\\sqrt{Sxx}\\sqrt{Syy}} = ${r.roundedNumber(decimals)}$$",
-            r))
-        result.add(Result(R.string.square_of_r,
-            "$$ R^2 = ${squareOfR.roundedNumber(decimals)}",
-            squareOfR))
-        result.add(Result(R.string.n,
-            "$$ n = ${simpleRegression.n}",
-            simpleRegression.n.toDouble()))
-        result.add(Result(R.string.sXX,
-            "$$ Sxx = \\frac{\\sum{Lnx^2}}{n}-\\overline{Lnx}^2 = ${sXX.roundedNumber(decimals)}$$",
-            sXX))
-        result.add(Result(R.string.sYY,
-            "$$ Syy = \\frac{\\sum{Lny^2}}{n}-\\overline{Lny}^2 = ${sYY.roundedNumber(decimals)}$$",
-            sYY))
-        result.add(Result(R.string.sXY,
-            "$$ Sxy = \\frac{\\sum (Lnx*Lny)}{n}-\\overline{Lnx}\\overline{Lny} = ${sXY.roundedNumber(decimals)}$$",
-            sXY))
-        result.add(Result(R.string.ln_x_average,
-            "$$\\overline{Lnx} = \\frac{\\sum {Lnx}}{n} = ${lnXAverage.roundedNumber(decimals)}$$",
-            lnXAverage))
-        result.add(Result(R.string.ln_y_average,
-            "$$\\overline{Lny} = \\frac{\\sum {Lny}}{n} = ${lnYAverage.roundedNumber(decimals)}$$",
-            lnYAverage))
-        result.add(Result(R.string.sum_of_ln_x,
-            "$$\\sum {Lnx} = ${sumOfLnX.roundedNumber(decimals)}$$",
-            sumOfLnX))
-        result.add(Result(R.string.sum_of_ln_y,
-            "$$\\sum {Lny} = ${sumOfLnY.roundedNumber(decimals)}$$",
-            sumOfLnY))
-        result.add(Result(R.string.sum_of_ln_x_ln_y_products,
-            "$$\\sum {Lnx*Lny} = ${sumOfLnXLnYProduct.roundedNumber(decimals)}$$",
-            sumOfLnXLnYProduct))
+        result.add(
+            Result(
+                R.string.a,
+                "$$ A = e^{\\overline{lny}-B\\overline{lnx}} = ${a.roundedNumber(decimals)}$$",
+                a
+            )
+        )
+        result.add(
+            Result(
+                R.string.b,
+                "$$ B = \\frac{Sxy}{Sxx} = ${b.roundedNumber(decimals)}$$",
+                b
+            )
+        )
+        result.add(
+            Result(
+                R.string.r,
+                "$$ R = \\frac{Sxy}{\\sqrt{Sxx}\\sqrt{Syy}} = ${r.roundedNumber(decimals)}$$",
+                r
+            )
+        )
+        result.add(
+            Result(
+                R.string.square_of_r,
+                "$$ R^2 = ${squareOfR.roundedNumber(decimals)}",
+                squareOfR
+            )
+        )
+        result.add(
+            Result(
+                R.string.n,
+                "$$ n = ${simpleRegression.n}",
+                simpleRegression.n.toDouble()
+            )
+        )
+        result.add(
+            Result(
+                R.string.sXX,
+                "$$ Sxx = \\frac{\\sum{Lnx^2}}{n}-\\overline{Lnx}^2 = ${sXX.roundedNumber(decimals)}$$",
+                sXX
+            )
+        )
+        result.add(
+            Result(
+                R.string.sYY,
+                "$$ Syy = \\frac{\\sum{Lny^2}}{n}-\\overline{Lny}^2 = ${sYY.roundedNumber(decimals)}$$",
+                sYY
+            )
+        )
+        result.add(
+            Result(
+                R.string.sXY,
+                "$$ Sxy = \\frac{\\sum (Lnx*Lny)}{n}-\\overline{Lnx}\\overline{Lny} = ${
+                    sXY.roundedNumber(
+                        decimals
+                    )
+                }$$",
+                sXY
+            )
+        )
+        result.add(
+            Result(
+                R.string.ln_x_average,
+                "$$\\overline{Lnx} = \\frac{\\sum {Lnx}}{n} = ${lnXAverage.roundedNumber(decimals)}$$",
+                lnXAverage
+            )
+        )
+        result.add(
+            Result(
+                R.string.ln_y_average,
+                "$$\\overline{Lny} = \\frac{\\sum {Lny}}{n} = ${lnYAverage.roundedNumber(decimals)}$$",
+                lnYAverage
+            )
+        )
+        result.add(
+            Result(
+                R.string.sum_of_ln_x,
+                "$$\\sum {Lnx} = ${sumOfLnX.roundedNumber(decimals)}$$",
+                sumOfLnX
+            )
+        )
+        result.add(
+            Result(
+                R.string.sum_of_ln_y,
+                "$$\\sum {Lny} = ${sumOfLnY.roundedNumber(decimals)}$$",
+                sumOfLnY
+            )
+        )
+        result.add(
+            Result(
+                R.string.sum_of_ln_x_ln_y_products,
+                "$$\\sum {Lnx*Lny} = ${sumOfLnXLnYProduct.roundedNumber(decimals)}$$",
+                sumOfLnXLnYProduct
+            )
+        )
         return result
     }
 
-    override fun getCalculatedPoints(): List<Pair<Double, Double>> {
-        val result = ArrayList<Pair<Double, Double>>()
+    override suspend fun getCalculatedLines(): List<LineData> {
+        val calculated = ArrayList<Pair<Double, Double>>()
+        val result = ArrayList<LineData>()
         val ordered = xColumn.zip(yColumn).sortedBy {
             it.first
         }
         val firstPointX = ordered.first().first
         val lastPointX = ordered.last().first
         val distance = firstPointX.minus(lastPointX).absoluteValue
-        val step = distance.div(100)
-        for (i in 0 .. 100) {
+        val stepCount = 50
+        val step = distance.div(stepCount)
+        for (i in 0 ..stepCount) {
             step.times(i).let { currentDistance->
                 val x = firstPointX + currentDistance
-                var y = a * (currentDistance.pow(b))
+                var y = a * x.pow(b)
                 if (y.isInfinite()){
                     y = ordered.map { it.second }.maxOrNull()!!
                 }
-                result.add(Pair(x, y))
+                calculated.add(Pair(x, y))
             }
         }
+        result.add(LineData(R.string.formula_fit_line, calculated))
         return result
     }
 
+    override suspend fun getOriginalDataLine(): LineData {
+        val originalData = xColumn.zip(yColumn)
+        return LineData(R.string.formula_fit_line, originalData)
+    }
 }

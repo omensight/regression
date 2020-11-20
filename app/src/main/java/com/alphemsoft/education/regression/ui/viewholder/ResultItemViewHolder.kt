@@ -15,7 +15,7 @@ class ResultItemViewHolder(mViewBinding: ItemResultBinding) :
         item?.let {
             mDataBinding.tvTitle.text = context.getString(item.title)
             val mathViewResult = mDataBinding.mathViewResult
-            mathViewResult.fontSize = 40f
+            mathViewResult.fontSize = 38f
             mathViewResult.textColor = Color.WHITE
             mathViewResult.textAlignment = MTMathView.MTTextAlignment.KMTTextAlignmentCenter
             mathViewResult.latex = item.formula

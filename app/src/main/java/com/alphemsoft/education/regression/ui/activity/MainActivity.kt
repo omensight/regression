@@ -2,6 +2,7 @@ package com.alphemsoft.education.regression.ui.activity
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.navigation.findNavController
@@ -23,10 +24,9 @@ class MainActivity : BaseAppCompatActivity(true) {
         MobileAds.initialize(applicationContext) {}
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
+        loadAds()
         setupToolbar()
     }
-
-
 
     private fun setupToolbar() {
         val toolbar = findViewById<MaterialToolbar>(R.id.toolbar_main)
@@ -48,20 +48,26 @@ class MainActivity : BaseAppCompatActivity(true) {
 
     private fun changeAdLooper(unifiedNativeAds: List<AdEntity>) {
         coroutineHandler.foregroundScope.launch {
-            unifiedNativeAds.forEach { ad->
-                if (unifiedNativeAds.isNotEmpty()){
+            if (unifiedNativeAds.isNotEmpty()){
+                unifiedNativeAds.forEachIndexed {i, ad->
                     ad.unifiedNativeAd?.let { nativeAd->
                         ad_template_view.setNativeAd(nativeAd)
                     }
+                    Log.d("$i -> Coroutine Thread", "The thread is ${Thread.currentThread().name}, the ad is: ${ad.id}")
+                    delay(1000*5)
+                    unifiedNativeAds.lastOrNull()?.let {
+                        if(i == unifiedNativeAds.indexOf(it)){
+                            loadAds()
+                        }
+                    }
                 }
-                delay(1000*60)
             }
-            loadAds()
         }
     }
 
     override fun onAdsLoaded(unifiedNativeAds: List<AdEntity>, adsChanged: Boolean) {
         super.onAdsLoaded(unifiedNativeAds, adsChanged)
+        println("AdsLoaded")
         changeAdLooper(unifiedNativeAds)
     }
 }

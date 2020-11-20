@@ -20,5 +20,5 @@ data class Sheet(
     @ColumnInfo(name = "created_on")
     val createdOn: Date,
     @ColumnInfo(name = "width")
-    val width: Int
+    val variableCount: Int
 )

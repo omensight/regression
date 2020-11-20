@@ -3,10 +3,11 @@ package com.alphemsoft.education.regression.ui.base
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.alphemsoft.education.regression.ui.comparators.DataEntryComparator
 import com.alphemsoft.education.regression.ui.comparators.DiffUtilComparatorCallback
 
-abstract class BaseEntityAdapter<T: Any, VH : RecyclerView.ViewHolder>: RecyclerView.Adapter<VH>() {
-    val diffUtil = DiffUtilComparatorCallback<T>()
+abstract class BaseEntityAdapter<T: Any, VH : RecyclerView.ViewHolder>(val diffUtil: DiffUtilComparatorCallback<T> = DiffUtilComparatorCallback<T>()): RecyclerView.Adapter<VH>() {
+
     protected val items: MutableList<T> = ArrayList()
     fun addNewItems(newItems: List<T>){
         val result = diffUtil.getResult(items, newItems)

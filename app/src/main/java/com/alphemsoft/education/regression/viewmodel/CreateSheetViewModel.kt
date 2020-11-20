@@ -17,7 +17,8 @@ class CreateSheetViewModel @ViewModelInject constructor(
         newSheet.value = Sheet(
             id = 0,
             name = "",
-            createdOn = Date(-1)
+            createdOn = Date(-1),
+            variableCount = 2
         )
     }
 

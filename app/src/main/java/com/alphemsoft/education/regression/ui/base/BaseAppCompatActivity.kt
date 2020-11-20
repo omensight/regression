@@ -31,11 +31,6 @@ abstract class BaseAppCompatActivity(private val supportsNativeAds: Boolean = fa
         setupNativeAds()
     }
 
-    override fun onStart() {
-        super.onStart()
-        loadAds()
-    }
-
     private fun setupNativeAds() {
         val adLoaderBuilder =
             AdLoader.Builder(applicationContext, getString(R.string.ad_native_id))
@@ -62,24 +57,16 @@ abstract class BaseAppCompatActivity(private val supportsNativeAds: Boolean = fa
             override fun onAdFailedToLoad(p0: LoadAdError?) {
                 super.onAdFailedToLoad(p0)
                 adLoadedListeners.forEach {
-                    val listOfAds = listOf(AdEntity())
+                    val listOfAds = emptyList<AdEntity>()
                     it.onAdsLoaded(listOfAds, true)
                 }
-            }
-
-            override fun onAdLoaded() {
-                super.onAdLoaded()
-            }
-
-
-            override fun onAdImpression() {
-                super.onAdImpression()
             }
         })
         adLoader = adLoaderBuilder.build()
     }
 
     protected fun loadAds(){
+        unifiedNativeAds.clear()
         adLoader.loadAds(AdRequest.Builder().build(), 5)
     }
 
@@ -91,7 +78,7 @@ abstract class BaseAppCompatActivity(private val supportsNativeAds: Boolean = fa
         if (!adLoadedListeners.contains(adLoadedListener)){
             adLoadedListeners.add(adLoadedListener)
             val ads = if (unifiedNativeAds.isEmpty()){
-                listOf(AdEntity())
+                emptyList()
             }else{
                 unifiedNativeAds.map {
                     AdEntity().apply {

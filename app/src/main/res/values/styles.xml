@@ -6,6 +6,7 @@
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorOnPrimary">#000</item>
         <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="colorSecondaryVariant">#004D40</item>
         <item name="colorOnSecondary">#806410</item>
         <item name="colorError">#F44336</item>
@@ -37,21 +38,8 @@
 <!--    <color name="secondaryDarkColor">#D32F2F</color>-->
 <!--    <color name="primaryTextColor">#99000000</color>-->
 <!--    <color name="secondaryTextColor">#6F000000</color>-->
-    <color name="primaryColor">#004C40</color>
 
-    <color name="primaryLightColor">#80e27e</color>
 
-    <color name="primaryDarkColor">#004C40</color>
-
-    <color name="secondaryColor">#2e7d32</color>
-
-    <color name="secondaryLightColor">#60ad5e</color>
-
-    <color name="secondaryDarkColor">#005005</color>
-
-    <color name="primaryTextColor">#000000</color>
-
-    <color name="secondaryTextColor">#ffffff</color>
 
     <style name="App.Theme.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="hintTextColor">?colorPrimaryVariant</item>
@@ -95,4 +83,16 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="backgroundTint">@color/color_action_cancel</item>
     </style>
+
+    <style name="DataInputEditText" parent="Widget.Design.TextInputLayout">
+        <item name="backgroundTint">#fff</item>
+        <item name="colorControlNormal">#000</item>
+        <item name="android:textColor">@android:color/white</item>
+
+        //added attributes
+        <item name="colorControlActivated">@color/primaryColor</item>
+        <item name="colorControlHighlight">@color/primaryColor</item>
+    </style>
+
+
 </resources>

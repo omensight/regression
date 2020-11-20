@@ -8,7 +8,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:background="@drawable/drawable_square_rounded_corners"
+        android:id="@+id/cl_parent">
         <View
             android:id="@+id/view_background"
             android:layout_width="0dp"
@@ -24,7 +26,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:background="@color/primaryDarkColor"
+
+            android:background="@color/result_title"
             android:textColor="@android:color/white"
             android:textAlignment="center"/>
 
@@ -37,14 +40,14 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:padding="@dimen/big_spacing"
-            android:background="@color/secondaryColor">
+            android:background="@color/result_formula">
             <com.agog.mathdisplay.MTMathView
                 android:id="@+id/math_view_result"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/tv_title"
                 android:padding="@dimen/big_spacing"
-                android:background="@color/secondaryColor"/>
+                android:background="@color/result_formula"/>
         </HorizontalScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

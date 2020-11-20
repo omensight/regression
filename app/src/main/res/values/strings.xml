@@ -18,7 +18,7 @@
     <string name="add_new_data_point">Add new data point</string>
     <string name="action_delete_selected">Delete selected</string>
     <string name="action_copy_to_another">Copy to another sheet</string>i
-    <string name="action_add_empty_data_points">Add empty data points</string>
+    <string name="action_add_empty_data_points">Add empty entries</string>
     <string name="error_invalid">Invalid field</string>
     <string name="hint_number_of_data_points">Data point number</string>
     <string name="description_add_data_points">Add data points</string>
@@ -64,5 +64,9 @@
     <string-array name="regression_types">
         <item>Linear</item>
         <item>Power</item>
+    </string-array>
+
+    <string-array name="test_device_ids">
+        <item>6D0D8D07459ECA5CFD42A1EAC430C940</item>
     </string-array>
 </resources>

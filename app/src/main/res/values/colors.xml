@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#F5F6FA</color>
-    <color name="colorPrimaryDark">#F5F6FA</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="primaryColor">#004C40</color>
+    <color name="primaryLightColor">#80e27e</color>
+    <color name="primaryDarkColor">#22242d</color>
+    <color name="secondaryColor">#2e7d32</color>
+    <color name="secondaryLightColor">#60ad5e</color>
+    <color name="secondaryDarkColor">#005005</color>
+    <color name="primaryTextColor">#000000</color>
+
+    <color name="secondaryTextColor">#ffffff</color>
+    <color name="colorAccent">#fff</color>
     <color name="color_item_sheet_type">#FFF</color>
-    <color name="color_item_sheet_background">#004C40</color>
+    <color name="color_item_sheet_background">#636e72</color>
     <color name="color_item_sheet_date_creation">#EFC358</color>
     <color name="color_item_action">#B3E5FC</color>
     <color name="item_textfield_background">#26A69A</color>
@@ -18,5 +25,10 @@
     <color name="color_action_cancel">#F44336</color>
     <color name="color_background_white">#efefef</color>
     <color name="color_background_dark">#7f7f7f</color>
+    <color name="color_pair">#485926</color>
+    <color name="color_data_even_position">#636e72</color>
+    <color name="color_data_odd_position">#b2bec3</color>
+    <color name="result_title">@color/primaryDarkColor</color>
+    <color name="result_formula">#636e72</color>
 
 </resources>
