@@ -30,7 +30,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toLeftOf="@id/guide_center"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:textColor="@color/primaryColor"
+            android:singleLine="true"
+            android:ellipsize="marquee"
             app:setBigDecimal="@{x}"/>
 
         <com.google.android.material.textview.MaterialTextView
@@ -40,8 +41,9 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toRightOf="@id/guide_center"
             app:layout_constraintRight_toRightOf="parent"
-            android:textColor="@color/primaryColor"
-            app:setBigDecimal="@{y}"/>
+            app:setBigDecimal="@{y}"
+            android:singleLine="true"
+            android:ellipsize="marquee"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

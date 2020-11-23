@@ -6,28 +6,26 @@ import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.MimeTypeMap
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alphemsoft.education.regression.BR
 import com.alphemsoft.education.regression.R
+import com.alphemsoft.education.regression.constants.IntentResultConstants.Companion.RESULT_IMPORT_DATA
+import com.alphemsoft.education.regression.constants.IntentResultConstants.Companion.SUPPORTED_IMPORT_MIME_TYPES
 import com.alphemsoft.education.regression.constants.PREMIUM_REQUEST_IMPORT_DATA
-import com.alphemsoft.education.regression.constants.RESULT_IMPORT_DATA
 import com.alphemsoft.education.regression.databinding.FragmentDataSheetBinding
 import com.alphemsoft.education.regression.extensions.displayMetrics
 import com.alphemsoft.education.regression.parser.CSVHelper
 import com.alphemsoft.education.regression.ui.SimpleFieldModelUi
 import com.alphemsoft.education.regression.ui.adapter.DataPointAdapter
-import com.alphemsoft.education.regression.ui.adapter.itemdecoration.DividerItemDecoration
 import com.alphemsoft.education.regression.ui.base.BaseFragment
-import com.alphemsoft.education.regression.ui.divider.TestDivider
 import com.alphemsoft.education.regression.viewmodel.DataSheetViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -41,29 +39,32 @@ import javax.inject.Inject
 abstract class BaseDataSheetFragment : BaseFragment<FragmentDataSheetBinding, DataSheetViewModel>(
     layoutId = R.layout.fragment_data_sheet,
     viewModelId = BR.data_sheet_viewmodel,
-    menuResourceId = R.menu.menu_data_sheet_detail,
-)
+    R.menu.menu_data_sheet_detail
+), PremiumFeatureDialogFragment.OnPremiumDecisionListener
 
-@ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class DataSheetFragment : BaseDataSheetFragment(),
-    PremiumFeatureDialogFragment.OnPremiumDecisionListener {
-    override val viewModel: DataSheetViewModel by viewModels()
+class DataSheetFragment : BaseDataSheetFragment() {
+    override val viewModel: DataSheetViewModel by activityViewModels()
     val args: DataSheetFragmentArgs by navArgs()
     private var actionMode: ActionMode? = null
     private lateinit var actionCallback: ActionMode.Callback
 
-    @Inject lateinit var dataPointAdapter: DataPointAdapter
-    private val importEntriesDialogFragment =  ImportEntriesDialogFragment()
+    @Inject
+    lateinit var dataPointAdapter: DataPointAdapter
+//    private lateinit var importEntriesDialogFragment: ImportEntriesDialogFragment
 
     lateinit var singleFieldDataSheetFragment: SingleFieldDataSheetFragmentSimple
 
-    @ExperimentalCoroutinesApi
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setUpAdapter()
         setupBottomAppBar()
         setupContextMenu()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
     private fun setupSingleFieldBottomSheet() {
@@ -74,7 +75,7 @@ class DataSheetFragment : BaseDataSheetFragment(),
             getString(R.string.description_add_data_points)
         )
         singleFieldDataSheetFragment.setModelUi(modelUi)
-        singleFieldDataSheetFragment.setSimpleFieldListener(object : SimpleFieldListener<Int>{
+        singleFieldDataSheetFragment.setSimpleFieldListener(object : SimpleFieldListener<Int> {
             override fun onFieldFilled(field: Int) {
                 coroutineHandler.backgroundScope.launch {
                     viewModel.addTemporaryPoints(field, args.sheetId)
@@ -84,26 +85,38 @@ class DataSheetFragment : BaseDataSheetFragment(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
-            R.id.action_validate_and_save->{
-                if (viewModel.dataEntries.value?.size?:0 <3){
-                    Snackbar.make(requireView(), getString(R.string.error_not_enough_entries), Snackbar.LENGTH_LONG).show()
-                }else{
+        return when (item.itemId) {
+            R.id.action_validate_and_save -> {
+                if (viewModel.dataEntries.value?.size ?: 0 < 3) {
+                    Snackbar.make(
+                        requireView(),
+                        getString(R.string.error_not_enough_entries),
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                } else {
                     coroutineHandler.backgroundScope.launch {
                         val saved: Boolean = viewModel.validateAndSaveData()
-                        if (saved){
+                        if (saved) {
                             viewModel.getDataPointList(args.sheetId)
-                            Snackbar.make(requireView(), getString(R.string.saved), Snackbar.LENGTH_LONG).show()
+                            Snackbar.make(
+                                requireView(),
+                                getString(R.string.saved),
+                                Snackbar.LENGTH_LONG
+                            ).show()
                             val action = DataSheetFragmentDirections.actionResults(args.sheetId)
                             findNavController().navigate(action)
-                        }else{
-                            Snackbar.make(requireView(), getString(R.string.error_invalid_data_points), Snackbar.LENGTH_LONG).show()
+                        } else {
+                            Snackbar.make(
+                                requireView(),
+                                getString(R.string.error_invalid_data_points),
+                                Snackbar.LENGTH_LONG
+                            ).show()
                         }
                     }
                 }
                 true
             }
-            R.id.action_import_csv_data->{
+            R.id.action_import_csv_data -> {
 //                val fragment = PremiumFeatureDialogFragment()
 //                fragment.show(childFragmentManager, this, PREMIUM_REQUEST_IMPORT_DATA, R.string.action_import_csv_data)
                 onRewardedVideoWatched(PREMIUM_REQUEST_IMPORT_DATA)
@@ -113,7 +126,6 @@ class DataSheetFragment : BaseDataSheetFragment(),
         }
     }
 
-    @ExperimentalCoroutinesApi
     private fun setupContextMenu() {
         actionCallback = object : ActionMode.Callback {
             override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
@@ -128,7 +140,7 @@ class DataSheetFragment : BaseDataSheetFragment(),
             override fun onActionItemClicked(p0: ActionMode?, menuItem: MenuItem?): Boolean {
                 return when (menuItem?.itemId) {
                     R.id.action_delete_selected -> {
-                        coroutineHandler.foregroundScope.launch{
+                        coroutineHandler.foregroundScope.launch {
                             viewModel.deleteSelected()
                             delay(500)
                             dataPointAdapter.notifyDataSetChanged()
@@ -160,8 +172,6 @@ class DataSheetFragment : BaseDataSheetFragment(),
 
     }
 
-    @ExperimentalCoroutinesApi
-
     private fun setupBottomAppBar() {
         dataBinding.bottomAppBarController.setOnMenuItemClickListener {
             when (it.itemId) {
@@ -182,11 +192,11 @@ class DataSheetFragment : BaseDataSheetFragment(),
 
                 R.id.action_select -> {
                     dataPointAdapter.selectable = true
-                    actionMode?.let{
+                    actionMode?.let {
                         coroutineHandler.backgroundScope.launch {
                             viewModel.selectNothing()
                         }
-                    }?:run{
+                    } ?: run {
                         actionMode = requireActivity().startActionMode(actionCallback)
                     }
                 }
@@ -195,28 +205,31 @@ class DataSheetFragment : BaseDataSheetFragment(),
                     coroutineHandler.foregroundScope.launch {
                         dataPointAdapter.selectable = true
                         viewModel.selectAll()
-                        actionMode?:run{
+                        actionMode ?: run {
                             actionMode = requireActivity().startActionMode(actionCallback)
                         }
                     }
                 }
 
-                R.id.action_add_bunch ->{
+                R.id.action_add_bunch -> {
                     setupSingleFieldBottomSheet()
-                    singleFieldDataSheetFragment.show(requireActivity().supportFragmentManager, "SingleFieldBottomSheet")
+                    singleFieldDataSheetFragment.show(
+                        requireActivity().supportFragmentManager,
+                        "SingleFieldBottomSheet"
+                    )
                 }
             }
             true
         }
     }
 
-    @ExperimentalCoroutinesApi
     private fun setUpAdapter() {
         coroutineHandler.foregroundScope.launch {
             val sheet = viewModel.getSheet(args.sheetId)
             sheet?.let { safeSheet ->
                 dataBinding.rvDataPoints.apply {
-                    layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL,false)
+                    layoutManager =
+                        LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
 //                    addItemDecoration(
 //                        DividerItemDecoration(
 //                            resources.getDimensionPixelSize(R.dimen.small_spacing)
@@ -229,7 +242,7 @@ class DataSheetFragment : BaseDataSheetFragment(),
 
                 coroutineHandler.foregroundScope.launch {
                     viewModel.getDataPointList(args.sheetId).collectLatest { it ->
-                        dataPointAdapter.addNewItems(it.filter {item-> !item.deleted })
+                        dataPointAdapter.addNewItems(it.filter { item -> !item.deleted })
                     }
                 }
             }
@@ -245,12 +258,12 @@ class DataSheetFragment : BaseDataSheetFragment(),
     }
 
     override fun onRewardedVideoWatched(requestId: Int) {
-        when(requestId){
-            PREMIUM_REQUEST_IMPORT_DATA ->{
+        when (requestId) {
+            PREMIUM_REQUEST_IMPORT_DATA -> {
                 val intent = Intent(Intent.ACTION_GET_CONTENT)
                 val mimeTypeMap = MimeTypeMap.getSingleton()
                 intent.type = "*/*"
-//                intent.putExtra(Intent.EXTRA_MIME_TYPES,types)
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, SUPPORTED_IMPORT_MIME_TYPES)
                 startActivityForResult(intent, RESULT_IMPORT_DATA)
             }
         }
@@ -259,29 +272,29 @@ class DataSheetFragment : BaseDataSheetFragment(),
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val uri = data?.data
-        uri?.let { safeUri->
-            val mime = requireActivity().contentResolver.getType(uri)?:""
+        uri?.let { safeUri ->
+            val mime = requireActivity().contentResolver.getType(uri) ?: ""
             val inputStream = requireActivity().contentResolver.openInputStream(safeUri)
             val cachePath = requireActivity().externalCacheDir?.absoluteFile
             val file = File(cachePath, UUID.randomUUID().toString())
             file.outputStream().use {
                 inputStream?.copyTo(it)
             }
-            val types = arrayOf("application/csv", "text/comma-separated-values", "text/csv", "text/plain")
-            if (types.contains(mime)){
+            val types =
+                arrayOf("application/csv", "text/comma-separated-values", "text/csv", "text/plain")
+            if (types.contains(mime)) {
+                val csvReader = CSVParser.parse(FileReader(file), CSVFormat.DEFAULT)
+                val csvHelper = CSVHelper(csvReader)
 
+                val entries = csvHelper.sheetEntries
+                coroutineHandler.foregroundScope.launch {
+                    viewModel.addImportedEntries(entries, args.sheetId)
+                    val dest = DataSheetFragmentDirections.actionDestinationDataSheetToDestinationImportDataFromDataSheet(csvHelper.errorCount)
+                    findNavController().navigate(dest)
+                }
             }
-            val csvReader = CSVParser.parse(FileReader(file), CSVFormat.DEFAULT)
-            val csvHelper = CSVHelper(csvReader)
 
-            val entries = csvHelper.sheetEntries
-            coroutineHandler.backgroundScope.launch {
-                viewModel.addImportedEntries(entries)
-            }
 
-            importEntriesDialogFragment.show(
-                requireActivity().supportFragmentManager,
-                "ImportEntries")
         }
     }
 

@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:minHeight="320sp">
+        android:minHeight="320sp"
+        android:background="@android:color/transparent">
 
 
 
@@ -18,11 +19,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/drawable_shape_title"
-            android:backgroundTint="@color/color_premium_dialog_title"
+            android:backgroundTint="@color/primaryDarkColor"
             android:padding="@dimen/big_spacing"
-            android:text="@string/title_dialog_premium_feature"
+            android:text="@string/import_data_title_imported_data_"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:textColor="@android:color/white"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -46,7 +48,7 @@
             app:layout_constraintBottom_toTopOf="@id/bt_import"
             app:layout_constraintLeft_toLeftOf="@id/view_background"
             app:layout_constraintRight_toRightOf="@id/view_background"
-            android:layout_margin="@dimen/big_spacing" />
+            android:layout_margin="@dimen/medium_spacing" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bt_import"
@@ -56,8 +58,9 @@
             app:layout_constraintBottom_toBottomOf="@id/view_background"
             app:layout_constraintRight_toRightOf="@id/view_background"
             style="@style/App.Theme.ButtonAccept"
-            android:layout_marginRight="@dimen/big_spacing"
-            android:layout_marginBottom="@dimen/big_spacing"/>
+            app:backgroundTint="@color/primaryDarkColor"
+            android:layout_marginRight="@dimen/medium_spacing"
+            android:layout_marginBottom="@dimen/medium_spacing"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bt_cancel"
@@ -68,7 +71,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/bt_import"
             app:layout_constraintRight_toLeftOf="@id/bt_import"
             app:layout_constraintTop_toTopOf="@+id/bt_import"
-            android:layout_marginEnd="@dimen/big_spacing"/>
+            android:layout_marginEnd="@dimen/medium_spacing"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_import_message"
@@ -79,8 +82,8 @@
             app:layout_constraintRight_toRightOf="@id/view_background"
             android:text="@string/import_data_message"
             android:textColor="@color/primaryColor"
-            android:paddingStart="@dimen/big_spacing"
-            android:paddingEnd="@dimen/big_spacing"
-            android:paddingTop="@dimen/big_spacing" />
+            android:paddingStart="@dimen/medium_spacing"
+            android:paddingEnd="@dimen/medium_spacing"
+            android:paddingTop="@dimen/medium_spacing" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

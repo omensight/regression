@@ -5,7 +5,6 @@ import android.view.*
 import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.alphemsoft.education.regression.coroutines.CoroutineHandler
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -18,20 +17,22 @@ abstract class BaseSimpleBottomSheetDialogFragment<VDB : ViewDataBinding> constr
     private val job = Job()
     protected val coroutineHandler = CoroutineHandler(job)
     protected lateinit var dataBinding: VDB
-    private lateinit var viewModelProvider: ViewModelProvider
+    protected lateinit var viewModelProvider: ViewModelProvider
+    protected lateinit var mActivity: BaseAppCompatActivity
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
+        mActivity = requireActivity() as BaseAppCompatActivity
         viewModelProvider = ViewModelProvider(requireActivity(), defaultViewModelProviderFactory)
         dataBinding = generateDataBinding(inflater, container)
         return dataBinding.root
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun generateDataBinding(inflater: LayoutInflater, container: ViewGroup?): VDB {
+    open fun generateDataBinding(inflater: LayoutInflater, container: ViewGroup?): VDB {
         return DataBindingUtil.inflate<ViewDataBinding>(inflater, layoutId, container, false) as VDB
     }
 }

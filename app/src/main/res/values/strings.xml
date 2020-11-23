@@ -58,7 +58,9 @@
     <string name="action_import_csv_data">Import CSV</string>
     <string name="user_earned_reward">Thank you, now you can proceed</string>
     <string name="import_data">Import</string>
-    <string name="import_data_message">The current data gonna be imported:</string>
+    <string name="import_data_message">The current entries gonna be imported:</string>
+    <string name="import_data_message_with_errors">The current entries gonna be imported (%d errors detected) :</string>
+    <string name="import_data_title_imported_data_">Import Data</string>
 
 
     <string-array name="regression_types">

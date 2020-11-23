@@ -11,7 +11,7 @@
         android:label="SheetListFragment"
         tools:layout="@layout/fragment_sheet_list">
         <action
-            android:id="@+id/action_data_sheet_detail"
+            android:id="@+id/action_data_sheet_detail_from_sheet_list"
             app:destination="@id/destination_data_sheet" />
         <action
             android:id="@+id/action_create_sheet"
@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_results"
             app:destination="@id/destination_result" />
+        <action
+            android:id="@+id/action_destination_data_sheet_to_destination_import_data_from_data_sheet"
+            app:destination="@id/destination_import_data_from_data_sheet" />
     </fragment>
     <fragment
         android:id="@+id/destination_create_sheet"
@@ -36,7 +39,7 @@
         tools:layout="@layout/fragment_create_sheet">
 
         <action
-            android:id="@+id/action_data_sheet_detail"
+            android:id="@+id/action_data_sheet_detail_from_create_sheet"
             app:destination="@id/destination_data_sheet" />
     </fragment>
     <fragment
@@ -63,4 +66,17 @@
             app:argType="long"
             app:nullable="false"/>
     </fragment>
+
+    <dialog
+        android:id="@+id/destination_import_data_from_data_sheet"
+        android:name="com.alphemsoft.education.regression.ui.fragment.ImportEntriesDialogFragment"
+        android:label="ImportEntriesDialogFragment"
+        tools:layout="@layout/dialog_fragment_import_data">
+
+        <argument
+            android:name="errorCount"
+            app:argType="integer"
+            app:nullable="false"
+            android:defaultValue="0"/>
+    </dialog>
 </navigation>

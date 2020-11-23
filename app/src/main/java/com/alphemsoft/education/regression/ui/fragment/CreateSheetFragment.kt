@@ -68,7 +68,7 @@ class CreateSheetFragment : AbstractCreateSheetFragment() {
         require(sheet != null)
         if (sheet.name.isNotEmpty()){
             val id = viewModel.insertNewSheet()
-            val action = CreateSheetFragmentDirections.actionDataSheetDetail(id)
+            val action = CreateSheetFragmentDirections.actionDataSheetDetailFromCreateSheet(id)
             findNavController().navigate(action)
         }else{
             requireActivity().runOnUiThread{
