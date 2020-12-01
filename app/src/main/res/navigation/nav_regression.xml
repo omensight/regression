@@ -31,6 +31,10 @@
         <action
             android:id="@+id/action_destination_data_sheet_to_destination_import_data_from_data_sheet"
             app:destination="@id/destination_import_data_from_data_sheet" />
+
+        <action
+            android:id="@+id/action_export_data"
+            app:destination="@id/destination_export_data"/>
     </fragment>
     <fragment
         android:id="@+id/destination_create_sheet"
@@ -78,5 +82,13 @@
             app:argType="integer"
             app:nullable="false"
             android:defaultValue="0"/>
+    </dialog>
+
+    <dialog
+        android:id="@+id/destination_export_data"
+        android:name="com.alphemsoft.education.regression.ui.fragment.ExportDataBottomSheetFragment"
+        android:label="ExportEntriesDialogFragment"
+        tools:layout="@layout/dialog_fragment_export_data">
+
     </dialog>
 </navigation>

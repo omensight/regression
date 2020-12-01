@@ -1,14 +1,8 @@
-package com.alphemsoft.education.regression.parser
+package com.alphemsoft.education.regression.dataparser
 
-import com.alphemsoft.education.regression.data.model.SheetEntry
 import org.apache.commons.csv.CSVParser
-import java.lang.Exception
-import java.lang.IndexOutOfBoundsException
-import java.lang.NumberFormatException
-import java.math.BigDecimal
-import kotlin.math.max
 
-class CSVHelper(private val csvParser: CSVParser) {
+class CsvParser(private val csvParser: CSVParser) {
 
     private val _sheetEntries: MutableList<Pair<Double, Double>> = ArrayList()
 

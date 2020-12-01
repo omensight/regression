@@ -1,20 +1,20 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+    <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/primaryDarkColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
-        <item name="colorOnPrimary">#000</item>
+        <item name="colorOnPrimary">#fff</item>
         <item name="colorSecondary">@color/secondaryColor</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorSecondaryVariant">#004D40</item>
         <item name="colorOnSecondary">#806410</item>
         <item name="colorError">#F44336</item>
         <item name="colorOnError">#810000</item>
-        <item name="colorSurface">#558c2f</item>
+        <item name="colorSurface">#fafafa</item>
         <item name="colorOnSurface">#252424</item><!-- -->
         <item name="android:colorBackground">@color/background</item>
-        <item name="colorOnBackground">#000</item>
+        <item name="colorOnBackground">#fff</item>
         <item name="android:textColorPrimary">#000</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">@color/primaryDarkColor</item>
@@ -94,5 +94,9 @@
         <item name="colorControlHighlight">@color/primaryColor</item>
     </style>
 
+    <style name="AlertDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="colorSecondary">#457812</item>
+
+    </style>
 
 </resources>

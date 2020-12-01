@@ -33,11 +33,11 @@ class ResultFragment : AbstractResultFragment() {
     override val viewModel: ResultViewModel by viewModels()
     val args: ResultFragmentArgs by navArgs()
 
-    @Inject
     lateinit var resultAdapter: ResultAdapter
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        resultAdapter = ResultAdapter()
         setupResultList()
     }
 

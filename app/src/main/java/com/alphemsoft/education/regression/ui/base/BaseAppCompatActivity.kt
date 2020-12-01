@@ -7,12 +7,11 @@ import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.coroutines.CoroutineHandler
 import com.alphemsoft.education.regression.data.model.AdEntity
 import com.alphemsoft.education.regression.ui.OnAdLoadedListener
-import com.google.android.gms.ads.AdListener
-import com.google.android.gms.ads.AdLoader
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.*
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import kotlinx.coroutines.Job
+import java.util.*
+import kotlin.collections.ArrayList
 
 abstract class BaseAppCompatActivity(private val supportsNativeAds: Boolean = false): AppCompatActivity(),
     OnAdLoadedListener {
@@ -23,8 +22,10 @@ abstract class BaseAppCompatActivity(private val supportsNativeAds: Boolean = fa
     private val adLoadedListeners: MutableList<OnAdLoadedListener> = ArrayList()
     private var unifiedNativeAds: MutableList<UnifiedNativeAd> = ArrayList()
 
+    @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupTestDevices()
         if (supportsNativeAds){
             addAdLoadListener(this)
         }
@@ -93,6 +94,19 @@ abstract class BaseAppCompatActivity(private val supportsNativeAds: Boolean = fa
     @CallSuper
     override fun onAdsLoaded(unifiedNativeAds: List<AdEntity>, adsChanged: Boolean) {
         require(supportsNativeAds){"Load native ads not supported"}
+    }
+
+    private fun setupTestDevices() {
+//        val testDeviceIds = java.util.ArrayList<String>()
+//        testDeviceIds.addAll(resources.getStringArray(R.array.test_device_ids))
+
+        val requestConfiguration = RequestConfiguration.Builder().setTestDeviceIds(
+            listOf("10DBF36A467D9FB6AC6E5C94616189CC")
+        ).build()
+
+
+//        val requestConfiguration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
+        MobileAds.setRequestConfiguration(requestConfiguration)
     }
 
 }

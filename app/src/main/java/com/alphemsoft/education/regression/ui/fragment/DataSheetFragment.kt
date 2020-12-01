@@ -6,8 +6,9 @@ import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.MimeTypeMap
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,12 +18,14 @@ import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.constants.IntentResultConstants.Companion.RESULT_IMPORT_DATA
 import com.alphemsoft.education.regression.constants.IntentResultConstants.Companion.SUPPORTED_IMPORT_MIME_TYPES
 import com.alphemsoft.education.regression.constants.PREMIUM_REQUEST_IMPORT_DATA
+import com.alphemsoft.education.regression.constants.PermissionConstants
 import com.alphemsoft.education.regression.databinding.FragmentDataSheetBinding
+import com.alphemsoft.education.regression.dataparser.CsvParser
 import com.alphemsoft.education.regression.extensions.displayMetrics
-import com.alphemsoft.education.regression.parser.CSVHelper
 import com.alphemsoft.education.regression.ui.SimpleFieldModelUi
 import com.alphemsoft.education.regression.ui.adapter.DataPointAdapter
 import com.alphemsoft.education.regression.ui.base.BaseFragment
+import com.alphemsoft.education.regression.util.PermissionHandler
 import com.alphemsoft.education.regression.viewmodel.DataSheetViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,6 +47,7 @@ abstract class BaseDataSheetFragment : BaseFragment<FragmentDataSheetBinding, Da
 
 @AndroidEntryPoint
 class DataSheetFragment : BaseDataSheetFragment() {
+
     override val viewModel: DataSheetViewModel by activityViewModels()
     val args: DataSheetFragmentArgs by navArgs()
     private var actionMode: ActionMode? = null
@@ -60,11 +64,10 @@ class DataSheetFragment : BaseDataSheetFragment() {
         setUpAdapter()
         setupBottomAppBar()
         setupContextMenu()
+        setupPermissionHandler()
     }
 
-    override fun onResume() {
-        super.onResume()
-
+    private fun setupPermissionHandler() {
     }
 
     private fun setupSingleFieldBottomSheet() {
@@ -103,8 +106,10 @@ class DataSheetFragment : BaseDataSheetFragment() {
                                 getString(R.string.saved),
                                 Snackbar.LENGTH_LONG
                             ).show()
-                            val action = DataSheetFragmentDirections.actionResults(args.sheetId)
-                            findNavController().navigate(action)
+                            coroutineHandler.foregroundScope.launch {
+                                val action = DataSheetFragmentDirections.actionResults(args.sheetId)
+                                findNavController().navigate(action)
+                            }
                         } else {
                             Snackbar.make(
                                 requireView(),
@@ -120,6 +125,10 @@ class DataSheetFragment : BaseDataSheetFragment() {
 //                val fragment = PremiumFeatureDialogFragment()
 //                fragment.show(childFragmentManager, this, PREMIUM_REQUEST_IMPORT_DATA, R.string.action_import_csv_data)
                 onRewardedVideoWatched(PREMIUM_REQUEST_IMPORT_DATA)
+                true
+            }
+            R.id.action_export -> {
+                startDataExport()
                 true
             }
             else -> false
@@ -284,18 +293,64 @@ class DataSheetFragment : BaseDataSheetFragment() {
                 arrayOf("application/csv", "text/comma-separated-values", "text/csv", "text/plain")
             if (types.contains(mime)) {
                 val csvReader = CSVParser.parse(FileReader(file), CSVFormat.DEFAULT)
-                val csvHelper = CSVHelper(csvReader)
+                val csvHelper = CsvParser(csvReader)
 
                 val entries = csvHelper.sheetEntries
                 coroutineHandler.foregroundScope.launch {
                     viewModel.addImportedEntries(entries, args.sheetId)
-                    val dest = DataSheetFragmentDirections.actionDestinationDataSheetToDestinationImportDataFromDataSheet(csvHelper.errorCount)
+                    val dest =
+                        DataSheetFragmentDirections.actionDestinationDataSheetToDestinationImportDataFromDataSheet(
+                            csvHelper.errorCount
+                        )
                     findNavController().navigate(dest)
                 }
             }
-
-
         }
     }
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        val permissionsAccepted =
+            PermissionHandler.checkAcceptedPermissions(permissions, grantResults)
+        if (permissionsAccepted) {
+            when (requestCode) {
+                PermissionConstants.STORAGE_PERMISSION_REQUEST_CODE -> {
+                    startDataExport()
+                }
+            }
+        }
+    }
+
+    private fun startDataExport() {
+        val hasWritePermission = PermissionHandler.checkSinglePermission(
+            requireContext(),
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+
+        if (hasWritePermission) {
+            val exportDataDestination = DataSheetFragmentDirections.actionExportData()
+            findNavController().navigate(exportDataDestination)
+        } else {
+            var dialog: AlertDialog? = null
+            val dialogBuilder = AlertDialog.Builder(requireContext(), R.style.AlertDialog)
+                .setTitle(R.string.storage_permission_request_title)
+                .setMessage(R.string.storage_permission_request_message)
+                .setNegativeButton(R.string.no_thanks) { _, _ ->
+                    dialog?.dismiss()
+                }
+                .setPositiveButton(R.string.grant) { _, _ ->
+                    ActivityCompat.requestPermissions(
+                        requireActivity(),
+                        arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        PermissionConstants.STORAGE_PERMISSION_REQUEST_CODE
+                    )
+                }
+            dialog = dialogBuilder.create()
+            dialog.show()
+        }
+    }
 }

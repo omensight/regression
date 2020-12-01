@@ -27,7 +27,8 @@ abstract class BaseFragment<VDB : ViewDataBinding, VM : ViewModel>(
     protected abstract val viewModel: VM
     protected lateinit var dataBinding: VDB
     private lateinit var viewModelProvider: ViewModelProvider
-    private lateinit var activity: BaseAppCompatActivity
+    private lateinit var mActivity: BaseAppCompatActivity
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(menuResourceId != null)
@@ -38,11 +39,11 @@ abstract class BaseFragment<VDB : ViewDataBinding, VM : ViewModel>(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        activity = requireActivity() as BaseAppCompatActivity
+        mActivity = requireActivity() as BaseAppCompatActivity
         viewModelProvider = ViewModelProvider(requireActivity(), defaultViewModelProviderFactory)
         dataBinding = generateDataBinding(inflater, container)
         if(supportsNativeAds){
-            activity.addAdLoadListener(this)
+            mActivity.addAdLoadListener(this)
         }
         return dataBinding.root
     }
@@ -64,7 +65,7 @@ abstract class BaseFragment<VDB : ViewDataBinding, VM : ViewModel>(
     }
 
     fun getUnifiedNativeAds(): List<UnifiedNativeAd> {
-        return activity.getUnifiedNativeAds()
+        return mActivity.getUnifiedNativeAds()
     }
 
 

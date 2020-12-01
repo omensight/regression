@@ -61,6 +61,15 @@
     <string name="import_data_message">The current entries gonna be imported:</string>
     <string name="import_data_message_with_errors">The current entries gonna be imported (%d errors detected) :</string>
     <string name="import_data_title_imported_data_">Import Data</string>
+    <string name="title_dialog_export_data">Export Data</string>
+    <string name="import_data_hint_path">Path</string>
+    <string name="export">Export</string>
+    <string name="export_data">Export data</string>
+    <string name="storage_permission_request_title">Storage permission needed</string>
+    <string name="storage_permission_request_message">Let us access the storage to save document files and give you a better experience.</string>
+    <string name="grant">Grant</string>
+    <string name="no_thanks">No, thanks</string>
+    <string name="document_saved">Document saved</string>
 
 
     <string-array name="regression_types">
@@ -69,6 +78,6 @@
     </string-array>
 
     <string-array name="test_device_ids">
-        <item>6D0D8D07459ECA5CFD42A1EAC430C940</item>
+        <item>10DBF36A467D9FB6AC6E5C94616189CC</item>
     </string-array>
 </resources>

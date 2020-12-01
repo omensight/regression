@@ -21,8 +21,8 @@ import kotlinx.coroutines.launch
 class MainActivity : BaseAppCompatActivity(true) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        MobileAds.initialize(applicationContext) {}
         super.onCreate(savedInstanceState)
+        MobileAds.initialize(applicationContext) {}
         setContentView(R.layout.main_activity)
         loadAds()
         setupToolbar()

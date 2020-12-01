@@ -5,9 +5,14 @@
         android:title="@string/action_import_csv_data"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_import"/>
+    <item android:id="@+id/action_export"
+        android:title="@string/export_data"
+        android:icon="@drawable/ic_export"
+        app:showAsAction="always"/>
     <item android:id="@+id/action_validate_and_save"
         android:title="@string/action_validate_and_save"
         android:icon="@drawable/ic_content_save"
         app:showAsAction="always"/>
+
 
 </menu>
