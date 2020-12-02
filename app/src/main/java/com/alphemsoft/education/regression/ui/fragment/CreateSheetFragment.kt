@@ -68,8 +68,10 @@ class CreateSheetFragment : AbstractCreateSheetFragment() {
         require(sheet != null)
         if (sheet.name.isNotEmpty()){
             val id = viewModel.insertNewSheet()
-            val action = CreateSheetFragmentDirections.actionDataSheetDetailFromCreateSheet(id)
-            findNavController().navigate(action)
+            coroutineHandler.foregroundScope.launch {
+                val action = CreateSheetFragmentDirections.actionDataSheetDetailFromCreateSheet(id)
+                findNavController().navigate(action)
+            }
         }else{
             requireActivity().runOnUiThread{
                 dataBinding.tilLabel.error = getString(R.string.text_error_empty_field)

@@ -44,7 +44,8 @@
 
         <action
             android:id="@+id/action_data_sheet_detail_from_create_sheet"
-            app:destination="@id/destination_data_sheet" />
+            app:destination="@id/destination_data_sheet"
+            app:popUpTo="@id/destination_sheet_list"/>
     </fragment>
     <fragment
         android:id="@+id/destination_result"
