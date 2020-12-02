@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.main_activity.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.IllegalStateException
 
 @AndroidEntryPoint
 class MainActivity : BaseAppCompatActivity(true) {
@@ -52,6 +53,7 @@ class MainActivity : BaseAppCompatActivity(true) {
                 unifiedNativeAds.forEachIndexed {i, ad->
                     ad.unifiedNativeAd?.let { nativeAd->
                         ad_template_view.setNativeAd(nativeAd)
+
                     }
                     Log.d("$i -> Coroutine Thread", "The thread is ${Thread.currentThread().name}, the ad is: ${ad.id}")
                     delay(1000*5)

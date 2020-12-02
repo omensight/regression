@@ -11,7 +11,7 @@
         android:layout_height="@dimen/list_item_normal_height"
         android:id="@+id/ll_container">
 
-        <View
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/view_background"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -19,8 +19,8 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/drawable_square_rounded_corners"
-            android:backgroundTint="@color/color_item_sheet_background"
+            android:background="@drawable/drawable_shape_ripple_no_border"
+            android:backgroundTint="@color/color_data_odd_position"
             android:clickable="true"
             android:focusable="true"/>
 

@@ -44,11 +44,8 @@ class SheetListFragment : AbstractSheetListFragment() {
     }
 
     private fun setupSheetList() {
-        val divider =
-            com.alphemsoft.education.regression.ui.adapter.itemdecoration.DividerItemDecoration(18)
         dataBinding.rvSheetList.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-            addItemDecoration(divider)
             adapter = sheetPagingAdapter
         }
     }
