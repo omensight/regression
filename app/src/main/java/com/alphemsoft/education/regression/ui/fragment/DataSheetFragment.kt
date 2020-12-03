@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
-import android.webkit.MimeTypeMap
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
@@ -55,13 +54,12 @@ class DataSheetFragment : BaseDataSheetFragment() {
 
     @Inject
     lateinit var dataPointAdapter: DataPointAdapter
-//    private lateinit var importEntriesDialogFragment: ImportEntriesDialogFragment
 
     lateinit var singleFieldDataSheetFragment: SingleFieldDataSheetFragmentSimple
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        setUpAdapter()
+        setupUi()
         setupBottomAppBar()
         setupContextMenu()
         setupPermissionHandler()
@@ -232,18 +230,17 @@ class DataSheetFragment : BaseDataSheetFragment() {
         }
     }
 
-    private fun setUpAdapter() {
+    private fun setupUi() {
         coroutineHandler.foregroundScope.launch {
             val sheet = viewModel.getSheet(args.sheetId)
             sheet?.let { safeSheet ->
+                dataBinding.tvXLabel.text =
+                    if (sheet.xLabel.isNotEmpty()) sheet.xLabel else getString(R.string.generic_x_label)
+                dataBinding.tvYLabel.text =
+                    if (sheet.yLabel.isNotEmpty()) sheet.yLabel else getString(R.string.generic_y_label)
                 dataBinding.rvDataPoints.apply {
                     layoutManager =
                         LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-//                    addItemDecoration(
-//                        DividerItemDecoration(
-//                            resources.getDimensionPixelSize(R.dimen.small_spacing)
-//                        )
-//                    )
                     val metrics = requireActivity().displayMetrics()
                     dataPointAdapter.metrics = metrics
                     adapter = dataPointAdapter
@@ -270,7 +267,6 @@ class DataSheetFragment : BaseDataSheetFragment() {
         when (requestId) {
             PREMIUM_REQUEST_IMPORT_DATA -> {
                 val intent = Intent(Intent.ACTION_GET_CONTENT)
-                val mimeTypeMap = MimeTypeMap.getSingleton()
                 intent.type = "*/*"
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, SUPPORTED_IMPORT_MIME_TYPES)
                 startActivityForResult(intent, RESULT_IMPORT_DATA)

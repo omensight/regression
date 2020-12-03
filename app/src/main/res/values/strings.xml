@@ -72,6 +72,9 @@
     <string name="document_saved">Document saved</string>
     <string name="buy_subscription">Buy subscription</string>
     <string name="buy_subscription_offer_message">Don\'t you want to see the ads? Enjoy using Regression without any of them</string>
+    <string name="i">I</string>
+    <string name="generic_x_label">X</string>
+    <string name="generic_y_label">Y</string>
 
 
     <string-array name="regression_types">

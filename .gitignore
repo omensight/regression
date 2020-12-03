@@ -15,3 +15,4 @@
 /app/src/main/res/values/secret.xml
 /app/secret_config.gradle
 /app/release
+/nativetemplates/build/
