@@ -20,11 +20,11 @@ abstract class BaseDialogFragment<VDB : ViewDataBinding> constructor(
     protected val coroutineHandler = CoroutineHandler(job)
     protected lateinit var dataBinding: VDB
     private lateinit var viewModelProvider: ViewModelProvider
-    private lateinit var activity: BaseAppCompatActivity
+    private lateinit var activity: BaseAppCompatActivity<ViewDataBinding>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity = requireActivity() as BaseAppCompatActivity
+        activity = requireActivity() as BaseAppCompatActivity<ViewDataBinding>
     }
 
     override fun onCreateView(

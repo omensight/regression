@@ -70,6 +70,8 @@
     <string name="grant">Grant</string>
     <string name="no_thanks">No, thanks</string>
     <string name="document_saved">Document saved</string>
+    <string name="buy_subscription">Buy subscription</string>
+    <string name="buy_subscription_offer_message">Don\'t you want to see the ads? Enjoy using Regression without any of them</string>
 
 
     <string-array name="regression_types">

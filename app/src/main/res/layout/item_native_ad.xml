@@ -14,5 +14,14 @@
             app:gnt_template_type="@layout/gnt_small_template_view"
             />
 
+        <include
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/layout_premium_subscription"
+            layout="@layout/item_premium_subscription_offer"
+            android:visibility="gone"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

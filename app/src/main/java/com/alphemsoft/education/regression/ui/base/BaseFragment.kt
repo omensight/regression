@@ -27,7 +27,7 @@ abstract class BaseFragment<VDB : ViewDataBinding, VM : ViewModel>(
     protected abstract val viewModel: VM
     protected lateinit var dataBinding: VDB
     private lateinit var viewModelProvider: ViewModelProvider
-    private lateinit var mActivity: BaseAppCompatActivity
+    private lateinit var mActivity: BaseAppCompatActivity<ViewDataBinding>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +39,7 @@ abstract class BaseFragment<VDB : ViewDataBinding, VM : ViewModel>(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mActivity = requireActivity() as BaseAppCompatActivity
+        mActivity = requireActivity() as BaseAppCompatActivity<ViewDataBinding>
         viewModelProvider = ViewModelProvider(requireActivity(), defaultViewModelProviderFactory)
         dataBinding = generateDataBinding(inflater, container)
         if(supportsNativeAds){

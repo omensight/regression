@@ -1,8 +1,13 @@
 package com.alphemsoft.education.regression.ui.base
 
+import android.content.Context
 import android.os.Bundle
+import android.util.AttributeSet
+import android.view.View
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.coroutines.CoroutineHandler
 import com.alphemsoft.education.regression.data.model.AdEntity
@@ -10,14 +15,15 @@ import com.alphemsoft.education.regression.ui.OnAdLoadedListener
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import kotlinx.coroutines.Job
-import java.util.*
-import kotlin.collections.ArrayList
 
-abstract class BaseAppCompatActivity(private val supportsNativeAds: Boolean = false): AppCompatActivity(),
+abstract class BaseAppCompatActivity<VDB: ViewDataBinding>(
+    private val supportsNativeAds: Boolean = false,
+    private val layoutId: Int
+): AppCompatActivity(),
     OnAdLoadedListener {
     protected val job = Job()
     protected val coroutineHandler = CoroutineHandler(job)
-
+    protected lateinit var mDataBinding: VDB
     private lateinit var adLoader: AdLoader
     private val adLoadedListeners: MutableList<OnAdLoadedListener> = ArrayList()
     private var unifiedNativeAds: MutableList<UnifiedNativeAd> = ArrayList()
@@ -25,14 +31,20 @@ abstract class BaseAppCompatActivity(private val supportsNativeAds: Boolean = fa
     @CallSuper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupDataBinding()
         setupTestDevices()
-        if (supportsNativeAds){
-            addAdLoadListener(this)
-        }
+
         setupNativeAds()
     }
 
+    private fun setupDataBinding() {
+        mDataBinding = DataBindingUtil.setContentView(this, layoutId)
+    }
+
     private fun setupNativeAds() {
+        if (supportsNativeAds){
+            addAdLoadListener(this)
+        }
         val adLoaderBuilder =
             AdLoader.Builder(applicationContext, getString(R.string.ad_native_id))
         adLoaderBuilder.forUnifiedNativeAd { nativeAd ->
@@ -97,15 +109,11 @@ abstract class BaseAppCompatActivity(private val supportsNativeAds: Boolean = fa
     }
 
     private fun setupTestDevices() {
-//        val testDeviceIds = java.util.ArrayList<String>()
-//        testDeviceIds.addAll(resources.getStringArray(R.array.test_device_ids))
-
         val requestConfiguration = RequestConfiguration.Builder().setTestDeviceIds(
             listOf("10DBF36A467D9FB6AC6E5C94616189CC")
         ).build()
 
 
-//        val requestConfiguration = RequestConfiguration.Builder().setTestDeviceIds(testDeviceIds).build()
         MobileAds.setRequestConfiguration(requestConfiguration)
     }
 

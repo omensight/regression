@@ -25,8 +25,8 @@ class ResultAdapter: BaseEntityAdapter<Any, BaseItemViewHolder<ViewDataBinding, 
                 ResultItemViewHolder(binding)
             }
             SimpleContentViewType.AD -> {
-                val mViewBinding = ItemNativeAdBinding.inflate(inflater,parent,false)
-                AdViewHolder(mViewBinding)
+                val binding = ItemNativeAdBinding.inflate(inflater,parent,false)
+                AdViewHolder(binding)
             }
         } as BaseItemViewHolder<ViewDataBinding, Any>
     }

@@ -42,7 +42,6 @@ class ResultFragment : AbstractResultFragment() {
     }
 
     private suspend fun refreshResultList(unifiedNativeAds: List<AdEntity>) {
-        if (unifiedNativeAds.isEmpty()) return
         val sheet = viewModel.getSheet(args.regressionId)
         sheet?.let {
             val regression = RegressionFactory.generateRegression(sheet.type)
@@ -53,13 +52,16 @@ class ResultFragment : AbstractResultFragment() {
             val resultsWithAds: MutableList<Any> = ArrayList()
             var adIndex = 0
             results.forEachIndexed { index, result ->
-                if (index % 5 == 0 && unifiedNativeAds.isNotEmpty() && index > 0) {
+                if (index % 5 == 0 && index > 0) {
                     val adEntity = AdEntity()
-                    adEntity.unifiedNativeAd = unifiedNativeAds[adIndex++].unifiedNativeAd
-                    resultsWithAds.add(adEntity)
-                    if (adIndex > unifiedNativeAds.size -1){
-                        adIndex = 0
+                    if (unifiedNativeAds.isNotEmpty()){
+                        adEntity.unifiedNativeAd = unifiedNativeAds[adIndex++].unifiedNativeAd
+                        if (adIndex > unifiedNativeAds.size -1){
+                            adIndex = 0
+                        }
                     }
+                    resultsWithAds.add(adEntity)
+
                 }
                 resultsWithAds.add(result)
 

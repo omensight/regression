@@ -1,5 +1,7 @@
 package com.alphemsoft.education.regression.ui.viewholder
 
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.graphics.ColorFilter
 import android.graphics.PorterDuff
 import android.os.Build
@@ -33,8 +35,10 @@ class SheetItemViewHolder(viewBinding: ItemSheetBinding, navController: NavContr
         } else{
             ContextCompat.getColor(context, R.color.color_data_odd_position)
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q){
             mDataBinding.viewBackground.background.setColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY)
+        }else{
+            mDataBinding.viewBackground.background.colorFilter = BlendModeColorFilter(backgroundColor, BlendMode.MULTIPLY)
         }
         mDataBinding.viewBackground.setOnClickListener {
             item?.let {

@@ -30,5 +30,7 @@
     <color name="color_data_odd_position">#b2bec3</color>
     <color name="result_title">@color/primaryDarkColor</color>
     <color name="result_formula">#636e72</color>
+    <color name="color_buy_premium_message_background">#FFEB3B</color>
+    <color name="color_ad_background">#091E33</color>
 
 </resources>

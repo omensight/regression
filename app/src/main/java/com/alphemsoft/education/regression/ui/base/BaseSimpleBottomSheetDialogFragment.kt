@@ -18,14 +18,14 @@ abstract class BaseSimpleBottomSheetDialogFragment<VDB : ViewDataBinding> constr
     protected val coroutineHandler = CoroutineHandler(job)
     protected lateinit var dataBinding: VDB
     protected lateinit var viewModelProvider: ViewModelProvider
-    protected lateinit var mActivity: BaseAppCompatActivity
+    protected lateinit var mActivity: BaseAppCompatActivity<ViewDataBinding>
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-        mActivity = requireActivity() as BaseAppCompatActivity
+        mActivity = requireActivity() as BaseAppCompatActivity<ViewDataBinding>
         viewModelProvider = ViewModelProvider(requireActivity(), defaultViewModelProviderFactory)
         dataBinding = generateDataBinding(inflater, container)
         return dataBinding.root
