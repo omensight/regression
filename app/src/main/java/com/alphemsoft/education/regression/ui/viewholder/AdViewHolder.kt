@@ -1,21 +1,21 @@
 package com.alphemsoft.education.regression.ui.viewholder
 
 import android.view.View
-import com.alphemsoft.education.regression.data.model.AdEntity
+import com.alphemsoft.education.regression.data.model.NativeAdEntity
 import com.alphemsoft.education.regression.databinding.ItemNativeAdBinding
 import com.alphemsoft.education.regression.ui.base.BaseItemViewHolder
 
 class AdViewHolder(mViewBinding: ItemNativeAdBinding) :
-    BaseItemViewHolder<ItemNativeAdBinding, AdEntity>(mViewBinding) {
+    BaseItemViewHolder<ItemNativeAdBinding, NativeAdEntity>(mViewBinding) {
 
     override var isSelectable: Boolean = false
 
-    override fun bind(item: AdEntity?) {
-        item?.unifiedNativeAd?.let {
-            mDataBinding.adTemplateView.setNativeAd(it)
+    override fun bind(item: NativeAdEntity?) {
+        if (item?.unifiedNativeAd != null) {
+            mDataBinding.adTemplateView.setNativeAd(item.unifiedNativeAd)
             mDataBinding.adTemplateView.visibility = View.VISIBLE
             mDataBinding.layoutPremiumSubscription.root.visibility = View.GONE
-        } ?: run {
+        }else{
             mDataBinding.adTemplateView.visibility = View.GONE
             mDataBinding.layoutPremiumSubscription.root.visibility = View.VISIBLE
         }

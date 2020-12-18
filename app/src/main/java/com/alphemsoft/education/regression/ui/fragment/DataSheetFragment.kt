@@ -41,7 +41,7 @@ import javax.inject.Inject
 abstract class BaseDataSheetFragment : BaseFragment<FragmentDataSheetBinding, DataSheetViewModel>(
     layoutId = R.layout.fragment_data_sheet,
     viewModelId = BR.data_sheet_viewmodel,
-    R.menu.menu_data_sheet_detail
+    menuResourceId = R.menu.menu_data_sheet_detail
 ), PremiumFeatureDialogFragment.OnPremiumDecisionListener
 
 @AndroidEntryPoint

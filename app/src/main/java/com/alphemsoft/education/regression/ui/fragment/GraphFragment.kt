@@ -1,15 +1,12 @@
 package com.alphemsoft.education.regression.ui.fragment
 
-import android.content.Context
 import android.graphics.Color
-import android.graphics.DashPathEffect
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.alphemsoft.education.regression.BR
 import com.alphemsoft.education.regression.R
-import com.alphemsoft.education.regression.data.model.SheetType
 import com.alphemsoft.education.regression.data.regression.RegressionFactory
 import com.alphemsoft.education.regression.databinding.FragmentGraphBinding
 import com.alphemsoft.education.regression.ui.base.BaseFragment

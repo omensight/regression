@@ -1,5 +1,9 @@
 package com.alphemsoft.education.regression.ui.viewholder
 
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
 import android.util.DisplayMetrics
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -23,8 +27,10 @@ class DataPointItemViewHolder(
                 ContextCompat.getColor(context, R.color.color_data_even_position)
             else
                 ContextCompat.getColor(context, R.color.color_data_odd_position)
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            mDataBinding.viewBackground.background.setTint(backgroundColor)
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.R) {
+            mDataBinding.clContainer.background.setColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY)
+        }else{
+            mDataBinding.clContainer.background.colorFilter = BlendModeColorFilter(backgroundColor, BlendMode.MULTIPLY)
         }
         mDataBinding.cbSelected.visibility = if (isSelectable) {
             View.VISIBLE

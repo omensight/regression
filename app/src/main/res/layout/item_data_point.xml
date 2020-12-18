@@ -15,20 +15,21 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/drawable_shape_ripple_no_border">
 
 
-        <View
-            android:id="@+id/view_background"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/drawable_square"
-            android:backgroundTint="#C8E6C9"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:strokeWidth="5dp" />
+<!--        <View-->
+<!--            android:id="@+id/view_background"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:background="@drawable/drawable_square"-->
+<!--            android:backgroundTint="#C8E6C9"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:strokeWidth="5dp" />-->
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_position"

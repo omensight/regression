@@ -1,20 +1,14 @@
 package com.alphemsoft.education.regression.ui.viewholder
 
-import android.graphics.BlendMode
-import android.graphics.BlendModeColorFilter
-import android.graphics.ColorFilter
-import android.graphics.PorterDuff
+import android.graphics.*
 import android.os.Build
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.navigation.NavController
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.data.model.Sheet
 import com.alphemsoft.education.regression.databinding.ItemSheetBinding
 import com.alphemsoft.education.regression.ui.base.BaseItemViewHolder
-import com.alphemsoft.education.regression.ui.fragment.CreateSheetFragmentDirections
-import com.alphemsoft.education.regression.ui.fragment.DataSheetFragmentDirections
 import com.alphemsoft.education.regression.ui.fragment.SheetListFragmentDirections
 
 
@@ -30,17 +24,19 @@ class SheetItemViewHolder(viewBinding: ItemSheetBinding, navController: NavContr
         }?: kotlin.run {
             mDataBinding.root.visibility = View.INVISIBLE
         }
-        val backgroundColor = if (absoluteAdapterPosition % 2 == 0){
-            ContextCompat.getColor(context, R.color.color_data_even_position)
+        val backgroundColorResource = if (absoluteAdapterPosition % 2 == 0){
+            R.color.color_data_even_position
         } else{
-            ContextCompat.getColor(context, R.color.color_data_odd_position)
+            R.color.color_data_odd_position
         }
+        val backgroundColor = ContextCompat.getColor(context, backgroundColorResource)
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q){
-            mDataBinding.viewBackground.background.setColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY)
+            val backgroundView =mDataBinding.llContainer
+            backgroundView.background.setColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY)
         }else{
-            mDataBinding.viewBackground.background.colorFilter = BlendModeColorFilter(backgroundColor, BlendMode.MULTIPLY)
+            mDataBinding.llContainer.background.colorFilter = BlendModeColorFilter(backgroundColor, BlendMode.MULTIPLY)
         }
-        mDataBinding.viewBackground.setOnClickListener {
+        mDataBinding.llContainer.setOnClickListener {
             item?.let {
                 val action = SheetListFragmentDirections.actionDataSheetDetailFromSheetList(it.id)
                 navController?.navigate(action)

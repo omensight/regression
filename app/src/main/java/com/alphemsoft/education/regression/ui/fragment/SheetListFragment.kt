@@ -22,7 +22,6 @@ abstract class AbstractSheetListFragment :
         layoutId = R.layout.fragment_sheet_list,
         viewModelId = BR.sheet_list_view_model,
         menuResourceId = R.menu.menu_sheet_list,
-        true,
     )
 
 

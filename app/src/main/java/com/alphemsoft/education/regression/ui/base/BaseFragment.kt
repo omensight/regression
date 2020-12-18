@@ -2,7 +2,6 @@ package com.alphemsoft.education.regression.ui.base
 
 import android.os.Bundle
 import android.view.*
-import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.annotation.MenuRes
 import androidx.databinding.DataBindingUtil
@@ -10,25 +9,23 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
 import com.alphemsoft.education.regression.coroutines.CoroutineHandler
-import com.alphemsoft.education.regression.data.model.AdEntity
-import com.alphemsoft.education.regression.ui.OnAdLoadedListener
-import com.google.android.gms.ads.formats.UnifiedNativeAd
+import com.alphemsoft.education.regression.ui.activity.NativeAdDispatcher
 import kotlinx.coroutines.Job
 
 abstract class BaseFragment<VDB : ViewDataBinding, VM : ViewModel>(
     @LayoutRes protected val layoutId: Int,
     private val viewModelId: Int,
-    @MenuRes val menuResourceId: Int? = null,
-    private val supportsNativeAds: Boolean = false
-) : Fragment(), OnAdLoadedListener {
+    @MenuRes val menuResourceId: Int? = null
+) : Fragment() {
     private val job = Job()
     protected val coroutineHandler = CoroutineHandler(job)
     protected abstract val viewModel: VM
     protected lateinit var dataBinding: VDB
     private lateinit var viewModelProvider: ViewModelProvider
     private lateinit var mActivity: BaseAppCompatActivity<ViewDataBinding>
-
+    protected lateinit var nativeAdDispatcher: NativeAdDispatcher
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(menuResourceId != null)
@@ -40,11 +37,9 @@ abstract class BaseFragment<VDB : ViewDataBinding, VM : ViewModel>(
         savedInstanceState: Bundle?
     ): View? {
         mActivity = requireActivity() as BaseAppCompatActivity<ViewDataBinding>
+        nativeAdDispatcher = mActivity.nativeAdDispatcher
         viewModelProvider = ViewModelProvider(requireActivity(), defaultViewModelProviderFactory)
         dataBinding = generateDataBinding(inflater, container)
-        if(supportsNativeAds){
-            mActivity.addAdLoadListener(this)
-        }
         return dataBinding.root
     }
 
@@ -62,15 +57,5 @@ abstract class BaseFragment<VDB : ViewDataBinding, VM : ViewModel>(
         } ?: run {
             super.onCreateOptionsMenu(menu, inflater)
         }
-    }
-
-    fun getUnifiedNativeAds(): List<UnifiedNativeAd> {
-        return mActivity.getUnifiedNativeAds()
-    }
-
-
-    @CallSuper
-    override fun onAdsLoaded(unifiedNativeAds: List<AdEntity>, adsChanged: Boolean) {
-        require(supportsNativeAds){"Load native ads not supported by fragment"}
     }
 }
