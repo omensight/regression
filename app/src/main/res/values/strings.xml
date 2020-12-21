@@ -75,6 +75,9 @@
     <string name="i">I</string>
     <string name="generic_x_label">X</string>
     <string name="generic_y_label">Y</string>
+    <string name="preference_visible_decimals">Visible decimals</string>
+    <string name="settings_visible_decimals_description">This only works for the result views, not for the input data.</string>
+    <string name="_settings_buy_subscription_description">Enjoy Regression without ads and many other features</string>
 
 
     <string-array name="regression_types">

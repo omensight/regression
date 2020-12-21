@@ -12,6 +12,7 @@ import androidx.navigation.ui.onNavDestinationSelected
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.databinding.MainActivityBinding
 import com.alphemsoft.education.regression.ui.base.BaseAppCompatActivity
+import com.alphemsoft.education.regression.ui.fragment.MainSettingsFragment
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,7 +52,13 @@ class MainActivity : AbstractMainActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(findNavController(R.id.main_nav_host_fragment))
-                || super.onOptionsItemSelected(item)
+                || super.onOptionsItemSelected(item) || when(item.itemId){
+            R.id.main_menu_settings -> {
+                findNavController(R.id.main_nav_host_fragment).navigate(R.id.destination_main_settings)
+                true
+            }
+            else -> false
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

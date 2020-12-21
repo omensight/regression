@@ -27,4 +27,7 @@ object DatabaseModule {
 
     @Provides
     fun providesSheetDao(db: RegressionDatabase) = db.sheetDao()
+
+    @Provides
+    fun providesPreferenceDao(db: RegressionDatabase) = db.preferenceDao()
 }

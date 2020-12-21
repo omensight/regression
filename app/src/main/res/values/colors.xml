@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primaryColor">#2C423E</color>
+    <color name="primaryColor">#424242</color>
     <color name="primaryLightColor">#80e27e</color>
     <color name="primaryDarkColor">#22242d</color>
     <color name="secondaryColor">#2e7d32</color>
@@ -8,8 +8,8 @@
     <color name="secondaryDarkColor">#005005</color>
     <color name="primaryTextColor">#000000</color>
 
-    <color name="secondaryTextColor">#ffffff</color>
-    <color name="colorAccent">#fff</color>
+    <color name="secondaryTextColor">#159852</color>
+    <color name="colorAccent">#159852</color>
     <color name="color_item_sheet_type">#FFF</color>
     <color name="color_item_sheet_background">#636e72</color>
     <color name="color_item_sheet_date_creation">#EFC358</color>
@@ -17,7 +17,7 @@
     <color name="item_textfield_background">#26A69A</color>
     <color name="color_original_data">#673AB7</color>
     <color name="color_calculated_data">#F44336</color>
-    <color name="color_window_background">#F5F5F5</color>
+    <color name="color_window_background">#313131</color>
     <color name="color_primary_text_color">#212121</color>
     <color name="color_premium_dialog_title">#00796B</color>
     <color name="color_button_watch_video">#009688</color>

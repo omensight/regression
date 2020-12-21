@@ -1,7 +1,7 @@
 <resources>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="colorPrimary">@color/primaryDarkColor</item>
+        <item name="colorPrimary">@color/primaryColor</item>
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorOnPrimary">#fff</item>
@@ -11,12 +11,14 @@
         <item name="colorOnSecondary">#806410</item>
         <item name="colorError">#F44336</item>
         <item name="colorOnError">#810000</item>
-        <item name="colorSurface">#fafafa</item>
+        <item name="colorSurface">@color/color_window_background</item>
         <item name="colorOnSurface">#252424</item><!-- -->
         <item name="android:colorBackground">@color/background</item>
         <item name="colorOnBackground">#fff</item>
         <item name="android:textColorPrimary">#000</item>
         <item name="windowActionModeOverlay">true</item>
+        <item name="android:textColor">#f5f5f5</item>
+        <item name="android:windowBackground">@color/color_window_background</item>
         <item name="actionModeBackground">@color/primaryDarkColor</item>
         <item name="actionModeCloseButtonStyle">@style/ActionModeCloseButtonStyle</item>
         <item name="titleTextColor">@android:color/white</item>

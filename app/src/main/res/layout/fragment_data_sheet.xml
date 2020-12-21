@@ -18,8 +18,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/tv_x_label"
-            android:background="@drawable/drawable_square"
-            android:backgroundTint="@color/result_title"/>
+            android:background="@color/result_title"/>
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_index"
             android:layout_width="64dp"

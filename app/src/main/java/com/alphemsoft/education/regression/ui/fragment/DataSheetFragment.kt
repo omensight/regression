@@ -241,9 +241,11 @@ class DataSheetFragment : BaseDataSheetFragment() {
                 dataBinding.rvDataPoints.apply {
                     layoutManager =
                         LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-                    val metrics = requireActivity().displayMetrics()
-                    dataPointAdapter.metrics = metrics
-                    adapter = dataPointAdapter
+                    if (isAttachedToWindow){
+                        val metrics = requireActivity().displayMetrics()
+                        dataPointAdapter.metrics = metrics
+                        adapter = dataPointAdapter
+                    }
                 }
 
                 coroutineHandler.foregroundScope.launch {

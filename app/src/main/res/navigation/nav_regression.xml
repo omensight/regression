@@ -92,4 +92,8 @@
         tools:layout="@layout/dialog_fragment_export_data">
 
     </dialog>
+    <fragment
+        android:id="@+id/destination_main_settings"
+        android:name="com.alphemsoft.education.regression.ui.fragment.MainSettingsFragment"
+        android:label="MainSettingsFragment" />
 </navigation>

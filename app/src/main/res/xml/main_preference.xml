@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="@string/buy_subscription">
+        <Preference
+            android:key="key_buy_subscription"
+            android:icon="@drawable/ic_crown"
+            android:title="@string/buy_subscription"
+            android:summary="@string/_settings_buy_subscription_description"/>
+    </PreferenceCategory>
+
+
+    <SeekBarPreference
+        android:key="@string/key_preference_decimal_count"
+        android:title="@string/preference_visible_decimals"
+        android:icon="@drawable/ic_decimal"
+        android:summary="@string/settings_visible_decimals_description"
+        android:max="20"
+        app:min="1"
+        />
+
+</PreferenceScreen>
