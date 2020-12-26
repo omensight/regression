@@ -9,6 +9,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
+import com.alphemsoft.education.regression.BuildConfig
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.databinding.MainActivityBinding
 import com.alphemsoft.education.regression.ui.base.BaseAppCompatActivity

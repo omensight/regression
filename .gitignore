@@ -16,3 +16,4 @@
 /app/secret_config.gradle
 /app/release
 /nativetemplates/build/
+/android_math/build
