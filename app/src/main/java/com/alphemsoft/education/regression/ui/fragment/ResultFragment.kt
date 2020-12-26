@@ -17,7 +17,7 @@ import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.databinding.FragmentResultsBinding
 import com.alphemsoft.education.regression.data.regression.RegressionFactory
 import com.alphemsoft.education.regression.ui.adapter.ResultAdapter
-import com.alphemsoft.education.regression.ui.adapter.itemdecoration.DividerItemDecoration
+import com.alphemsoft.education.regression.ui.adapter.itemdecoration.DividerSpacingItemDecoration
 import com.alphemsoft.education.regression.ui.base.BaseFragment
 import com.alphemsoft.education.regression.viewmodel.ResultViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -111,7 +111,7 @@ class ResultFragment : AbstractResultFragment(),
             setItemViewCacheSize(20)
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             adapter = resultAdapter
-            addItemDecoration(DividerItemDecoration(16))
+            addItemDecoration(DividerSpacingItemDecoration(16))
         }
     }
 

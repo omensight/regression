@@ -11,13 +11,15 @@
     </PreferenceCategory>
 
 
-    <SeekBarPreference
-        android:key="@string/key_preference_decimal_count"
-        android:title="@string/preference_visible_decimals"
-        android:icon="@drawable/ic_decimal"
-        android:summary="@string/settings_visible_decimals_description"
-        android:max="20"
-        app:min="1"
-        />
+    <PreferenceCategory android:title="@string/category_title_application_settings">
+        <SeekBarPreference
+            android:key="@string/key_preference_decimal_count"
+            android:title="@string/preference_visible_decimals"
+            android:icon="@drawable/ic_decimal"
+            android:summary="@string/settings_visible_decimals_description"
+            android:max="20"
+            app:min="1"
+            />
+    </PreferenceCategory>
 
 </PreferenceScreen>

@@ -30,7 +30,7 @@ class MainActivity : AbstractMainActivity() {
         super.onCreate(savedInstanceState)
         MobileAds.initialize(applicationContext)
         setupUi()
-        setupToolbar()
+//        setupToolbar()
         showAds()
     }
 
@@ -81,7 +81,9 @@ class MainActivity : AbstractMainActivity() {
             coroutineHandler.foregroundScope.launch {
 
                 nativeAds.forEach { nativeAd ->
-                    ad_template_view.setNativeAd(nativeAd.unifiedNativeAd)
+                    nativeAd.unifiedNativeAd?.let {
+                        ad_template_view.setNativeAd(it)
+                    }
                     delay(1000 * resources.getInteger(R.integer.ad_duration).toLong())
                 }
                 showAds()

@@ -32,7 +32,9 @@
             app:layout_constraintLeft_toLeftOf="parent"
             android:singleLine="true"
             android:ellipsize="marquee"
-            app:setBigDecimal="@{x}"/>
+            app:setBigDecimal="@{x}"
+            style="@style/TextOnSurface"
+            />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_y"
@@ -43,6 +45,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:setBigDecimal="@{y}"
             android:singleLine="true"
+            style="@style/TextOnSurface"
             android:ellipsize="marquee"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

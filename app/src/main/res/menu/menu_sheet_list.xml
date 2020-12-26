@@ -7,6 +7,5 @@
         android:title="@string/regression_new"
         android:tooltipText="@string/regression_new"
         android:orderInCategory="100"
-        app:showAsAction="always"
-        android:iconTint="@color/color_item_action"/>
+        app:showAsAction="always"/>
 </menu>

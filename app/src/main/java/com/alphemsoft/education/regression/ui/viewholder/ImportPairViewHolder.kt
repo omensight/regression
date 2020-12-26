@@ -16,9 +16,9 @@ class ImportPairViewHolder(mViewBinding: ItemImportPairBinding) : BaseItemViewHo
         mDataBinding.y = sheetEntry?.y
         val currentPos = absoluteAdapterPosition
         val colorResource = if (currentPos % 2 == 0){
-            R.color.color_background_white
+            R.color.color_data_even_position
         }else{
-            R.color.color_background_dark
+            R.color.color_data_odd_position
         }
         val colorBackground = ContextCompat.getColor(context, colorResource)
         mDataBinding.container.setBackgroundColor(colorBackground)

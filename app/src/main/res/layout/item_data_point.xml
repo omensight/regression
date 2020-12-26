@@ -16,7 +16,7 @@
         android:id="@+id/cl_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/drawable_shape_ripple_no_border">
+        android:background="@drawable/drawable_square_rounded_corners">
 
 
 <!--        <View-->
@@ -41,14 +41,13 @@
             app:layout_constraintDimensionRatio="3:2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/ti_x"
-            />
+            android:textColor="@android:color/white"/>
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/ti_x"
             style="@style/DataInputEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/primaryDarkColor"
             android:drawableTint="#fff"
             android:inputType="numberDecimal|numberSigned"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -64,7 +63,6 @@
             style="@style/DataInputEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/primaryDarkColor"
             android:drawableTint="#fff"
             android:inputType="numberDecimal|numberSigned"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -83,7 +81,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ti_y"
             app:layout_constraintTop_toTopOf="@id/ti_x"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

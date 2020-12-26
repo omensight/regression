@@ -18,7 +18,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/tv_x_label"
-            android:background="@color/result_title"/>
+            android:background="@color/primaryColor"/>
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_index"
             android:layout_width="64dp"
@@ -26,7 +26,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:text="@string/n"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            style="@style/TextAppearance.MaterialComponents.ListHeader"/>
 
 
         <com.google.android.material.textview.MaterialTextView
@@ -37,7 +38,8 @@
             android:text="@string/generic_x_label"
             app:layout_constraintStart_toEndOf="@id/tv_index"
             app:layout_constraintEnd_toStartOf="@id/tv_y_label"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            style="@style/TextAppearance.MaterialComponents.ListHeader"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_y_label"
@@ -48,7 +50,8 @@
             app:layout_constraintStart_toEndOf="@id/tv_x_label"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/generic_y_label"
-            android:textAlignment="center"/>
+            android:textAlignment="center"
+            style="@style/TextAppearance.MaterialComponents.ListHeader"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_data_points"
@@ -75,8 +78,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:menu="@menu/menu_botom_data_sheet_detail"
-                android:backgroundTint="?attr/colorPrimaryDark"
-                android:layout_gravity="bottom"/>
+                android:layout_gravity="bottom"
+                style="@style/BottomAppBar"/>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

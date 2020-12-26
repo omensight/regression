@@ -23,6 +23,7 @@ import com.alphemsoft.education.regression.dataparser.CsvParser
 import com.alphemsoft.education.regression.extensions.displayMetrics
 import com.alphemsoft.education.regression.ui.SimpleFieldModelUi
 import com.alphemsoft.education.regression.ui.adapter.DataPointAdapter
+import com.alphemsoft.education.regression.ui.adapter.itemdecoration.DividerSpacingItemDecoration
 import com.alphemsoft.education.regression.ui.base.BaseFragment
 import com.alphemsoft.education.regression.util.PermissionHandler
 import com.alphemsoft.education.regression.viewmodel.DataSheetViewModel
@@ -120,9 +121,8 @@ class DataSheetFragment : BaseDataSheetFragment() {
                 true
             }
             R.id.action_import_csv_data -> {
-//                val fragment = PremiumFeatureDialogFragment()
-//                fragment.show(childFragmentManager, this, PREMIUM_REQUEST_IMPORT_DATA, R.string.action_import_csv_data)
-                onRewardedVideoWatched(PREMIUM_REQUEST_IMPORT_DATA)
+                val fragment = PremiumFeatureDialogFragment()
+                fragment.show(childFragmentManager, this, PREMIUM_REQUEST_IMPORT_DATA, R.string.action_import_csv_data)
                 true
             }
             R.id.action_export -> {
@@ -245,6 +245,7 @@ class DataSheetFragment : BaseDataSheetFragment() {
                         val metrics = requireActivity().displayMetrics()
                         dataPointAdapter.metrics = metrics
                         adapter = dataPointAdapter
+                        addItemDecoration(DividerSpacingItemDecoration(8))
                     }
                 }
 

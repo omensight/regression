@@ -16,7 +16,7 @@ class MainSettingsFragment: PreferenceFragmentCompat() {
     val coroutineHandler = CoroutineHandler(Job())
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        setPreferencesFromResource(R.xml.main_preference, rootKey)
+        setPreferencesFromResource(R.xml.main_settings, rootKey)
 
     }
 }

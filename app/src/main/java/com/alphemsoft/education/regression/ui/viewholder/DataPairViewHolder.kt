@@ -13,7 +13,7 @@ import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.databinding.ItemDataPointBinding
 import com.alphemsoft.education.regression.ui.base.BaseItemViewHolder
 
-class DataPointItemViewHolder(
+class DataPairViewHolder(
     viewBinding: ItemDataPointBinding,
     private val metrics: DisplayMetrics? = null
 ) : BaseItemViewHolder<ItemDataPointBinding, SheetEntry>(
@@ -27,11 +27,7 @@ class DataPointItemViewHolder(
                 ContextCompat.getColor(context, R.color.color_data_even_position)
             else
                 ContextCompat.getColor(context, R.color.color_data_odd_position)
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.R) {
-            mDataBinding.clContainer.background.setColorFilter(backgroundColor, PorterDuff.Mode.MULTIPLY)
-        }else{
-            mDataBinding.clContainer.background.colorFilter = BlendModeColorFilter(backgroundColor, BlendMode.MULTIPLY)
-        }
+        mDataBinding.clContainer.background.setTint(backgroundColor)
         mDataBinding.cbSelected.visibility = if (isSelectable) {
             View.VISIBLE
         } else {

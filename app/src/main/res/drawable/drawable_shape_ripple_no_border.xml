@@ -10,7 +10,7 @@
 
     <item>
         <shape>
-            <solid android:color="@color/color_item_sheet_background"/>
+
         </shape>
     </item>
 </ripple>

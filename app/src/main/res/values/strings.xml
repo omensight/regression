@@ -78,6 +78,7 @@
     <string name="preference_visible_decimals">Visible decimals</string>
     <string name="settings_visible_decimals_description">This only works for the result views, not for the input data.</string>
     <string name="_settings_buy_subscription_description">Enjoy Regression without ads and many other features</string>
+    <string name="category_title_application_settings">Application</string>
 
 
     <string-array name="regression_types">

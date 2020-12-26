@@ -10,7 +10,9 @@ import com.alphemsoft.education.regression.BR
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.databinding.FragmentSheetListBinding
 import com.alphemsoft.education.regression.ui.adapter.SheetPagingAdapter
+import com.alphemsoft.education.regression.ui.adapter.itemdecoration.DividerSpacingItemDecoration
 import com.alphemsoft.education.regression.ui.base.BaseFragment
+import com.alphemsoft.education.regression.ui.divider.TestDivider
 import com.alphemsoft.education.regression.viewmodel.DataSheetViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -45,7 +47,9 @@ class SheetListFragment : AbstractSheetListFragment() {
     private fun setupSheetList() {
         dataBinding.rvSheetList.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
+            addItemDecoration(DividerSpacingItemDecoration(8))
             adapter = sheetPagingAdapter
+
         }
     }
 

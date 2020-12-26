@@ -6,19 +6,19 @@ import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.databinding.ItemDataPointBinding
 import com.alphemsoft.education.regression.ui.base.BaseEntityPagingDataAdapter
 import com.alphemsoft.education.regression.ui.comparators.DbEntityComparatorItemCallback
-import com.alphemsoft.education.regression.ui.viewholder.DataPointItemViewHolder
+import com.alphemsoft.education.regression.ui.viewholder.DataPairViewHolder
 import javax.inject.Inject
 
 class DataPointPagingAdapter @Inject constructor() :
-    BaseEntityPagingDataAdapter<SheetEntry, DataPointItemViewHolder>(
+    BaseEntityPagingDataAdapter<SheetEntry, DataPairViewHolder>(
         DbEntityComparatorItemCallback()
     ) {
-    override fun onBindViewHolder(holder: DataPointItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: DataPairViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): DataPointItemViewHolder {
+    override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup, viewType: Int): DataPairViewHolder {
         val bind = ItemDataPointBinding.inflate(inflater, parent, false)
-        return DataPointItemViewHolder(bind)
+        return DataPairViewHolder(bind)
     }
 }

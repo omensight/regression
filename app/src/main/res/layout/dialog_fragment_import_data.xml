@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="import_view_model"
             type="com.alphemsoft.education.regression.viewmodel.DataSheetViewModel" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:minHeight="320sp"
         android:background="@android:color/transparent">
 
@@ -19,7 +19,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/drawable_shape_title"
-            android:backgroundTint="@color/primaryDarkColor"
+            android:backgroundTint="@color/primaryColor"
             android:padding="@dimen/big_spacing"
             android:text="@string/import_data_title_imported_data_"
             android:textSize="18sp"
@@ -58,7 +58,6 @@
             app:layout_constraintBottom_toBottomOf="@id/view_background"
             app:layout_constraintRight_toRightOf="@id/view_background"
             style="@style/App.Theme.ButtonAccept"
-            app:backgroundTint="@color/primaryDarkColor"
             android:layout_marginRight="@dimen/medium_spacing"
             android:layout_marginBottom="@dimen/medium_spacing"/>
 
@@ -77,13 +76,13 @@
             android:id="@+id/tv_import_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            android:paddingStart="@dimen/medium_spacing"
+            android:paddingTop="@dimen/medium_spacing"
+            android:paddingEnd="@dimen/medium_spacing"
+            android:text="@string/import_data_message"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="@id/view_background"
             app:layout_constraintRight_toRightOf="@id/view_background"
-            android:text="@string/import_data_message"
-            android:textColor="@color/primaryColor"
-            android:paddingStart="@dimen/medium_spacing"
-            android:paddingEnd="@dimen/medium_spacing"
-            android:paddingTop="@dimen/medium_spacing" />
+            app:layout_constraintTop_toBottomOf="@id/tv_title" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

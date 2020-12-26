@@ -8,11 +8,11 @@ import com.alphemsoft.education.regression.databinding.ItemDataPointBinding
 
 import com.alphemsoft.education.regression.ui.base.BaseEntityAdapter
 import com.alphemsoft.education.regression.ui.comparators.DataEntryComparator
-import com.alphemsoft.education.regression.ui.viewholder.DataPointItemViewHolder
+import com.alphemsoft.education.regression.ui.viewholder.DataPairViewHolder
 import javax.inject.Inject
 
 class DataPointAdapter @Inject constructor() :
-    BaseEntityAdapter<SheetEntry, DataPointItemViewHolder>(DataEntryComparator()) {
+    BaseEntityAdapter<SheetEntry, DataPairViewHolder>(DataEntryComparator()) {
     lateinit var metrics: DisplayMetrics
     var selectable: Boolean = false
         set(value) {
@@ -24,18 +24,18 @@ class DataPointAdapter @Inject constructor() :
         inflater: LayoutInflater,
         parent: ViewGroup,
         viewType: Int
-    ): DataPointItemViewHolder {
+    ): DataPairViewHolder {
         val binding = ItemDataPointBinding.inflate(inflater,parent,false)
-        return DataPointItemViewHolder(binding, metrics)
+        return DataPairViewHolder(binding, metrics)
 
     }
 
-    override fun onViewRecycled(holder: DataPointItemViewHolder) {
+    override fun onViewRecycled(holder: DataPairViewHolder) {
         super.onViewRecycled(holder)
         holder.lostFocus()
     }
 
-    override fun onBindViewHolder(holder: DataPointItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: DataPairViewHolder, position: Int) {
         holder.isSelectable = selectable
         val item = items[holder.adapterPosition]
         holder.bind(item)

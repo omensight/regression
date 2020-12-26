@@ -6,7 +6,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 
-class DividerItemDecoration(private val spacing: Int): RecyclerView.ItemDecoration()
+class DividerSpacingItemDecoration(private val spacing: Int): RecyclerView.ItemDecoration()
 {
 
     override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
