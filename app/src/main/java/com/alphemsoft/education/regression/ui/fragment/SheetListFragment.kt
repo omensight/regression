@@ -41,7 +41,11 @@ class SheetListFragment : AbstractSheetListFragment() {
                 sheetPagingAdapter.submitData(it)
             }
         }
+
         setupSheetList()
+        coroutineHandler.backgroundScope.launch {
+            viewModel.migrateLegacyData()
+        }
     }
 
     private fun setupSheetList() {

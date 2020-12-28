@@ -11,6 +11,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import com.alphemsoft.education.regression.BuildConfig
 import com.alphemsoft.education.regression.R
+import com.alphemsoft.education.regression.data.legacy.OldDBHelper
 import com.alphemsoft.education.regression.databinding.MainActivityBinding
 import com.alphemsoft.education.regression.ui.base.BaseAppCompatActivity
 import com.alphemsoft.education.regression.ui.fragment.MainSettingsFragment

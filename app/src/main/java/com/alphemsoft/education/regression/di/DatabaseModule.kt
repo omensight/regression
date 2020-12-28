@@ -3,6 +3,7 @@ package com.alphemsoft.education.regression.di
 import android.content.Context
 import androidx.room.Room
 import com.alphemsoft.education.regression.data.RegressionDatabase
+import com.alphemsoft.education.regression.data.legacy.LegacyDataMigrationHelper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,4 +34,7 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun providesPreferenceDao(db: RegressionDatabase) = db.preferenceDao()
+
+    @Provides
+    fun providesLegacyDataMigrationHelper(@ApplicationContext context: Context) = LegacyDataMigrationHelper(context)
 }

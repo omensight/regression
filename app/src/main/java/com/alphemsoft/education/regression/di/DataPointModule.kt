@@ -1,8 +1,8 @@
 package com.alphemsoft.education.regression.di
 
 import com.alphemsoft.education.regression.data.dao.DataPointDao
-import com.alphemsoft.education.regression.data.datasource.IDataPointLocalDataSource
-import com.alphemsoft.education.regression.data.datasource.base.DataPointLocalDataSource
+import com.alphemsoft.education.regression.data.datasource.ISheetEntryLocalDataSource
+import com.alphemsoft.education.regression.data.datasource.base.SheetEntryLocalDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,8 +15,8 @@ object DataPointModule {
 
     @Provides
     @Singleton
-    fun providesDataPointDataSource(dataPointDao: DataPointDao): IDataPointLocalDataSource {
-        return DataPointLocalDataSource(dataPointDao)
+    fun providesDataPointDataSource(dataPointDao: DataPointDao): ISheetEntryLocalDataSource {
+        return SheetEntryLocalDataSource(dataPointDao)
     }
 
 

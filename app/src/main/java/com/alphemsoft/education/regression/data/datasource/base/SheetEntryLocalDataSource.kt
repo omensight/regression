@@ -3,14 +3,14 @@ package com.alphemsoft.education.regression.data.datasource.base
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.alphemsoft.education.regression.data.dao.DataPointDao
-import com.alphemsoft.education.regression.data.datasource.IDataPointLocalDataSource
+import com.alphemsoft.education.regression.data.datasource.ISheetEntryLocalDataSource
 import com.alphemsoft.education.regression.data.model.SheetEntry
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class DataPointLocalDataSource @Inject constructor(
+class SheetEntryLocalDataSource @Inject constructor(
     private val dataPointDao: DataPointDao
-) : IDataPointLocalDataSource {
+) : ISheetEntryLocalDataSource {
 
     override fun getDataPointPager(sheetId: Long): Pager<Int, SheetEntry> {
         return Pager(

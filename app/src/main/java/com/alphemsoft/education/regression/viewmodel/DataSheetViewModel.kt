@@ -1,11 +1,13 @@
 package com.alphemsoft.education.regression.viewmodel
 
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.alphemsoft.education.regression.data.datasource.IDataPointLocalDataSource
+import com.alphemsoft.education.regression.data.datasource.ISheetEntryLocalDataSource
 import com.alphemsoft.education.regression.data.datasource.ISheetDataSource
+import com.alphemsoft.education.regression.data.legacy.LegacyDataMigrationHelper
 import com.alphemsoft.education.regression.data.model.Sheet
 import com.alphemsoft.education.regression.data.model.SheetEntry
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +18,8 @@ import kotlin.random.Random
 
 class DataSheetViewModel @ViewModelInject constructor(
     private val sheetDataSource: ISheetDataSource,
-    private val dataPointDataSource: IDataPointLocalDataSource,
+    private val sheetEntryDataSource: ISheetEntryLocalDataSource,
+    private val legacyDataMigrationHelper: LegacyDataMigrationHelper
 ) : ViewModel() {
 
     val dataEntries: MutableLiveData<MutableList<SheetEntry>> = MutableLiveData(ArrayList())
@@ -36,7 +39,7 @@ class DataSheetViewModel @ViewModelInject constructor(
 
    
     suspend fun getDataPointList(sheetId: Long): Flow<List<SheetEntry>> {
-        dataEntries.postValue(ArrayList(dataPointDataSource.getDataPointList(sheetId)))
+        dataEntries.postValue(ArrayList(sheetEntryDataSource.getDataPointList(sheetId)))
         return dataEntries.asFlow()
     }
 
@@ -111,17 +114,17 @@ class DataSheetViewModel @ViewModelInject constructor(
             value?.filter {
                 it.id != 0L
             }?.let {
-                dataPointDataSource.update(it)
+                sheetEntryDataSource.update(it)
             }
             value?.filter {
                 it.id == 0L
             }?.let {
-                dataPointDataSource.insert(it)
+                sheetEntryDataSource.insert(it)
             }
             value?.filter {
                 it.deleted && it.id != 0L
             }?.run {
-                dataPointDataSource.delete(this)
+                sheetEntryDataSource.delete(this)
             }
             true
         }
@@ -143,5 +146,15 @@ class DataSheetViewModel @ViewModelInject constructor(
         val oldDataEntries = dataEntries.value?:ArrayList()
         oldDataEntries.addAll(importedItems)
         dataEntries.value = oldDataEntries
+    }
+
+    suspend fun migrateLegacyData(){
+        Log.d("Migrated", "Yes")
+        legacyDataMigrationHelper.readData()
+        val sheetList = legacyDataMigrationHelper.sheetList
+        val sheetEntries = legacyDataMigrationHelper.sheetEntries
+        sheetDataSource.insert(sheetList)
+        sheetEntryDataSource.insert(sheetEntries)
+        legacyDataMigrationHelper.deleteSheets()
     }
 }
