@@ -21,6 +21,7 @@ import com.alphemsoft.education.regression.ui.adapter.itemdecoration.DividerSpac
 import com.alphemsoft.education.regression.ui.base.BaseFragment
 import com.alphemsoft.education.regression.viewmodel.ResultViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -63,9 +64,15 @@ class ResultFragment : AbstractResultFragment(),
     }
 
     private suspend fun refreshResultList() {
-        val unifiedNativeNativeAds: List<NativeAdEntity> = nativeAdDispatcher.fetchAds()
+
         viewModel.getDataPointsFlow(args.regressionId).collectLatest {data->
+            var unifiedNativeNativeAds: List<NativeAdEntity> = nativeAdDispatcher.fetchAds()
             loadResults(data, unifiedNativeNativeAds)
+            if (unifiedNativeNativeAds.isEmpty()){
+                delay(10000)
+                unifiedNativeNativeAds = nativeAdDispatcher.fetchAds()
+                loadResults(data, unifiedNativeNativeAds)
+            }
         }
     }
 
@@ -130,7 +137,8 @@ class ResultFragment : AbstractResultFragment(),
         Log.d("PrefChanged","Changed")
         if (key == getString(R.string.key_preference_decimal_count)){
             coroutineHandler.backgroundScope.launch {
-                loadResults(viewModel.getDataPoints(args.regressionId), nativeAdDispatcher.fetchAds())
+                val ads = nativeAdDispatcher.fetchAds()
+                loadResults(viewModel.getDataPoints(args.regressionId), ads)
             }
         }
     }

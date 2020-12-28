@@ -69,6 +69,9 @@ class CreateSheetFragment : AbstractCreateSheetFragment() {
             val id = viewModel.insertNewSheet()
             coroutineHandler.foregroundScope.launch {
                 val action = CreateSheetFragmentDirections.actionDataSheetDetailFromCreateSheet(id)
+                dataBinding.etLabel.isEnabled = false
+                dataBinding.etXLabel.isEnabled = false
+                dataBinding.etYLabel.isEnabled = false
                 findNavController().navigate(action)
             }
         }else{

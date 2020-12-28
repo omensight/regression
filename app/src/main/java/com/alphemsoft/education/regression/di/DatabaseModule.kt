@@ -23,11 +23,14 @@ object DatabaseModule {
     }
 
     @Provides
+    @Singleton
     fun providesDataPointDao(db: RegressionDatabase) = db.dataPointDao()
 
     @Provides
+    @Singleton
     fun providesSheetDao(db: RegressionDatabase) = db.sheetDao()
 
     @Provides
+    @Singleton
     fun providesPreferenceDao(db: RegressionDatabase) = db.preferenceDao()
 }

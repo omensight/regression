@@ -70,6 +70,7 @@ class MainActivity : AbstractMainActivity() {
     private fun showAds() {
         coroutineHandler.backgroundScope.launch {
             val nativeAds = nativeAdDispatcher.fetchAds()
+
             coroutineHandler.foregroundScope.launch {
                 if (nativeAds.isEmpty()) {
                     mDataBinding.layoutPremiumSubscription.root.visibility = View.VISIBLE
@@ -78,14 +79,16 @@ class MainActivity : AbstractMainActivity() {
                     mDataBinding.layoutPremiumSubscription.root.visibility = View.GONE
                     mDataBinding.adTemplateView.visibility = View.VISIBLE
                 }
-            }
-            coroutineHandler.foregroundScope.launch {
-
                 nativeAds.forEach { nativeAd ->
                     nativeAd.unifiedNativeAd?.let {
                         ad_template_view.setNativeAd(it)
                     }
                     delay(1000 * resources.getInteger(R.integer.ad_duration).toLong())
+                }
+                if (nativeAds.isEmpty()){
+                    delay(1000*5.toLong())
+                }else{
+                    delay(1000*30.toLong())
                 }
                 showAds()
             }
