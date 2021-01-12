@@ -2,25 +2,24 @@ package com.alphemsoft.education.regression.ui.activity
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
-import com.alphemsoft.education.regression.BuildConfig
 import com.alphemsoft.education.regression.R
-import com.alphemsoft.education.regression.data.legacy.OldDBHelper
 import com.alphemsoft.education.regression.databinding.MainActivityBinding
+import com.alphemsoft.education.regression.premium.PremiumSubscriptionState
 import com.alphemsoft.education.regression.ui.base.BaseAppCompatActivity
-import com.alphemsoft.education.regression.ui.fragment.MainSettingsFragment
+import com.alphemsoft.education.regression.viewmodel.PurchaseSubscriptionViewModel
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.main_activity.*
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collectLatest
 
 abstract class AbstractMainActivity :
     BaseAppCompatActivity<MainActivityBinding>(R.layout.main_activity)
@@ -28,12 +27,35 @@ abstract class AbstractMainActivity :
 @AndroidEntryPoint
 class MainActivity : AbstractMainActivity() {
 
+    val subscriptionViewModel: PurchaseSubscriptionViewModel by viewModels()
+    private val adJob = Job()
+    private val backgroundAdCoroutineScope = CoroutineScope(adJob + Dispatchers.Default)
+    private val foregroundAdCoroutineScope = CoroutineScope(adJob + Dispatchers.Main)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         MobileAds.initialize(applicationContext)
         setupUi()
-//        setupToolbar()
-        showAds()
+        setupAds()
+    }
+
+    private fun setupAds() {
+        coroutineHandler.foregroundScope.launch {
+            subscriptionViewModel.subscriptionFlow.collectLatest {subscription ->
+                when(subscription.subscriptionState){
+                    PremiumSubscriptionState.NOT_SUBSCRIBED, PremiumSubscriptionState.TEMPORARY_ACCESS -> {
+                        mDataBinding.layoutPremiumSubscription.root.visibility = View.VISIBLE
+                        showAds()
+                    }
+                    PremiumSubscriptionState.SUBSCRIBED, PremiumSubscriptionState.CANCELLED -> {
+                        adJob.cancel()
+                        mDataBinding.layoutPremiumSubscription.root.visibility = View.GONE
+                        mDataBinding.adTemplateView.visibility = View.GONE
+                        mDataBinding.layoutPremiumSubscription.root.invalidate()
+                    }
+                }
+            }
+        }
     }
 
     private fun setupUi() {
@@ -42,6 +64,9 @@ class MainActivity : AbstractMainActivity() {
                 applicationContext,
                 R.drawable.drawable_shape_ripple_no_border
             )
+        mDataBinding.layoutPremiumSubscription.btSubscribe.setOnClickListener {
+            findNavController(R.id.main_nav_host_fragment).navigate(R.id.destination_purchase_subscription)
+        }
     }
 
     private fun setupToolbar() {
@@ -61,6 +86,7 @@ class MainActivity : AbstractMainActivity() {
             }
             else -> false
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -69,10 +95,10 @@ class MainActivity : AbstractMainActivity() {
     }
 
     private fun showAds() {
-        coroutineHandler.backgroundScope.launch {
+        backgroundAdCoroutineScope.launch {
             val nativeAds = nativeAdDispatcher.fetchAds()
 
-            coroutineHandler.foregroundScope.launch {
+            foregroundAdCoroutineScope.launch {
                 if (nativeAds.isEmpty()) {
                     mDataBinding.layoutPremiumSubscription.root.visibility = View.VISIBLE
                     mDataBinding.adTemplateView.visibility = View.GONE

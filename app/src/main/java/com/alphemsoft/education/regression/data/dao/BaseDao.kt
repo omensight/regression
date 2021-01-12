@@ -12,6 +12,7 @@ interface BaseDao<in T> {
     fun insert(vararg item: T): List<Long>
 
     @Insert
+    @Transaction
     fun insert(items: List<T>)
 
     @Update

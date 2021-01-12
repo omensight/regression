@@ -4,7 +4,7 @@
 
     <PreferenceCategory android:title="@string/buy_subscription">
         <Preference
-            android:key="key_buy_subscription"
+            android:key="@string/key_preference_buy_subscription"
             android:icon="@drawable/ic_crown"
             android:title="@string/buy_subscription"
             android:summary="@string/_settings_buy_subscription_description"/>

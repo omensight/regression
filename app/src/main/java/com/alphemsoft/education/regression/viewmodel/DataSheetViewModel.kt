@@ -5,12 +5,17 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.alphemsoft.education.regression.coroutines.CoroutineHandler
 import com.alphemsoft.education.regression.data.datasource.ISheetEntryLocalDataSource
 import com.alphemsoft.education.regression.data.datasource.ISheetDataSource
+import com.alphemsoft.education.regression.data.datasource.ISubscriptionDataSource
 import com.alphemsoft.education.regression.data.legacy.LegacyDataMigrationHelper
 import com.alphemsoft.education.regression.data.model.Sheet
 import com.alphemsoft.education.regression.data.model.SheetEntry
+import com.alphemsoft.education.regression.data.model.SheetType
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.*
 import kotlin.collections.ArrayList
@@ -19,10 +24,15 @@ import kotlin.random.Random
 class DataSheetViewModel @ViewModelInject constructor(
     private val sheetDataSource: ISheetDataSource,
     private val sheetEntryDataSource: ISheetEntryLocalDataSource,
-    private val legacyDataMigrationHelper: LegacyDataMigrationHelper
+    private val legacyDataMigrationHelper: LegacyDataMigrationHelper,
+    private val subscriptionDataSource: ISubscriptionDataSource
 ) : ViewModel() {
 
     val dataEntries: MutableLiveData<MutableList<SheetEntry>> = MutableLiveData(ArrayList())
+
+    val subscriptionFlow = subscriptionDataSource.getUniqueSubscriptionFlow()
+
+    val coroutineScope = CoroutineHandler(Job())
 
     private val _importedEntries: MutableLiveData<List<SheetEntry>> = MutableLiveData()
     val importedEntries: LiveData<List<SheetEntry>>
@@ -37,27 +47,29 @@ class DataSheetViewModel @ViewModelInject constructor(
         return sheetDataSource.findAll().flow.cachedIn(viewModelScope)
     }
 
-   
+
     suspend fun getDataPointList(sheetId: Long): Flow<List<SheetEntry>> {
         dataEntries.postValue(ArrayList(sheetEntryDataSource.getDataPointList(sheetId)))
         return dataEntries.asFlow()
     }
 
-   
+
     suspend fun addTemporaryPoint(sheetId: Long) {
         val value = dataEntries.value
-        value?.add(SheetEntry(
-            0L,
-            sheetId,
-            null,
-            null,
-            false,
-            Date().time
-        ))
+        value?.add(
+            SheetEntry(
+                0L,
+                sheetId,
+                null,
+                null,
+                false,
+                Date().time
+            )
+        )
         dataEntries.postValue(value)
     }
 
-   
+
     suspend fun sweepAll() {
         val value = ArrayList<SheetEntry>(dataEntries.value)
         value.forEach {
@@ -67,17 +79,18 @@ class DataSheetViewModel @ViewModelInject constructor(
         dataEntries.postValue(value)
     }
 
-   
+
     suspend fun deleteSelected() {
         val value = ArrayList(dataEntries.value)
-        value.filter { it.selected
+        value.filter {
+            it.selected
         }.forEach {
             it.deleted = true
         }
         dataEntries.postValue(value)
     }
 
-   
+
     suspend fun selectNothing() {
         val value = dataEntries.value
         value?.filter { it.selected }?.forEach {
@@ -86,7 +99,7 @@ class DataSheetViewModel @ViewModelInject constructor(
         dataEntries.postValue(dataEntries.value)
     }
 
-   
+
     suspend fun selectAll() {
         val value = ArrayList(dataEntries.value)
         value.forEach {
@@ -132,7 +145,13 @@ class DataSheetViewModel @ViewModelInject constructor(
 
     fun addImportedEntries(entryList: List<Pair<Double, Double>>, sheetId: Long) {
         val temp = entryList.map {
-            SheetEntry(0,sheetId, BigDecimal(it.first), BigDecimal(it.second), tempHash = Date().time)
+            SheetEntry(
+                0,
+                sheetId,
+                BigDecimal(it.first),
+                BigDecimal(it.second),
+                tempHash = Date().time
+            )
         }
         _importedEntries.value = temp
     }
@@ -142,19 +161,23 @@ class DataSheetViewModel @ViewModelInject constructor(
     }
 
     fun addImportedDataToDataList() {
-        val importedItems = _importedEntries.value?:ArrayList()
-        val oldDataEntries = dataEntries.value?:ArrayList()
+        val importedItems = _importedEntries.value ?: ArrayList()
+        val oldDataEntries = dataEntries.value ?: ArrayList()
         oldDataEntries.addAll(importedItems)
         dataEntries.value = oldDataEntries
     }
 
-    suspend fun migrateLegacyData(){
-        Log.d("Migrated", "Yes")
+    suspend fun migrateLegacyData() {
         legacyDataMigrationHelper.readData()
         val sheetList = legacyDataMigrationHelper.sheetList
         val sheetEntries = legacyDataMigrationHelper.sheetEntries
         sheetDataSource.insert(sheetList)
         sheetEntryDataSource.insert(sheetEntries)
         legacyDataMigrationHelper.deleteSheets()
+    }
+
+    suspend fun hasPremiumSubscription(): Boolean {
+        val subscription = subscriptionDataSource.getUniqueSubscription()
+        return subscription?.hasAnActiveSubscription() ?: false
     }
 }

@@ -71,7 +71,10 @@ class ImportEntriesDialogFragment: BaseImportEntriesDialogFragment() {
             adapter = importPairAdapter
         }
         viewModel.importedEntries.observe(requireActivity(), {
-            importPairAdapter.addNewItems(it)
+            it?.let {
+                importPairAdapter.addNewItems(it)
+
+            }
         })
     }
 }

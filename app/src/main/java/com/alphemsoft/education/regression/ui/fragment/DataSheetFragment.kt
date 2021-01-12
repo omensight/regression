@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alphemsoft.education.regression.BR
 import com.alphemsoft.education.regression.R
-import com.alphemsoft.education.regression.constants.IntentResultConstants.Companion.RESULT_IMPORT_DATA
-import com.alphemsoft.education.regression.constants.IntentResultConstants.Companion.SUPPORTED_IMPORT_MIME_TYPES
-import com.alphemsoft.education.regression.constants.PREMIUM_REQUEST_IMPORT_DATA
+import com.alphemsoft.education.regression.constants.IntentResultConstants
+import com.alphemsoft.education.regression.constants.PREMIUM_REQUEST_FEATURE_EXPORT_DATA
+import com.alphemsoft.education.regression.constants.PREMIUM_REQUEST_FEATURE_IMPORT_DATA
 import com.alphemsoft.education.regression.constants.PermissionConstants
 import com.alphemsoft.education.regression.databinding.FragmentDataSheetBinding
 import com.alphemsoft.education.regression.dataparser.CsvParser
@@ -43,10 +43,11 @@ abstract class BaseDataSheetFragment : BaseFragment<FragmentDataSheetBinding, Da
     layoutId = R.layout.fragment_data_sheet,
     viewModelId = BR.data_sheet_viewmodel,
     menuResourceId = R.menu.menu_data_sheet_detail
-), PremiumFeatureDialogFragment.OnPremiumDecisionListener
+)
 
 @AndroidEntryPoint
-class DataSheetFragment : BaseDataSheetFragment() {
+class DataSheetFragment : BaseDataSheetFragment(),
+    PremiumFeatureDialogFragment.OnPremiumDecisionListener {
 
     override val viewModel: DataSheetViewModel by activityViewModels()
     val args: DataSheetFragmentArgs by navArgs()
@@ -121,16 +122,52 @@ class DataSheetFragment : BaseDataSheetFragment() {
                 true
             }
             R.id.action_import_csv_data -> {
-                val fragment = PremiumFeatureDialogFragment()
-                fragment.show(childFragmentManager, this, PREMIUM_REQUEST_IMPORT_DATA, R.string.action_import_csv_data)
+                coroutineHandler.foregroundScope.launch {
+                    if (viewModel.hasPremiumSubscription()){
+                        startDataImport()
+                    }else{
+                        val fragment = PremiumFeatureDialogFragment()
+                        fragment.show(
+                            parentFragmentManager,
+                            this@DataSheetFragment,
+                            PREMIUM_REQUEST_FEATURE_IMPORT_DATA,
+                            R.string.import_data
+                        )
+                    }
+
+                }
                 true
             }
             R.id.action_export -> {
-                startDataExport()
+                coroutineHandler.foregroundScope.launch {
+                    if (viewModel.hasPremiumSubscription()){
+                        startDataExport()
+                    }else{
+                        val fragment = PremiumFeatureDialogFragment()
+                        fragment.show(
+                            parentFragmentManager,
+                            this@DataSheetFragment,
+                            PREMIUM_REQUEST_FEATURE_IMPORT_DATA,
+                            R.string.import_data
+                        )
+                    }
+
+                }
+
                 true
             }
             else -> false
         }
+    }
+
+    private fun startDataImport() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "*/*"
+        intent.putExtra(
+            Intent.EXTRA_MIME_TYPES,
+            IntentResultConstants.SUPPORTED_IMPORT_MIME_TYPES
+        )
+        startActivityForResult(intent, IntentResultConstants.RESULT_IMPORT_DATA)
     }
 
     private fun setupContextMenu() {
@@ -241,7 +278,7 @@ class DataSheetFragment : BaseDataSheetFragment() {
                 dataBinding.rvDataPoints.apply {
                     layoutManager =
                         LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
-                    if (isAttachedToWindow){
+                    if (isAttachedToWindow) {
                         val metrics = requireActivity().displayMetrics()
                         dataPointAdapter.metrics = metrics
                         adapter = dataPointAdapter
@@ -254,25 +291,6 @@ class DataSheetFragment : BaseDataSheetFragment() {
                         dataPointAdapter.addNewItems(it.filter { item -> !item.deleted })
                     }
                 }
-            }
-        }
-    }
-
-    override fun onCancelSelected(requestId: Int) {
-
-    }
-
-    override fun onGetASubscriptionSelected(requestId: Int) {
-
-    }
-
-    override fun onRewardedVideoWatched(requestId: Int) {
-        when (requestId) {
-            PREMIUM_REQUEST_IMPORT_DATA -> {
-                val intent = Intent(Intent.ACTION_GET_CONTENT)
-                intent.type = "*/*"
-                intent.putExtra(Intent.EXTRA_MIME_TYPES, SUPPORTED_IMPORT_MIME_TYPES)
-                startActivityForResult(intent, RESULT_IMPORT_DATA)
             }
         }
     }
@@ -350,6 +368,21 @@ class DataSheetFragment : BaseDataSheetFragment() {
                 }
             dialog = dialogBuilder.create()
             dialog.show()
+        }
+    }
+
+    override suspend fun onGetASubscriptionSelected(featureId: Int) {
+        findNavController().navigate(R.id.destination_purchase_subscription)
+    }
+
+    override fun onRewardedVideoWatched(featureId: Int) {
+        when(featureId){
+            PREMIUM_REQUEST_FEATURE_EXPORT_DATA->{
+                startDataExport()
+            }
+            PREMIUM_REQUEST_FEATURE_IMPORT_DATA->{
+                startDataImport()
+            }
         }
     }
 }

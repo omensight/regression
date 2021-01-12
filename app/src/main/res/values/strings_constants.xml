@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="key_preference_decimal_count" translatable="false">key_preference_decimal_count</string>
+    <string name="key_preference_buy_subscription" translatable="false">key_preference_buy_subscription</string>
 </resources>

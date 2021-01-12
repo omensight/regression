@@ -52,7 +52,8 @@
     <string name="show_plot">Show graph</string>
     <string name="original_data">Original data</string>
     <string name="title_dialog_premium_feature">Premium feature</string>
-    <string name="description_show_reward_ads">Enjoy of this and another premium features getting a premium subscription, or instead you can also watch a video.</string>
+    <string name="description_offer_premium">Enjoy of this and another premium features getting a premium subscription. <br/> Or watch a video to access to this feature.</string>
+    <string name="description_show_rewarded_video">Or watch a video and get 15 minutes of all features without any restriction.</string>
     <string name="watch_video">Watch video</string>
     <string name="get_a_subscription">Get a subscription</string>
     <string name="action_import_csv_data">Import CSV</string>
@@ -79,7 +80,14 @@
     <string name="settings_visible_decimals_description">This only works for the result views, not for the input data.</string>
     <string name="_settings_buy_subscription_description">Enjoy Regression without ads and many other features</string>
     <string name="category_title_application_settings">Application</string>
-
+    <string name="subscription_pay_as_you_go">Pay as you go, cancel anytime</string>
+    <string name="subscription_monthly">Monthly</string>
+    <string name="subscription_billed_monthly">Billed monthly</string>
+    <string name="subscription_yearly">Yearly</string>
+    <string name="subscription_billed_yearly">Billed yearly</string>
+    <string name="buy_subscription_enjoy_title">Purchase a subscription <br/> and enjoy  all of these features:</string>
+    <string name="premium_feature_description_no_ads">No ads</string>
+    <string name="cancelled_purchase">Cancelled purchase</string>
 
     <string-array name="regression_types">
         <item>Linear</item>

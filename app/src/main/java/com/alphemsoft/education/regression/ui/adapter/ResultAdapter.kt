@@ -12,7 +12,8 @@ import com.alphemsoft.education.regression.ui.base.BaseItemViewHolder
 import com.alphemsoft.education.regression.ui.viewholder.AdViewHolder
 import com.alphemsoft.education.regression.ui.viewholder.ResultItemViewHolder
 
-class ResultAdapter: BaseEntityAdapter<Any, BaseItemViewHolder<ViewDataBinding, Any>>() {
+class ResultAdapter constructor(private val adClickListener: OnPurchaseASubscriptionClicked)
+    : BaseEntityAdapter<Any, BaseItemViewHolder<ViewDataBinding, Any>>() {
 
     override fun onCreateViewHolder(
         inflater: LayoutInflater,
@@ -26,7 +27,7 @@ class ResultAdapter: BaseEntityAdapter<Any, BaseItemViewHolder<ViewDataBinding, 
             }
             SimpleContentViewType.AD -> {
                 val binding = ItemNativeAdBinding.inflate(inflater,parent,false)
-                AdViewHolder(binding)
+                AdViewHolder(binding, adClickListener)
             }
         } as BaseItemViewHolder<ViewDataBinding, Any>
     }
@@ -41,5 +42,9 @@ class ResultAdapter: BaseEntityAdapter<Any, BaseItemViewHolder<ViewDataBinding, 
 
     override fun onBindViewHolder(holder: BaseItemViewHolder<ViewDataBinding, Any>, position: Int) {
         holder.bind(items[position])
+    }
+
+    interface OnPurchaseASubscriptionClicked{
+        fun onPurchaseASubscriptionClicked()
     }
 }

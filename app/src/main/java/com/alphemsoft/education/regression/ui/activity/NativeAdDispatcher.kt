@@ -17,7 +17,7 @@ class NativeAdDispatcher(private val context: Context) {
 
     suspend fun fetchAds(): List<NativeAdEntity> {
         val thereIsUnusedAds = nativeAds.any {
-            it.isUsed == false
+            !it.isUsed
         }
         val newNativeAds: List<NativeAdEntity> = ArrayList(nativeAds)
         if (!thereIsUnusedAds && !isLoading) {

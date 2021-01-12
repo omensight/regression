@@ -20,9 +20,16 @@
     <color name="color_calculated_data">#E91E63</color>
     <color name="color_ad_background">#091E33</color>
 
-
     <color name="color_on_error">#F44336</color>
 
     <color name="color_buy_subscription">#FFC107</color>
+    <color name="color_monthly_subscription">#ECECEC</color>
+    <color name="color_yearly_subscription">#FFEB3B</color>
 
+
+    <color name="color_monthly_start">#033EC3</color>
+    <color name="color_monthly_end">#00248C</color>
+
+    <color name="color_yearly_start">#442FFF</color>
+    <color name="color_yearly_end">#4109AA</color>
 </resources>

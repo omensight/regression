@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_export_data"
             app:destination="@id/destination_export_data"/>
+        <action
+            android:id="@+id/action_buy_subscription"
+            app:destination="@id/destination_purchase_subscription" />
     </fragment>
     <fragment
         android:id="@+id/destination_create_sheet"
@@ -96,4 +99,11 @@
         android:id="@+id/destination_main_settings"
         android:name="com.alphemsoft.education.regression.ui.fragment.MainSettingsFragment"
         android:label="MainSettingsFragment" />
+    <fragment
+        android:id="@+id/destination_purchase_subscription"
+        android:name="com.alphemsoft.education.regression.ui.fragment.PurchaseSubscriptionFragment"
+        android:label="BuySubscriptionFragment"
+        tools:layout="@layout/fragment_purchase_subscription">
+
+    </fragment>
 </navigation>

@@ -31,11 +31,11 @@ abstract class AbstractSheetListFragment :
 class SheetListFragment : AbstractSheetListFragment() {
     override val viewModel: DataSheetViewModel by viewModels()
 
-    @Inject
     lateinit var sheetPagingAdapter: SheetPagingAdapter
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        sheetPagingAdapter = SheetPagingAdapter(findNavController())
         coroutineHandler.foregroundScope.launch {
             viewModel.getAllSheets().collectLatest {
                 sheetPagingAdapter.submitData(it)

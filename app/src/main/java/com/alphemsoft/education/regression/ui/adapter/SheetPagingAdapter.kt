@@ -10,7 +10,7 @@ import com.alphemsoft.education.regression.ui.comparators.DbEntityComparatorItem
 import com.alphemsoft.education.regression.ui.viewholder.SheetItemViewHolder
 import javax.inject.Inject
 
-class SheetPagingAdapter @Inject constructor(private val navController: NavController) :
+class SheetPagingAdapter constructor(private val navController: NavController) :
     BaseEntityPagingDataAdapter<Sheet, SheetItemViewHolder>(
         DbEntityComparatorItemCallback()
     ) {

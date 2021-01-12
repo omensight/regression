@@ -24,7 +24,8 @@ abstract class BaseFragment<VDB : ViewDataBinding, VM : ViewModel>(
     protected abstract val viewModel: VM
     protected lateinit var dataBinding: VDB
     private lateinit var viewModelProvider: ViewModelProvider
-    private lateinit var mActivity: BaseAppCompatActivity<ViewDataBinding>
+    protected lateinit var mActivity: BaseAppCompatActivity<ViewDataBinding>
+        private set
     protected lateinit var nativeAdDispatcher: NativeAdDispatcher
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

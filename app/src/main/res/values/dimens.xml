@@ -2,6 +2,7 @@
 <resources>
     <dimen name="small_spacing">4dp</dimen>
     <dimen name="list_item_normal_height">48dp</dimen>
+    <dimen name="list_item_mid_height">24dp</dimen>
     <dimen name="medium_spacing">8dp</dimen>
     <dimen name="small_width_icon">32dp</dimen>
     <dimen name="big_spacing">16dp</dimen>

@@ -19,8 +19,11 @@ object DatabaseModule {
     fun providesRegressionDatabase(@ApplicationContext context: Context): RegressionDatabase {
         val path = context.packageManager.getPackageInfo(context.packageName,0).applicationInfo.dataDir
         val dbPath = "$path/regression.db"
-        return Room.databaseBuilder(context, RegressionDatabase::class.java, dbPath)
+        val database = Room.databaseBuilder(context, RegressionDatabase::class.java, dbPath)
             .build()
+        database.populateInitialData()
+        database.checkSubscription()
+        return database
     }
 
     @Provides
@@ -37,4 +40,9 @@ object DatabaseModule {
 
     @Provides
     fun providesLegacyDataMigrationHelper(@ApplicationContext context: Context) = LegacyDataMigrationHelper(context)
+
+    @Provides
+    @Singleton
+    fun providesSubscriptionDao(db: RegressionDatabase) = db.subscriptionDao()
+
 }

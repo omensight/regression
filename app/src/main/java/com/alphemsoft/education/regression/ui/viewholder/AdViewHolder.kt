@@ -3,9 +3,13 @@ package com.alphemsoft.education.regression.ui.viewholder
 import android.view.View
 import com.alphemsoft.education.regression.data.model.NativeAdEntity
 import com.alphemsoft.education.regression.databinding.ItemNativeAdBinding
+import com.alphemsoft.education.regression.ui.adapter.ResultAdapter
 import com.alphemsoft.education.regression.ui.base.BaseItemViewHolder
 
-class AdViewHolder(mViewBinding: ItemNativeAdBinding) :
+class AdViewHolder(
+    mViewBinding: ItemNativeAdBinding,
+    private val adClickListener: ResultAdapter.OnPurchaseASubscriptionClicked
+) :
     BaseItemViewHolder<ItemNativeAdBinding, NativeAdEntity>(mViewBinding) {
 
     override var isSelectable: Boolean = false
@@ -17,7 +21,12 @@ class AdViewHolder(mViewBinding: ItemNativeAdBinding) :
             mDataBinding.layoutPremiumSubscription.root.visibility = View.GONE
         }else{
             mDataBinding.adTemplateView.visibility = View.GONE
-            mDataBinding.layoutPremiumSubscription.root.visibility = View.VISIBLE
+            mDataBinding.layoutPremiumSubscription.apply {
+                root.visibility = View.VISIBLE
+                btSubscribe.setOnClickListener {
+                    adClickListener.onPurchaseASubscriptionClicked()
+                }
+            }
         }
     }
 }
