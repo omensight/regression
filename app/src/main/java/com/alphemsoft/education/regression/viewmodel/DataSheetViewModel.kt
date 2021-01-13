@@ -1,27 +1,18 @@
 package com.alphemsoft.education.regression.viewmodel
 
-import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.alphemsoft.education.regression.coroutines.CoroutineHandler
 import com.alphemsoft.education.regression.data.datasource.ISheetEntryLocalDataSource
 import com.alphemsoft.education.regression.data.datasource.ISheetDataSource
 import com.alphemsoft.education.regression.data.datasource.ISubscriptionDataSource
 import com.alphemsoft.education.regression.data.legacy.LegacyDataMigrationHelper
 import com.alphemsoft.education.regression.data.model.Sheet
 import com.alphemsoft.education.regression.data.model.SheetEntry
-import com.alphemsoft.education.regression.data.model.SheetType
-import com.google.android.material.timepicker.TimeFormat
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
 import java.math.BigDecimal
-import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatterBuilder
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.random.Random
@@ -196,5 +187,13 @@ class DataSheetViewModel @ViewModelInject constructor(
 
     fun endDataExport() {
         exportNameLiveData.value = null
+    }
+
+    fun thereIsEnoughDataEntries(): Boolean {
+        val entries = dataEntries.value
+        val entryCount = entries?.size?:0
+        val deletedCount = entries?.filter { it.deleted }?.size?:0
+        val availableEntryCount = entryCount - deletedCount
+        return availableEntryCount >= 3
     }
 }

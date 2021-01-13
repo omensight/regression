@@ -89,13 +89,7 @@ class DataSheetFragment : BaseDataSheetFragment(),
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_validate_and_save -> {
-                if (viewModel.dataEntries.value?.size ?: 0 < 3) {
-                    Snackbar.make(
-                        requireView(),
-                        getString(R.string.error_not_enough_entries),
-                        Snackbar.LENGTH_LONG
-                    ).show()
-                } else {
+                if (viewModel.thereIsEnoughDataEntries()) {
                     coroutineHandler.backgroundScope.launch {
                         val saved: Boolean = viewModel.validateAndSaveData()
                         if (saved) {
@@ -117,6 +111,12 @@ class DataSheetFragment : BaseDataSheetFragment(),
                             ).show()
                         }
                     }
+                } else {
+                    Snackbar.make(
+                        requireView(),
+                        getString(R.string.error_not_enough_entries),
+                        Snackbar.LENGTH_LONG
+                    ).show()
                 }
                 true
             }
