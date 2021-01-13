@@ -12,14 +12,11 @@
         android:minHeight="320sp"
         android:background="@android:color/transparent">
 
-
-
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/drawable_shape_title"
-            android:backgroundTint="@color/primaryColor"
+            android:background="@color/primaryColor"
             android:padding="@dimen/big_spacing"
             android:text="@string/import_data_title_imported_data_"
             android:textSize="18sp"

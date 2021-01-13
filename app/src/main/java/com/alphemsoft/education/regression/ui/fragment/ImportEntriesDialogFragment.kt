@@ -44,6 +44,7 @@ class ImportEntriesDialogFragment: BaseImportEntriesDialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         (view?.parent as View).setBackgroundColor(Color.TRANSPARENT)
+        isCancelable = false
     }
 
     private fun setupUi() {
