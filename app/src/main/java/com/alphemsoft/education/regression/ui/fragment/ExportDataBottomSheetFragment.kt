@@ -3,6 +3,7 @@ package com.alphemsoft.education.regression.ui.fragment
 import android.content.ContentValues
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Environment
@@ -14,6 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContentResolverCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.alphemsoft.education.regression.BR
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.databinding.DialogFragmentExportDataBinding
@@ -22,6 +24,7 @@ import com.alphemsoft.education.regression.dataexporter.DataExporter
 import com.alphemsoft.education.regression.ui.base.BaseBottomSheetDialogFragment
 import com.alphemsoft.education.regression.viewmodel.DataSheetViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 abstract class BaseExportDataBottomSheetFragment :
     BaseBottomSheetDialogFragment<DialogFragmentExportDataBinding, DataSheetViewModel>(
@@ -36,8 +39,13 @@ class ExportDataBottomSheetFragment : BaseExportDataBottomSheetFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        (view?.parent?.parent as View?)?.setBackgroundColor(Color.TRANSPARENT)
+        isCancelable = false
         setupUi()
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        viewModel.endDataExport()
     }
 
     private fun setupUi() {
@@ -66,7 +74,9 @@ class ExportDataBottomSheetFragment : BaseExportDataBottomSheetFragment() {
             }
 
         }
-
-        dataBinding.btExport
+        dataBinding.lifecycleOwner = this
+        dataBinding.btCancel.setOnClickListener {
+            dismiss()
+        }
     }
 }

@@ -13,10 +13,15 @@ import com.alphemsoft.education.regression.data.legacy.LegacyDataMigrationHelper
 import com.alphemsoft.education.regression.data.model.Sheet
 import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.data.model.SheetType
+import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatterBuilder
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.random.Random
@@ -30,9 +35,7 @@ class DataSheetViewModel @ViewModelInject constructor(
 
     val dataEntries: MutableLiveData<MutableList<SheetEntry>> = MutableLiveData(ArrayList())
 
-    val subscriptionFlow = subscriptionDataSource.getUniqueSubscriptionFlow()
-
-    val coroutineScope = CoroutineHandler(Job())
+    val exportNameLiveData = MutableLiveData<String>("")
 
     private val _importedEntries: MutableLiveData<List<SheetEntry>> = MutableLiveData()
     val importedEntries: LiveData<List<SheetEntry>>
@@ -179,5 +182,19 @@ class DataSheetViewModel @ViewModelInject constructor(
     suspend fun hasPremiumSubscription(): Boolean {
         val subscription = subscriptionDataSource.getUniqueSubscription()
         return subscription?.hasAnActiveSubscription() ?: false
+    }
+
+    suspend fun startDataExport(sheetId: Long){
+        val formatter = SimpleDateFormat("yyyyMMdd_HHmss")
+        val date = Date()
+        sheetDataSource.find(sheetId)?.let {
+            val formattedNow = formatter.format(date)
+            val name = "${it.name}_$formattedNow"
+            exportNameLiveData.postValue(name)
+        }
+    }
+
+    fun endDataExport() {
+        exportNameLiveData.value = null
     }
 }

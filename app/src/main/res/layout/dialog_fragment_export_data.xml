@@ -44,8 +44,21 @@
                 android:id="@+id/et_path"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:maxLines="1"/>
+                android:maxLines="1"
+                android:text="@={dialog_fragment_export_viewmodel.exportNameLiveData}"/>
         </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_cancel"
+            android:layout_marginTop="@dimen/medium_spacing"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/til_path"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/bt_export"
+            android:text="@android:string/cancel"
+            android:layout_marginEnd="@dimen/small_spacing"
+            android:backgroundTint="?attr/colorError"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bt_export"
@@ -53,10 +66,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/til_path"
-            app:layout_constraintStart_toStartOf="@id/til_path"
+            app:layout_constraintStart_toEndOf="@id/bt_cancel"
             app:layout_constraintEnd_toEndOf="@id/til_path"
             android:text="@string/export"
-            />
+            android:layout_marginStart="@dimen/small_spacing"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

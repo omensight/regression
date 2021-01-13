@@ -6,7 +6,6 @@ import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -147,7 +146,7 @@ class DataSheetFragment : BaseDataSheetFragment(),
                         fragment.show(
                             parentFragmentManager,
                             this@DataSheetFragment,
-                            PREMIUM_REQUEST_FEATURE_IMPORT_DATA,
+                            PREMIUM_REQUEST_FEATURE_EXPORT_DATA,
                             R.string.import_data
                         )
                     }
@@ -350,6 +349,9 @@ class DataSheetFragment : BaseDataSheetFragment(),
 
         if (hasWritePermission) {
             val exportDataDestination = DataSheetFragmentDirections.actionExportData()
+            coroutineHandler.foregroundScope.launch {
+                viewModel.startDataExport(args.sheetId)
+            }
             findNavController().navigate(exportDataDestination)
         } else {
             var dialog: AlertDialog? = null
@@ -360,8 +362,7 @@ class DataSheetFragment : BaseDataSheetFragment(),
                     dialog?.dismiss()
                 }
                 .setPositiveButton(R.string.grant) { _, _ ->
-                    ActivityCompat.requestPermissions(
-                        requireActivity(),
+                    requestPermissions(
                         arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),
                         PermissionConstants.STORAGE_PERMISSION_REQUEST_CODE
                     )
