@@ -21,3 +21,9 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class * extends androidx.fragment.app.Fragment{}
+
+-keepclasseswithmembers class com.pvporbit.freetype.GlyphSlot
+-keepclasseswithmembers class com.pvporbit.freetype.FreeType
+-keepclasseswithmembers class com.pvporbit.freetype.Library
+-keepclasseswithmembers class com.pvporbit.freetype.* {*;}
+-keepclasseswithmembers class com.pvporbit.freetype.*

@@ -36,7 +36,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/tv_description"
         app:layout_constraintBottom_toBottomOf="@id/iv_icon"
-        android:text="@string/buy_subscription"
+        android:text="@string/get_a_subscription"
         android:layout_marginEnd="@dimen/small_spacing"
         android:backgroundTint="#388E3C"/>
 
