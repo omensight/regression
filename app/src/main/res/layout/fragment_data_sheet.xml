@@ -61,7 +61,16 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_label_headers_background"
-            android:textAlignment="center"/>
+            android:textAlignment="center" />
+
+        <include
+            android:id="@+id/layout_empty_view_entries"
+            layout="@layout/empty_view_generic"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/bottom_app_bar_container"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view_label_headers_background"/>
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/bottom_app_bar_container"
@@ -81,6 +90,7 @@
                 android:layout_gravity="bottom"
                 style="@style/BottomAppBar"/>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

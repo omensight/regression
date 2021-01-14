@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Query
 import com.alphemsoft.education.regression.data.model.Sheet
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SheetDao: BaseDao<Sheet> {
@@ -17,4 +18,7 @@ interface SheetDao: BaseDao<Sheet> {
         SELECT * from sheets
     """)
     fun findAll(): PagingSource<Int, Sheet>
+
+    @Query("SELECT COUNT(*) FROM sheets")
+    fun getSheetCount(): Flow<Long>
 }

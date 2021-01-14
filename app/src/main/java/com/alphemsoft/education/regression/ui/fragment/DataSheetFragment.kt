@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -63,10 +64,6 @@ class DataSheetFragment : BaseDataSheetFragment(),
         setupUi()
         setupBottomAppBar()
         setupContextMenu()
-        setupPermissionHandler()
-    }
-
-    private fun setupPermissionHandler() {
     }
 
     private fun setupSingleFieldBottomSheet() {
@@ -185,10 +182,10 @@ class DataSheetFragment : BaseDataSheetFragment(),
                     R.id.action_delete_selected -> {
                         coroutineHandler.foregroundScope.launch {
                             viewModel.deleteSelected()
-                            delay(500)
-                            dataPointAdapter.notifyDataSetChanged()
                             actionMode?.finish()
-                            actionMode = null
+//                            delay(500)
+//                            dataPointAdapter.notifyDataSetChanged()
+//                            actionMode = null
                         }
                         true
                     }
@@ -287,10 +284,23 @@ class DataSheetFragment : BaseDataSheetFragment(),
 
                 coroutineHandler.foregroundScope.launch {
                     viewModel.getDataPointList(args.sheetId).collectLatest { it ->
-                        dataPointAdapter.addNewItems(it.filter { item -> !item.deleted })
+                        it.filter { item -> !item.deleted }.let {newItems->
+                            if (newItems.isEmpty()){
+                                dataBinding.layoutEmptyViewEntries.root.visibility = View.VISIBLE
+                                dataBinding.rvDataPoints.visibility = View.GONE
+                            }else{
+                                dataBinding.layoutEmptyViewEntries.root.visibility = View.GONE
+                                dataBinding.rvDataPoints.visibility = View.VISIBLE
+                                dataPointAdapter.addNewItems(newItems)
+                            }
+                        }
                     }
                 }
             }
+        }
+        dataBinding.layoutEmptyViewEntries.apply {
+            ivEmptyViewIcon.setImageResource(R.drawable.ic_empty_view_entries)
+            tvEmptyViewDescription.text = getString(R.string.empty_message_no_data)
         }
     }
 

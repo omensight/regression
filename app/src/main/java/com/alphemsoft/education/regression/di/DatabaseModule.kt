@@ -18,7 +18,7 @@ object DatabaseModule {
     @Singleton
     fun providesRegressionDatabase(@ApplicationContext context: Context): RegressionDatabase {
         val path = context.packageManager.getPackageInfo(context.packageName,0).applicationInfo.dataDir
-        val dbPath = "$path/regression.db"
+        val dbPath = "$path/modern_regression.db"
         val database = Room.databaseBuilder(context, RegressionDatabase::class.java, dbPath)
             .build()
         database.populateInitialData()

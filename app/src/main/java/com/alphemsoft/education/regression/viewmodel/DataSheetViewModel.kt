@@ -27,6 +27,7 @@ class DataSheetViewModel @ViewModelInject constructor(
     val dataEntries: MutableLiveData<MutableList<SheetEntry>> = MutableLiveData(ArrayList())
 
     val exportNameLiveData = MutableLiveData<String>("")
+    val sheetItemCount = sheetDataSource.getSheetItemCount()
 
     private val _importedEntries: MutableLiveData<List<SheetEntry>> = MutableLiveData()
     val importedEntries: LiveData<List<SheetEntry>>

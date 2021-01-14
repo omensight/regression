@@ -2,12 +2,16 @@ package com.alphemsoft.education.regression.ui.fragment
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.paging.CombinedLoadStates
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alphemsoft.education.regression.BR
 import com.alphemsoft.education.regression.R
+import com.alphemsoft.education.regression.data.model.Sheet
 import com.alphemsoft.education.regression.databinding.FragmentSheetListBinding
 import com.alphemsoft.education.regression.ui.adapter.SheetPagingAdapter
 import com.alphemsoft.education.regression.ui.adapter.itemdecoration.DividerSpacingItemDecoration
@@ -35,20 +39,37 @@ class SheetListFragment : AbstractSheetListFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        sheetPagingAdapter = SheetPagingAdapter(findNavController())
-        coroutineHandler.foregroundScope.launch {
-            viewModel.getAllSheets().collectLatest {
-                sheetPagingAdapter.submitData(it)
-            }
-        }
-
+        setupUi()
         setupSheetList()
         coroutineHandler.backgroundScope.launch {
             viewModel.migrateLegacyData()
         }
     }
 
+    private fun setupUi() {
+        dataBinding.layoutEmptyViewSheets.apply {
+            tvEmptyViewDescription.text = getString(R.string.empty_message_no_sheets)
+            ivEmptyViewIcon.setImageResource(R.drawable.ic_empty_view_sheets)
+        }
+    }
+
     private fun setupSheetList() {
+
+        sheetPagingAdapter = SheetPagingAdapter(findNavController())
+        coroutineHandler.foregroundScope.launch {
+            viewModel.getAllSheets().collectLatest {newItems: PagingData<Sheet> ->
+                sheetPagingAdapter.submitData(newItems)
+            }
+        }
+        coroutineHandler.backgroundScope.launch {
+            viewModel.sheetItemCount.collectLatest {count ->
+                dataBinding.layoutEmptyViewSheets.root.visibility = if (count == 0L){
+                    View.VISIBLE
+                }else{
+                    View.GONE
+                }
+            }
+        }
         dataBinding.rvSheetList.apply {
             layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
             addItemDecoration(DividerSpacingItemDecoration(8))

@@ -25,7 +25,19 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            android:visibility="visible"
+            />
+
+        <include
+            android:id="@+id/layout_empty_view_sheets"
+            layout="@layout/empty_view_generic"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="parent"
+            android:elevation="5dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

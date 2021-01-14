@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_first_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent=".33"
+        android:orientation="vertical"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_second_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent=".66"
+        android:orientation="vertical"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline_first_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent=".33"
+        android:orientation="horizontal"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_empty_view_icon"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toEndOf="@id/guideline_first_vertical"
+        app:layout_constraintEnd_toStartOf="@id/guideline_second_vertical"
+        app:layout_constraintTop_toBottomOf="@id/guideline_first_horizontal"
+        app:layout_constraintDimensionRatio="1:1"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_empty_view_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/iv_empty_view_icon"
+        app:layout_constraintEnd_toEndOf="@id/iv_empty_view_icon"
+        app:layout_constraintTop_toBottomOf="@id/iv_empty_view_icon"
+        android:text=""/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

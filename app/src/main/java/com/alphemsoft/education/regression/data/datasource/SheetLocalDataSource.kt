@@ -4,6 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.alphemsoft.education.regression.data.dao.SheetDao
 import com.alphemsoft.education.regression.data.model.Sheet
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class SheetLocalDataSource @Inject constructor(private val sheetDao: SheetDao) : ISheetDataSource {
@@ -32,5 +33,9 @@ class SheetLocalDataSource @Inject constructor(private val sheetDao: SheetDao) :
 
     override suspend fun insert(items: List<Sheet>) {
         sheetDao.insert(items)
+    }
+
+    override fun getSheetItemCount(): Flow<Long> {
+        return sheetDao.getSheetCount()
     }
 }

@@ -88,6 +88,8 @@
     <string name="buy_subscription_enjoy_title">Purchase a subscription <br/> and enjoy  all of these features:</string>
     <string name="premium_feature_description_no_ads">No ads</string>
     <string name="cancelled_purchase">Cancelled purchase</string>
+    <string name="empty_message_no_data">No data</string>
+    <string name="empty_message_no_sheets">No sheets</string>
 
     <string-array name="regression_types">
         <item>Linear</item>
