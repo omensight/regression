@@ -21,17 +21,18 @@ android {
         targetSdkVersion(30)
         versionCode = 16
         versionName = "3.0"
-        multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled = true
 
     }
 
 
     buildTypes {
         getByName("debug") {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -61,6 +62,26 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+
+    sourceSets{
+        getByName("test"){
+            val newList = mutableListOf<File>()
+            newList.addAll(java.srcDirs)
+            newList.add(file("$projectDir/src/testShared"))
+            java.setSrcDirs(newList)
+
+        }
+        getByName("androidTest"){
+            val newList = mutableListOf<File>()
+            newList.addAll(java.srcDirs)
+            newList.add(file("$projectDir/src/testShared"))
+            java.setSrcDirs(newList)
+        }
+    }
+
+    testOptions{
+        unitTests.isReturnDefaultValues = true
+    }
 }
 
 dependencies {
@@ -79,8 +100,14 @@ dependencies {
     implementation("com.google.android.gms:play-services-ads:19.5.0")
 
     testImplementation("junit:junit:4.13.1")
-    androidTestImplementation("androidx.test.ext:junit:1.1.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.2")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+
+    testImplementation("org.powermock:powermock-api-mockito2:1.7.4")
+    testImplementation("org.powermock:powermock-module-junit4:1.7.4")
+    testImplementation("org.powermock:powermock-module-junit4-rule:1.7.4")
+    testImplementation("org.powermock:powermock-classloading-xstream:1.7.4")
+
     //Room
     implementation("androidx.room:room-runtime:$room_version")
     kapt("androidx.room:room-compiler:$room_version")

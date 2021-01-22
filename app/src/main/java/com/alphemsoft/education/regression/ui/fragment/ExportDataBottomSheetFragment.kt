@@ -1,30 +1,20 @@
 package com.alphemsoft.education.regression.ui.fragment
 
 import android.content.ContentValues
-import android.content.Context
-import android.content.ContextWrapper
 import android.content.DialogInterface
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Environment
-import android.provider.CalendarContract.CalendarCache.URI
 import android.provider.MediaStore
-import android.view.View
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContentResolverCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.alphemsoft.education.regression.BR
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.databinding.DialogFragmentExportDataBinding
-import com.alphemsoft.education.regression.dataexporter.CsvExportBehaviour
-import com.alphemsoft.education.regression.dataexporter.DataExporter
+import com.alphemsoft.education.regression.dataexporter.DataExportHelper
+import com.alphemsoft.education.regression.dataexporter.ExportBehaviour
 import com.alphemsoft.education.regression.ui.base.BaseBottomSheetDialogFragment
 import com.alphemsoft.education.regression.viewmodel.DataSheetViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 abstract class BaseExportDataBottomSheetFragment :
     BaseBottomSheetDialogFragment<DialogFragmentExportDataBinding, DataSheetViewModel>(
@@ -35,7 +25,7 @@ abstract class BaseExportDataBottomSheetFragment :
 @AndroidEntryPoint
 class ExportDataBottomSheetFragment : BaseExportDataBottomSheetFragment() {
     override val viewModel: DataSheetViewModel by activityViewModels()
-    private var dataExporter: DataExporter? = null
+    private var dataExportHelper: DataExportHelper? = null
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -56,17 +46,18 @@ class ExportDataBottomSheetFragment : BaseExportDataBottomSheetFragment() {
                 return@setOnClickListener
             }
             dataBinding.etPath.text?.toString()?.let { fileName ->
-                val contentValues = ContentValues().apply {
-                    put(MediaStore.Files.FileColumns.DISPLAY_NAME, "$fileName.csv")
-                    put(MediaStore.Files.FileColumns.MIME_TYPE, "text/*")
-                    put(MediaStore.Files.FileColumns.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS)
+                dataExportHelper = DataExportHelper().apply {
+                    exportBehaviour = ExportBehaviour.Builder(
+                        requireContext(),
+                        DataExportHelper.FileData.Csv(fileName)
+                    ).build()
                 }
-                val csvExporter = CsvExportBehaviour(contentValues, requireActivity().contentResolver)
-                dataExporter = DataExporter().apply {
-                    exportBehaviour = csvExporter
-                }
-                if (dataExporter?.export(data) == true){
-                    Toast.makeText(requireContext(), getString(R.string.document_saved), Toast.LENGTH_LONG).show()
+                if (dataExportHelper?.export(data) == true) {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.document_saved),
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
                 dismiss()
             } ?: kotlin.run {
