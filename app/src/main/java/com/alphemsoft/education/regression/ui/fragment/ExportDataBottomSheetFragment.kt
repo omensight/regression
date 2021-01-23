@@ -1,17 +1,20 @@
 package com.alphemsoft.education.regression.ui.fragment
 
-import android.content.ContentValues
 import android.content.DialogInterface
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import com.alphemsoft.education.regression.BR
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.databinding.DialogFragmentExportDataBinding
 import com.alphemsoft.education.regression.dataexporter.DataExportHelper
 import com.alphemsoft.education.regression.dataexporter.ExportBehaviour
+import com.alphemsoft.education.regression.dataexporter.FileData
 import com.alphemsoft.education.regression.ui.base.BaseBottomSheetDialogFragment
 import com.alphemsoft.education.regression.viewmodel.DataSheetViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,7 +33,29 @@ class ExportDataBottomSheetFragment : BaseExportDataBottomSheetFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         isCancelable = false
+        setupSupportedFormatList()
         setupUi()
+    }
+
+    private fun setupSupportedFormatList() {
+        val supportedFormats = FileData.getSupportedFormats()
+        val adapter = ArrayAdapter(requireContext(), R.layout.item_supported_type, supportedFormats)
+        (dataBinding.autoTvFormat as AutoCompleteTextView).setAdapter(adapter)
+        dataBinding.autoTvFormat.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                viewModel.exportFormatLiveData.value = supportedFormats[position]
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                parent?.setSelection(0)
+            }
+
+        }
     }
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -41,6 +66,8 @@ class ExportDataBottomSheetFragment : BaseExportDataBottomSheetFragment() {
     private fun setupUi() {
         dataBinding.btExport.setOnClickListener {
             val data = viewModel.dataEntries.value ?: return@setOnClickListener
+            val selectedFormat = viewModel.exportFormatLiveData.value
+            val type = FileData.Format.values().first { it.extension == selectedFormat}
             val fileName = dataBinding.etPath.text.toString()
             if (fileName.isEmpty()) {
                 return@setOnClickListener
@@ -49,7 +76,10 @@ class ExportDataBottomSheetFragment : BaseExportDataBottomSheetFragment() {
                 dataExportHelper = DataExportHelper().apply {
                     exportBehaviour = ExportBehaviour.Builder(
                         requireContext(),
-                        DataExportHelper.FileData.Csv(fileName)
+                        when(type){
+                            FileData.Format.CSV -> FileData.Csv(fileName)
+                            FileData.Format.XLSX -> FileData.Excel(fileName)
+                        }
                     ).build()
                 }
                 if (dataExportHelper?.export(data) == true) {

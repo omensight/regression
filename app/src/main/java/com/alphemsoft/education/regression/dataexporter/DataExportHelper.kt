@@ -10,12 +10,4 @@ class DataExportHelper {
         require(exportBehaviour != null) { "Export behaviour not set" }
         return exportBehaviour?.export(data) ?: false
     }
-
-    sealed class FileData(
-        val fileName: String,
-        val commonMimeType: String,
-        val commonExtension: String
-    ) {
-        class Csv(fileName: String): FileData(fileName, "text/*", "csv")
-    }
 }

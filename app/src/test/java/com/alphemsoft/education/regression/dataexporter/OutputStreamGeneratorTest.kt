@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
+import android.webkit.MimeTypeMap
 import com.alphemsoft.education.regression.helper.mock
 import com.alphemsoft.education.regression.helper.whenever
 import org.junit.Assert
@@ -12,17 +13,16 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.mockito.Mockito.*
-import org.mockito.verification.VerificationMode
 import org.powermock.api.mockito.PowerMockito
 import org.powermock.core.classloader.annotations.PrepareForTest
 import org.powermock.modules.junit4.PowerMockRunner
 
 @RunWith(PowerMockRunner::class)
-@PrepareForTest(MediaStore::class)
+@PrepareForTest(MediaStore::class, MimeTypeMap::class)
 class OutputStreamGeneratorTest {
 
     private lateinit var fileName: String
-    private lateinit var fileData : DataExportHelper.FileData.Csv
+    private lateinit var fileData : FileData.Csv
     private lateinit var context: Context
     private lateinit var contentResolver: ContentResolver
 
@@ -31,11 +31,17 @@ class OutputStreamGeneratorTest {
     @Before
     fun setup(){
         PowerMockito.mockStatic(MediaStore.Files::class.java)
+        PowerMockito.mockStatic(MimeTypeMap::class.java)
+        val mimeTypeMap: MimeTypeMap = mock()
+        whenever(mimeTypeMap.getMimeTypeFromExtension("csv")).thenReturn("text/*")
+        whenever(mimeTypeMap.getMimeTypeFromExtension("xlsx")).thenReturn("application/vnd.ms-excel")
+        whenever(MimeTypeMap.getSingleton()).thenReturn(mimeTypeMap)
         uri = mock()
         val mediaUri: Uri = mock()
         whenever(MediaStore.Files.getContentUri(Mockito.anyString())).thenReturn(mediaUri)
         fileName = "FILE_NAME"
         fileData = mock()
+        whenever(fileData.fileName).thenReturn(fileName)
         contentResolver = mock()
         context = mock()
         whenever(context.contentResolver).thenReturn(contentResolver)
@@ -48,12 +54,6 @@ class OutputStreamGeneratorTest {
 
         OutPutStreamGenerator.generate(fileData, contentResolver)
         verify(fileData).fileName
-    }
-
-    @Test
-    fun whenGenerating_getMimeType(){
-        OutPutStreamGenerator.generate(fileData, contentResolver)
-        verify(fileData).commonMimeType
     }
 
     @Test
@@ -93,4 +93,9 @@ class OutputStreamGeneratorTest {
         Assert.assertNull(OutPutStreamGenerator.generate(fileData, contentResolver))
     }
 
+    @Test
+    fun whenGenerating_returnsNullIfNameIsEmpty(){
+        whenever(fileData.fileName).thenReturn("")
+        Assert.assertNull(OutPutStreamGenerator.generate(fileData, contentResolver))
+    }
 }

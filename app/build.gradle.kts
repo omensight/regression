@@ -100,6 +100,8 @@ dependencies {
     implementation("com.google.android.gms:play-services-ads:19.5.0")
 
     testImplementation("junit:junit:4.13.1")
+    testImplementation("androidx.test.ext:junit:1.1.2")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.10")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
 
@@ -149,6 +151,13 @@ dependencies {
 
     //Billing
     implementation("com.android.billingclient:billing-ktx:$billing_version")
+
+    //POI Android
+    implementation( "com.github.SUPERCILEX.poi-android:poi:3.17")
+    testImplementation( "com.github.SUPERCILEX.poi-android:poi:3.17")
+    implementation("com.github.SUPERCILEX.poi-android:proguard:3.17")
+
+    compileOnly( "org.apache.poi:poi-ooxml:3.17")
 
 }
 

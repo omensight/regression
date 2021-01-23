@@ -54,6 +54,4 @@ class DataExportHelperTest {
         val exported = dataExportHelper.export(sheeEntrytList)
         Assert.assertTrue(exported)
     }
-
-
 }
