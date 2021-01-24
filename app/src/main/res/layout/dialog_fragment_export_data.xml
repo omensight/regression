@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/tv_title"
             app:layout_constraintStart_toStartOf="@id/tv_title"
-            app:layout_constraintEnd_toStartOf="@id/til_type"
+            app:layout_constraintEnd_toEndOf="parent"
             app:prefixText="/Documents/"
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
             android:hint="@string/import_data_hint_path"
@@ -54,7 +54,7 @@
             android:layout_marginTop="@dimen/medium_spacing"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/til_path"
+            app:layout_constraintTop_toBottomOf="@id/rg_format_options"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/bt_export"
             android:text="@android:string/cancel"
@@ -66,27 +66,47 @@
             android:layout_marginTop="@dimen/medium_spacing"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/til_path"
+            app:layout_constraintTop_toBottomOf="@id/rg_format_options"
             app:layout_constraintStart_toEndOf="@id/bt_cancel"
             app:layout_constraintEnd_toEndOf="parent"
             android:text="@string/export"
             android:layout_marginStart="@dimen/small_spacing"/>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_type"
+<!--        <com.google.android.material.textfield.TextInputLayout-->
+<!--            android:id="@+id/til_type"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="@id/til_path"-->
+<!--            app:layout_constraintBottom_toBottomOf="@id/til_path"-->
+<!--            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">-->
+<!--            <AutoCompleteTextView-->
+<!--                android:id="@+id/auto_tv_format"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:editable="false"/>-->
+<!--        </com.google.android.material.textfield.TextInputLayout>-->
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_subtitle_format"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/til_path"
+            app:layout_constraintStart_toStartOf="parent"
+            android:text="@string/subtitle_format"
+            android:textAlignment="textStart"
+            android:layout_margin="@dimen/medium_spacing"/>
+
+        <RadioGroup
+            android:id="@+id/rg_format_options"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_subtitle_format"
+            app:layout_constraintStart_toStartOf="@id/til_path"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/til_path"
-            app:layout_constraintBottom_toBottomOf="@id/til_path"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu">
-            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                android:id="@+id/auto_tv_format"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:editable="false"
-                android:text="@={dialog_fragment_export_viewmodel.exportFormatLiveData}"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            android:orientation="horizontal"
+            android:gravity="center">
+        </RadioGroup>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

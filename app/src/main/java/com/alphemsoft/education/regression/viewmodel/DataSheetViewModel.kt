@@ -10,6 +10,8 @@ import com.alphemsoft.education.regression.data.datasource.ISubscriptionDataSour
 import com.alphemsoft.education.regression.data.legacy.LegacyDataMigrationHelper
 import com.alphemsoft.education.regression.data.model.Sheet
 import com.alphemsoft.education.regression.data.model.SheetEntry
+import com.alphemsoft.education.regression.dataexporter.ExportBehaviour
+import com.alphemsoft.education.regression.dataexporter.FileData
 import kotlinx.coroutines.flow.Flow
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
@@ -33,7 +35,6 @@ class DataSheetViewModel @ViewModelInject constructor(
     private val _importedEntries: MutableLiveData<List<SheetEntry>> = MutableLiveData()
     val importedEntries: LiveData<List<SheetEntry>>
         get() = _importedEntries
-
 
     suspend fun getSheet(sheetId: Long): Sheet? {
         return sheetDataSource.find(sheetId)
@@ -189,6 +190,7 @@ class DataSheetViewModel @ViewModelInject constructor(
 
     fun endDataExport() {
         exportNameLiveData.value = null
+        exportFormatLiveData.value = null
     }
 
     fun thereIsEnoughDataEntries(): Boolean {

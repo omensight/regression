@@ -3,10 +3,7 @@ package com.alphemsoft.education.regression.ui.fragment
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.Toast
+import android.widget.*
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
 import com.alphemsoft.education.regression.BR
@@ -32,6 +29,7 @@ class ExportDataBottomSheetFragment : BaseExportDataBottomSheetFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        dataBinding.lifecycleOwner = this
         isCancelable = false
         setupSupportedFormatList()
         setupUi()
@@ -39,23 +37,19 @@ class ExportDataBottomSheetFragment : BaseExportDataBottomSheetFragment() {
 
     private fun setupSupportedFormatList() {
         val supportedFormats = FileData.getSupportedFormats()
-        val adapter = ArrayAdapter(requireContext(), R.layout.item_supported_type, supportedFormats)
-        (dataBinding.autoTvFormat as AutoCompleteTextView).setAdapter(adapter)
-        dataBinding.autoTvFormat.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                viewModel.exportFormatLiveData.value = supportedFormats[position]
+        val rgFormatOptions = dataBinding.rgFormatOptions
+        supportedFormats.forEachIndexed { index, text ->
+            val radioButtonFormatOption = RadioButton(context)
+            radioButtonFormatOption.isAllCaps = true
+            radioButtonFormatOption.text = text
+            rgFormatOptions.addView(radioButtonFormatOption)
+            radioButtonFormatOption.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked){
+                    viewModel.exportFormatLiveData.value = supportedFormats[index]
+                }
             }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                parent?.setSelection(0)
-            }
-
         }
+        (rgFormatOptions.getChildAt(0) as RadioButton).isChecked = true
     }
 
     override fun onDismiss(dialog: DialogInterface) {
