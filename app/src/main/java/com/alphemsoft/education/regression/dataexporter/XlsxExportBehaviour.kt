@@ -1,11 +1,16 @@
 package com.alphemsoft.education.regression.dataexporter
 
+import android.net.Uri
 import com.alphemsoft.education.regression.data.model.SheetEntry
 import org.apache.poi.ss.usermodel.Sheet
 import org.apache.poi.ss.usermodel.Workbook
 import java.io.OutputStream
 
-class XlsxExportBehaviour(private val workbook: Workbook, private val outputStream: OutputStream) : ExportBehaviour {
+class XlsxExportBehaviour(
+    private val workbook: Workbook,
+    private val outputStream: OutputStream,
+    uri: Uri
+) : ExportBehaviour(uri) {
 
     private val sheet: Sheet = workbook.createSheet("Data")
 

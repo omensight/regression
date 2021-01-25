@@ -2,10 +2,10 @@ package com.alphemsoft.education.regression.ui.fragment
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.View
 import android.widget.*
-import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.asFlow
+import androidx.navigation.findNavController
 import com.alphemsoft.education.regression.BR
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.databinding.DialogFragmentExportDataBinding
@@ -15,6 +15,8 @@ import com.alphemsoft.education.regression.dataexporter.FileData
 import com.alphemsoft.education.regression.ui.base.BaseBottomSheetDialogFragment
 import com.alphemsoft.education.regression.viewmodel.DataSheetViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 abstract class BaseExportDataBottomSheetFragment :
     BaseBottomSheetDialogFragment<DialogFragmentExportDataBinding, DataSheetViewModel>(
@@ -44,7 +46,7 @@ class ExportDataBottomSheetFragment : BaseExportDataBottomSheetFragment() {
             radioButtonFormatOption.text = text
             rgFormatOptions.addView(radioButtonFormatOption)
             radioButtonFormatOption.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked){
+                if (isChecked) {
                     viewModel.exportFormatLiveData.value = supportedFormats[index]
                 }
             }
@@ -58,34 +60,59 @@ class ExportDataBottomSheetFragment : BaseExportDataBottomSheetFragment() {
     }
 
     private fun setupUi() {
-        dataBinding.btExport.setOnClickListener {
-            val data = viewModel.dataEntries.value ?: return@setOnClickListener
-            val selectedFormat = viewModel.exportFormatLiveData.value
-            val type = FileData.Format.values().first { it.extension == selectedFormat}
-            val fileName = dataBinding.etPath.text.toString()
-            if (fileName.isEmpty()) {
-                return@setOnClickListener
-            }
-            dataBinding.etPath.text?.toString()?.let { fileName ->
-                dataExportHelper = DataExportHelper().apply {
-                    exportBehaviour = ExportBehaviour.Builder(
-                        requireContext(),
-                        when(type){
-                            FileData.Format.CSV -> FileData.Csv(fileName)
-                            FileData.Format.XLSX -> FileData.Excel(fileName)
+        coroutineHandler.foregroundScope.launch {
+            viewModel.exportSaving.asFlow().collectLatest {
+                it?.let {saving->
+                    if (saving){
+                        dataBinding.btExport.apply {
+                            text = getString(R.string.export_saving)
+                            isEnabled = false
                         }
-                    ).build()
+                    }else{
+                        dataBinding.btExport.apply {
+                            text = getString(R.string.export)
+                            isEnabled = true
+                        }
+                    }
                 }
-                if (dataExportHelper?.export(data) == true) {
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.document_saved),
-                        Toast.LENGTH_LONG
-                    ).show()
+            }
+        }
+        dataBinding.btExport.setOnClickListener {
+            coroutineHandler.backgroundScope.launch {
+                val data = viewModel.dataEntries.value ?: return@launch
+                viewModel.exportSaving.postValue(true)
+                val selectedFormat = viewModel.exportFormatLiveData.value
+                val type = FileData.Format.values().first { it.extension == selectedFormat }
+                val fileName = dataBinding.etPath.text.toString()
+                if (fileName.isEmpty()) {
+                    viewModel.exportSaving.postValue(false)
+                    return@launch
                 }
-                dismiss()
-            } ?: kotlin.run {
-
+                dataBinding.etPath.text?.toString()?.let { fileName ->
+                    dataExportHelper = DataExportHelper().apply {
+                        exportBehaviour = ExportBehaviour.Builder(
+                            requireContext(),
+                            when (type) {
+                                FileData.Format.CSV -> FileData.Csv(fileName)
+                                FileData.Format.XLSX -> FileData.Excel(fileName)
+                            }
+                        ).build()
+                    }
+                    if (dataExportHelper?.export(data) == true) {
+                        coroutineHandler.foregroundScope.launch {
+                            viewModel.exportUriLiveData.postValue(dataExportHelper?.uri)
+                            viewModel.exportFileNameLiveData.postValue("${fileName}.${type.extension}")
+                            requireActivity().findNavController(R.id.main_nav_host_fragment)
+                                .navigate(R.id.destination_export_result)
+                        }
+                    }else{
+                        coroutineHandler.foregroundScope.launch {
+                            Toast.makeText(requireContext(), getString(R.string.export_problem_saving_error_21), Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    viewModel.exportSaving.postValue(false)
+                    dismiss()
+                }
             }
 
         }

@@ -29,19 +29,19 @@ class ExportBehaviourBuilderTest {
 
     @Test
     fun whenBuilding_buildACsvBehaviour() {
-        val builder = ExportBehaviour.Builder(context, FileData.Csv("FILE_NAME"))
+        val builder = ExportBehaviour.Builder(context, FileData.Csv("ANY_NAME"))
         Assert.assertTrue(builder.build() is CsvExportBehaviour)
     }
 
     @Test
     fun whenBuilding_buildAXlsBehaviour() {
-        val builder = ExportBehaviour.Builder(context, FileData.Excel("PDF_FILE"))
+        val builder = ExportBehaviour.Builder(context, FileData.Excel("ANY_NAME"))
         Assert.assertTrue(builder.build() is XlsxExportBehaviour)
     }
 
     @Test
     fun whenBuilding_buildReturnsNullIfNameIsEmpty() {
-        val builder = ExportBehaviour.Builder(context, FileData.Excel(""))
+        val builder = ExportBehaviour.Builder(context, FileData.Csv(""))
         assertNull(builder.build())
     }
 

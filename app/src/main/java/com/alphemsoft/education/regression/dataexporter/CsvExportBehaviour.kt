@@ -1,5 +1,6 @@
 package com.alphemsoft.education.regression.dataexporter
 
+import android.net.Uri
 import com.alphemsoft.education.regression.data.model.SheetEntry
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVPrinter
@@ -8,8 +9,9 @@ import java.io.OutputStream
 import java.io.OutputStreamWriter
 
 class CsvExportBehaviour(
-    private val outputStream: OutputStream
-) : ExportBehaviour {
+    private val outputStream: OutputStream,
+    uri: Uri
+) : ExportBehaviour(uri) {
 
     private var csvPrinter: CSVPrinter? = null
 

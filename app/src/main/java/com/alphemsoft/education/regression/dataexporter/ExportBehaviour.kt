@@ -1,39 +1,31 @@
 package com.alphemsoft.education.regression.dataexporter
 
 import android.content.Context
+import android.net.Uri
 import com.alphemsoft.education.regression.data.model.SheetEntry
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import java.io.OutputStream
 
-interface ExportBehaviour {
+abstract class ExportBehaviour(val uri: Uri) {
 
-    fun export(data: List<SheetEntry>): Boolean
+    abstract fun export(data: List<SheetEntry>): Boolean
 
     class Builder(
         private val context: Context,
         private val fileData: FileData
     ) {
+
         fun build(): ExportBehaviour? {
             val contentResolver = context.contentResolver
-            val outputStream = OutPutStreamGenerator.generate(fileData, contentResolver)
+            val uri: Uri? = OutPutStreamGenerator.getUri(fileData.fileName, fileData.commonExtension, contentResolver)
+            val outputStream: OutputStream? = uri?.let { contentResolver.openOutputStream(uri) }
             return outputStream?.let {
                 when (fileData) {
                     is FileData.Csv -> {
-                        CsvExportBehaviour(outputStream)
+                        CsvExportBehaviour(outputStream, uri)
                     }
                     is FileData.Excel -> {
-                        System.setProperty(
-                            "org.apache.poi.javax.xml.stream.XMLInputFactory",
-                            "com.fasterxml.aalto.stax.InputFactoryImpl"
-                        )
-                        System.setProperty(
-                            "org.apache.poi.javax.xml.stream.XMLOutputFactory",
-                            "com.fasterxml.aalto.stax.OutputFactoryImpl"
-                        )
-                        System.setProperty(
-                            "org.apache.poi.javax.xml.stream.XMLEventFactory",
-                            "com.fasterxml.aalto.stax.EventFactoryImpl"
-                        )
-                        XlsxExportBehaviour(XSSFWorkbook(), outputStream)
+                        XlsxExportBehaviour(XSSFWorkbook(), outputStream, uri)
                     }
                 }
             }

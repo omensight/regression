@@ -104,6 +104,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.10")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
+    testImplementation("com.google.truth:truth:1.1.2")
+    testImplementation("com.google.truth.extensions:truth-java8-extension:1.1.2")
+
 
     testImplementation("org.powermock:powermock-api-mockito2:1.7.4")
     testImplementation("org.powermock:powermock-module-junit4:1.7.4")

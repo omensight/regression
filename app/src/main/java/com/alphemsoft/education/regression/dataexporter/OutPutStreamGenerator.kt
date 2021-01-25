@@ -2,26 +2,26 @@ package com.alphemsoft.education.regression.dataexporter
 
 import android.content.ContentResolver
 import android.content.ContentValues
+import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
-import java.io.OutputStream
 
 object OutPutStreamGenerator {
-    fun generate(fileData: FileData, contentResolver: ContentResolver): OutputStream? {
+
+    fun getUri(fileName: String, extension: String, contentResolver: ContentResolver): Uri? {
         val contentValues = ContentValues()
-        val fileName = fileData.fileName
-        if (fileName.isEmpty()){
-            return null
+        var uri: Uri? = null
+        if (fileName.isNotEmpty()){
+            val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+            contentValues.apply {
+                put(MediaStore.Files.FileColumns.DISPLAY_NAME, "$fileName.${extension}")
+                put(MediaStore.Files.FileColumns.MIME_TYPE, mimeType)
+                put(MediaStore.Files.FileColumns.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS)
+            }
+            uri = contentResolver.insert(MediaStore.Files.getContentUri("external"), contentValues)
         }
-        val mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(fileData.commonExtension)
-        contentValues.apply {
-            put(MediaStore.Files.FileColumns.DISPLAY_NAME, "$fileName.${fileData.commonExtension}")
-            put(MediaStore.Files.FileColumns.MIME_TYPE, mimeType)
-            put(MediaStore.Files.FileColumns.RELATIVE_PATH, Environment.DIRECTORY_DOCUMENTS)
-        }
-        val uri = contentResolver.insert(MediaStore.Files.getContentUri("external"), contentValues)
-        return uri?.let { contentResolver.openOutputStream(it) }
+        return uri
     }
 
 }

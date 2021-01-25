@@ -94,6 +94,9 @@
         android:label="ExportEntriesDialogFragment"
         tools:layout="@layout/dialog_fragment_export_data">
 
+        <action
+            android:id="@+id/action_destination_export_data_to_destination_export_result"
+            app:destination="@id/destination_export_result" />
     </dialog>
     <fragment
         android:id="@+id/destination_main_settings"
@@ -106,4 +109,10 @@
         tools:layout="@layout/fragment_purchase_subscription">
 
     </fragment>
+
+    <fragment
+        android:id="@+id/destination_export_result"
+        android:name="com.alphemsoft.education.regression.ui.fragment.ExportResultSheetFragment"
+        android:label="ExportResultSheetFragment"
+        tools:layout="@layout/dialog_fragment_show_export_result"/>
 </navigation>

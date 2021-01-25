@@ -1,9 +1,11 @@
 package com.alphemsoft.education.regression.dataexporter
 
+import android.net.Uri
 import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.dataexporter.testfactory.SheetEntryFactory
 import com.alphemsoft.education.regression.helper.mock
 import com.alphemsoft.education.regression.helper.whenever
+import com.google.common.truth.Truth
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.xssf.usermodel.XSSFCell
@@ -27,9 +29,10 @@ class XlsxExportBehaviourTest {
     private lateinit var rows: MutableList<Row>
     private lateinit var cells: MutableList<Cell>
 
-    val corruptedData = listOf(SheetEntry(0,0, null, BigDecimal("1.2")))
+    val corruptedData = listOf(SheetEntry(0, 0, null, BigDecimal("1.2")))
+
     @Before
-    fun setup(){
+    fun setup() {
         System.setProperty(
             "org.apache.poi.javax.xml.stream.XMLInputFactory",
             "com.fasterxml.aalto.stax.InputFactoryImpl"
@@ -47,31 +50,32 @@ class XlsxExportBehaviourTest {
         workbook = mock()
         sheet = mock()
         whenever(workbook.createSheet(anyString())).thenReturn(sheet)
-        xlsxExportBehaviour = XlsxExportBehaviour(workbook, outputStream)
+        val uri: Uri = mock()
+        xlsxExportBehaviour = XlsxExportBehaviour(workbook, outputStream, uri)
         rows = ArrayList()
         cells = ArrayList()
     }
 
     @Test
-    fun whenInstantiating_createSheet(){
+    fun whenInstantiating_createSheet() {
         verify(workbook, times(1)).createSheet(anyString())
     }
 
     @Test
-    fun whenExporting_returnsTrue(){
+    fun whenExporting_returnsTrue() {
         setupAnswerOfMockedRows()
         Assert.assertTrue(xlsxExportBehaviour.export(sheetEntries))
     }
 
     @Test
-    fun whenExporting_createRow(){
+    fun whenExporting_createRow() {
         setupAnswerOfMockedRows()
         xlsxExportBehaviour.export(sheetEntries)
         verify(sheet, atLeast(1)).createRow(anyInt())
     }
 
     @Test
-    fun whenExporting_createRow_calledSheetEntriesSizeTimes(){
+    fun whenExporting_createRow_calledSheetEntriesSizeTimes() {
         setupAnswerOfMockedRows()
         xlsxExportBehaviour.export(sheetEntries)
         verify(sheet, times(sheetEntries.size)).createRow(anyInt())
@@ -79,9 +83,9 @@ class XlsxExportBehaviourTest {
 
 
     @Test
-    fun whenExporting_verifySizeOfCellsAreTwiceTheRows(){
+    fun whenExporting_verifySizeOfCellsAreTwiceTheRows() {
         setupAnswerOfMockedRows()
-        Assert.assertEquals(rows.size*2, cells.size)
+        Assert.assertEquals(rows.size * 2, cells.size)
     }
 
     private fun setupAnswerOfMockedRows() {
@@ -93,14 +97,14 @@ class XlsxExportBehaviourTest {
         }.`when`(sheet).createRow(anyInt())
     }
 
-    private fun getMockedCell(): XSSFCell{
+    private fun getMockedCell(): XSSFCell {
         val cell: XSSFCell = mock()
         cells.add(cell)
         return cell
     }
 
     @Test
-    fun whenExporting_createTwiceCells(){
+    fun whenExporting_createTwiceCells() {
         setupAnswerOfMockedRows()
         xlsxExportBehaviour.export(sheetEntries)
         rows.forEach {
@@ -109,24 +113,24 @@ class XlsxExportBehaviourTest {
     }
 
     @Test
-    fun whenExporting_returnFalseIfDataIsCorrupted(){
+    fun whenExporting_returnFalseIfDataIsCorrupted() {
         Assert.assertFalse(xlsxExportBehaviour.export(corruptedData))
     }
 
     @Test
-    fun whenInstantiating_callToWriteExportNotCalled(){
+    fun whenInstantiating_callToWriteExportNotCalled() {
         verify(workbook, never()).write(any())
     }
 
     @Test
-    fun whenExporting_workbookCallToWrite_withValidData(){
+    fun whenExporting_workbookCallToWrite_withValidData() {
         setupAnswerOfMockedRows()
         xlsxExportBehaviour.export(sheetEntries)
         verify(workbook, times(1)).write(any())
     }
 
     @Test
-    fun whenExporting_workbookNotCallToWrite_withInvalidData(){
+    fun whenExporting_workbookNotCallToWrite_withInvalidData() {
         setupAnswerOfMockedRows()
         xlsxExportBehaviour.export(corruptedData)
         verify(workbook, never()).write(any())

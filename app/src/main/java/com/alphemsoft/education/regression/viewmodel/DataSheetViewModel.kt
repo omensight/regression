@@ -1,5 +1,6 @@
 package com.alphemsoft.education.regression.viewmodel
 
+import android.net.Uri
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.PagingData
@@ -30,6 +31,9 @@ class DataSheetViewModel @ViewModelInject constructor(
 
     val exportNameLiveData = MutableLiveData<String>("")
     val exportFormatLiveData = MutableLiveData<String>("")
+    val exportSaving =  MutableLiveData<Boolean>()
+    val exportUriLiveData = MutableLiveData<Uri>()
+    val exportFileNameLiveData = MutableLiveData<String>()
     val sheetItemCount = sheetDataSource.getSheetItemCount()
 
     private val _importedEntries: MutableLiveData<List<SheetEntry>> = MutableLiveData()

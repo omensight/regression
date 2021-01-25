@@ -87,6 +87,11 @@
     <string name="empty_message_no_data">No data</string>
     <string name="empty_message_no_sheets">No sheets</string>
     <string name="subtitle_format">Format</string>
+    <string name="export_saved_as">Saved as:</string>
+    <string name="share">Share</string>
+    <string name="open">Open</string>
+    <string name="export_saving">Saving</string>
+    <string name="export_problem_saving_error_21">Problem saving - 21 Code</string>
 
     <string-array name="regression_types">
         <item>Linear</item>

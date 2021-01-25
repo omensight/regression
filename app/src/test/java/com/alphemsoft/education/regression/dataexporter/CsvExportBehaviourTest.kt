@@ -3,6 +3,7 @@ package com.alphemsoft.education.regression.dataexporter
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
+import android.net.Uri
 import android.provider.MediaStore
 import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.dataexporter.testfactory.SheetEntryFactory
@@ -41,7 +42,8 @@ class CsvExportBehaviourUnitTest {
         whenever(context.contentResolver).thenReturn(contentResolver)
         whenever(contentResolver.insert(any(), any())).thenReturn(mock())
         outputStream = mock()
-        csvExportBehaviour = CsvExportBehaviour(outputStream)
+        val uri: Uri = mock()
+        csvExportBehaviour = CsvExportBehaviour(outputStream, uri)
         whenever(contentResolver.openOutputStream(any())).thenReturn(mock())
     }
 

@@ -7,6 +7,7 @@ import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 import com.alphemsoft.education.regression.helper.mock
 import com.alphemsoft.education.regression.helper.whenever
+import com.google.common.truth.Truth.assertThat
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -18,7 +19,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest
 import org.powermock.modules.junit4.PowerMockRunner
 
 @RunWith(PowerMockRunner::class)
-@PrepareForTest(MediaStore::class, MimeTypeMap::class)
+@PrepareForTest(MediaStore::class, MimeTypeMap::class, Uri::class, OutPutStreamGenerator::class)
 class OutputStreamGeneratorTest {
 
     private lateinit var fileName: String
@@ -32,10 +33,13 @@ class OutputStreamGeneratorTest {
     fun setup(){
         PowerMockito.mockStatic(MediaStore.Files::class.java)
         PowerMockito.mockStatic(MimeTypeMap::class.java)
+        PowerMockito.mockStatic(Uri::class.java)
+        PowerMockito.mockStatic(OutPutStreamGenerator::class.java)
         val mimeTypeMap: MimeTypeMap = mock()
         whenever(mimeTypeMap.getMimeTypeFromExtension("csv")).thenReturn("text/*")
         whenever(mimeTypeMap.getMimeTypeFromExtension("xlsx")).thenReturn("application/vnd.ms-excel")
         whenever(MimeTypeMap.getSingleton()).thenReturn(mimeTypeMap)
+        whenever(Uri.fromFile(any())).thenReturn(mock())
         uri = mock()
         val mediaUri: Uri = mock()
         whenever(MediaStore.Files.getContentUri(Mockito.anyString())).thenReturn(mediaUri)
@@ -50,28 +54,15 @@ class OutputStreamGeneratorTest {
     }
 
     @Test
-    fun whenGenerating_getFileName(){
-
-        OutPutStreamGenerator.generate(fileData, contentResolver)
-        verify(fileData).fileName
-    }
-
-    @Test
     fun whenGenerating_returnNonNullValue(){
         whenever(contentResolver.insert(any(), any())).thenReturn(uri)
-        Assert.assertNotNull(OutPutStreamGenerator.generate(fileData, contentResolver))
+        Assert.assertNotNull(OutPutStreamGenerator.getUri("file", "csv", contentResolver))
     }
 
     @Test
     fun whenGenerating_createsUri(){
-        OutPutStreamGenerator.generate(fileData, contentResolver)
+        OutPutStreamGenerator.getUri("file", "csv", contentResolver)
         verify(contentResolver).insert(any(), any())
-    }
-    @Test
-    fun whenGenerating_callToOpenOutputStream(){
-        whenever(contentResolver.insert(any(), any())).thenReturn(uri)
-        OutPutStreamGenerator.generate(fileData, contentResolver)
-        verify(contentResolver).openOutputStream(any())
     }
 
     @Test
@@ -81,21 +72,14 @@ class OutputStreamGeneratorTest {
     }
 
     @Test
-    fun whenGenerating_verifyContentResolverOpensOutputStream(){
-        whenever(contentResolver.insert(any(), any())).thenReturn(uri)
-        OutPutStreamGenerator.generate(fileData, contentResolver)
-        verify(contentResolver, times(1)).openOutputStream(any())
-    }
-
-    @Test
     fun whenGenerating_returnNullIfUriIsNull(){
         whenever(contentResolver.insert(any(), any())).thenReturn(null)
-        Assert.assertNull(OutPutStreamGenerator.generate(fileData, contentResolver))
+        Assert.assertNull(OutPutStreamGenerator.getUri("file", "csv", contentResolver))
     }
 
     @Test
-    fun whenGenerating_returnsNullIfNameIsEmpty(){
-        whenever(fileData.fileName).thenReturn("")
-        Assert.assertNull(OutPutStreamGenerator.generate(fileData, contentResolver))
+    fun whenGettingUri_returnsNullIfNameIsEmpty(){
+        assertThat(OutPutStreamGenerator.getUri("", "csv", contentResolver)).isNull()
     }
+
 }
