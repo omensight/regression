@@ -2,6 +2,7 @@ package com.alphemsoft.education.regression.ui.fragment
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
@@ -142,7 +143,13 @@ class ResultFragment : AbstractResultFragment(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+        Log.println(Log.DEBUG,"ItemSelected", "onOptionsItemSelected: ${item.itemId}")
+        val result =  when (item.itemId) {
+            R.id.action_create_report -> {
+                val action = ResultFragmentDirections.actionDestinationResultToDestinationExportCompleteReport(args.regressionId)
+                findNavController().navigate(action)
+                true
+            }
             R.id.action_show_plot -> {
                 val action = ResultFragmentDirections.actionShowGraph(args.regressionId)
                 findNavController().navigate(action)
@@ -150,6 +157,7 @@ class ResultFragment : AbstractResultFragment(),
             }
             else -> false
         }
+        return result
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {

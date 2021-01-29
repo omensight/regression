@@ -63,6 +63,10 @@
         <action
             android:id="@+id/action_show_graph"
             app:destination="@id/destination_show_graph" />
+        <action
+            android:id="@+id/action_destination_result_to_destination_export__complete_report"
+            app:destination="@id/destination_export__complete_report" />
+
     </fragment>
     <fragment
         android:id="@+id/destination_show_graph"
@@ -110,9 +114,33 @@
 
     </fragment>
 
-    <fragment
+    <dialog
         android:id="@+id/destination_export_result"
-        android:name="com.alphemsoft.education.regression.ui.fragment.ExportResultSheetFragment"
+        android:name="com.alphemsoft.education.regression.ui.fragment.ShowExportResultSheetFragment"
         android:label="ExportResultSheetFragment"
-        tools:layout="@layout/dialog_fragment_show_export_result"/>
+        tools:layout="@layout/dialog_fragment_show_export_result">
+        <argument
+            android:name="fileUri"
+            app:argType="android.net.Uri" />
+        <argument
+            android:name="fileName"
+            app:argType="string"
+            app:nullable="false"/>
+    </dialog>
+    <dialog
+        android:id="@+id/destination_export__complete_report"
+        android:name="com.alphemsoft.education.regression.ui.fragment.SaveReportBottomSheetFragment"
+        android:label="SaveReportBottomSheetFragment"
+        tools:layout="@layout/dialog_fragment_export_report">
+        <argument
+            android:name="sheetId"
+            app:argType="long"
+            app:nullable="false"/>
+        <action
+            android:id="@+id/action_destination_export__complete_report_to_destination_export_result"
+            app:destination="@id/destination_export_result"
+            app:popUpTo="@id/destination_result"/>
+    </dialog>
+
+
 </navigation>

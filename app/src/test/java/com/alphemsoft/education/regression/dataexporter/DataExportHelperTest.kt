@@ -2,17 +2,19 @@ package com.alphemsoft.education.regression.dataexporter
 
 import android.content.ContentValues
 import android.content.Context
+import com.alphemsoft.education.regression.dataexporter.exportbehaviour.ExportBehaviour
 import com.alphemsoft.education.regression.dataexporter.testfactory.SheetEntryFactory
-import com.alphemsoft.education.regression.helper.mock
-import com.alphemsoft.education.regression.helper.whenever
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.spy
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.anyList
 import org.mockito.Mock
-import org.mockito.Mockito.*
 import org.powermock.modules.junit4.PowerMockRunner
-import java.lang.IllegalArgumentException
 
 @RunWith(PowerMockRunner::class)
 class DataExportHelperTest {
@@ -50,7 +52,7 @@ class DataExportHelperTest {
     fun export_returnsTrueWhenDataIsExported(){
         dataExportHelper.exportBehaviour = exportBehaviour
 
-        `when`(exportBehaviour.export(anyList())).thenReturn(true)
+        whenever(exportBehaviour.export(anyList())).thenReturn(true)
         val exported = dataExportHelper.export(sheeEntrytList)
         Assert.assertTrue(exported)
     }

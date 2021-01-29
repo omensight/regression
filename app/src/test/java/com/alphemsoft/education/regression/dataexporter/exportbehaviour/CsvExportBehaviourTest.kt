@@ -1,28 +1,30 @@
-package com.alphemsoft.education.regression.dataexporter
+package com.alphemsoft.education.regression.dataexporter.exportbehaviour
 
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
 import android.net.Uri
-import android.provider.MediaStore
 import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.dataexporter.testfactory.SheetEntryFactory
-import com.alphemsoft.education.regression.helper.mock
-import com.alphemsoft.education.regression.helper.whenever
-import junit.framework.TestCase.assertNotNull
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.*
+import org.mockito.ArgumentMatchers.any
+import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mockito.verify
-import org.powermock.api.mockito.PowerMockito
-import org.powermock.core.classloader.annotations.PrepareForTest
+import org.mockito.MockitoAnnotations
+import org.mockito.junit.MockitoJUnit
 import org.powermock.modules.junit4.PowerMockRunner
 import java.io.OutputStream
 
 @RunWith(PowerMockRunner::class)
-@PrepareForTest(MediaStore::class)
 class CsvExportBehaviourUnitTest {
+
+    @get:Rule
+    val mockitoRule = MockitoJUnit.rule()
 
     lateinit var csvExportBehaviour: CsvExportBehaviour
 
@@ -34,7 +36,7 @@ class CsvExportBehaviourUnitTest {
 
     @Before
     fun setup(){
-        PowerMockito.mockStatic(MediaStore.Files::class.java)
+        MockitoAnnotations.initMocks(this)
         contentValues = mock()
         sheetList = SheetEntryFactory.getRandomList(5)
         val context: Context = mock()

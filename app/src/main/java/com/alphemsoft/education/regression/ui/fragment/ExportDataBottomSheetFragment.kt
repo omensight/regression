@@ -1,6 +1,7 @@
 package com.alphemsoft.education.regression.ui.fragment
 
 import android.content.DialogInterface
+import android.net.Uri
 import android.os.Bundle
 import android.widget.*
 import androidx.fragment.app.activityViewModels
@@ -10,7 +11,7 @@ import com.alphemsoft.education.regression.BR
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.databinding.DialogFragmentExportDataBinding
 import com.alphemsoft.education.regression.dataexporter.DataExportHelper
-import com.alphemsoft.education.regression.dataexporter.ExportBehaviour
+import com.alphemsoft.education.regression.dataexporter.exportbehaviour.ExportBehaviour
 import com.alphemsoft.education.regression.dataexporter.FileData
 import com.alphemsoft.education.regression.ui.base.BaseBottomSheetDialogFragment
 import com.alphemsoft.education.regression.viewmodel.DataSheetViewModel
@@ -98,12 +99,12 @@ class ExportDataBottomSheetFragment : BaseExportDataBottomSheetFragment() {
                             }
                         ).build()
                     }
-                    if (dataExportHelper?.export(data) == true) {
+                    val uri = dataExportHelper?.uri
+                    if (dataExportHelper?.export(data) == true && uri != null) {
                         coroutineHandler.foregroundScope.launch {
-                            viewModel.exportUriLiveData.postValue(dataExportHelper?.uri)
-                            viewModel.exportFileNameLiveData.postValue("${fileName}.${type.extension}")
+                            val destination = ExportDataBottomSheetFragmentDirections.actionDestinationExportDataToDestinationExportResult(uri,fileName)
                             requireActivity().findNavController(R.id.main_nav_host_fragment)
-                                .navigate(R.id.destination_export_result)
+                                .navigate(destination)
                         }
                     }else{
                         coroutineHandler.foregroundScope.launch {

@@ -11,8 +11,6 @@ import com.alphemsoft.education.regression.data.datasource.ISubscriptionDataSour
 import com.alphemsoft.education.regression.data.legacy.LegacyDataMigrationHelper
 import com.alphemsoft.education.regression.data.model.Sheet
 import com.alphemsoft.education.regression.data.model.SheetEntry
-import com.alphemsoft.education.regression.dataexporter.ExportBehaviour
-import com.alphemsoft.education.regression.dataexporter.FileData
 import kotlinx.coroutines.flow.Flow
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
@@ -32,8 +30,7 @@ class DataSheetViewModel @ViewModelInject constructor(
     val exportNameLiveData = MutableLiveData<String>("")
     val exportFormatLiveData = MutableLiveData<String>("")
     val exportSaving =  MutableLiveData<Boolean>()
-    val exportUriLiveData = MutableLiveData<Uri>()
-    val exportFileNameLiveData = MutableLiveData<String>()
+
     val sheetItemCount = sheetDataSource.getSheetItemCount()
 
     private val _importedEntries: MutableLiveData<List<SheetEntry>> = MutableLiveData()

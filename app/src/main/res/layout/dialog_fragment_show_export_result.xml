@@ -3,7 +3,7 @@
     <data>
         <variable
             name="show_export_view_model"
-            type="com.alphemsoft.education.regression.viewmodel.DataSheetViewModel" />
+            type="com.alphemsoft.education.regression.viewmodel.ShowExportResultViewModel" />
     </data>
     
     <androidx.constraintlayout.widget.ConstraintLayout

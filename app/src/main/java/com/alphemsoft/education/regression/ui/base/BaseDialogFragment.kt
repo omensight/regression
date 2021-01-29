@@ -1,5 +1,7 @@
 package com.alphemsoft.education.regression.ui.base
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +27,14 @@ abstract class BaseDialogFragment<VDB : ViewDataBinding> constructor(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activity = requireActivity() as BaseAppCompatActivity<ViewDataBinding>
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.let {
+            it.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
     }
 
     override fun onCreateView(

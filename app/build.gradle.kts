@@ -1,5 +1,3 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -14,7 +12,7 @@ val kotlin_version = "1.4.10"
 
 android {
     compileSdkVersion(30)
-    buildToolsVersion("30.0.2")
+    buildToolsVersion("30.0.3")
     defaultConfig {
         applicationId = "com.alphemsoft.education.regression"
         minSdkVersion(21)
@@ -78,7 +76,6 @@ android {
             java.setSrcDirs(newList)
         }
     }
-
     testOptions{
         unitTests.isReturnDefaultValues = true
     }
@@ -101,17 +98,19 @@ dependencies {
 
     testImplementation("junit:junit:4.13.1")
     testImplementation("androidx.test.ext:junit:1.1.2")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.10")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.4.21")
     androidTestImplementation("androidx.test.ext:junit:1.1.2")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
     testImplementation("com.google.truth:truth:1.1.2")
     testImplementation("com.google.truth.extensions:truth-java8-extension:1.1.2")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
+    testImplementation("org.robolectric:robolectric:4.4")
 
 
-    testImplementation("org.powermock:powermock-api-mockito2:1.7.4")
-    testImplementation("org.powermock:powermock-module-junit4:1.7.4")
-    testImplementation("org.powermock:powermock-module-junit4-rule:1.7.4")
-    testImplementation("org.powermock:powermock-classloading-xstream:1.7.4")
+    testImplementation("org.powermock:powermock-api-mockito2:2.0.9")
+    testImplementation("org.powermock:powermock-module-junit4:2.0.9")
+    testImplementation("org.powermock:powermock-module-junit4-rule:2.0.9")
+    testImplementation("org.powermock:powermock-classloading-xstream:2.0.9")
 
     //Room
     implementation("androidx.room:room-runtime:$room_version")
@@ -157,16 +156,22 @@ dependencies {
 
     //POI Android
     implementation( "com.github.SUPERCILEX.poi-android:poi:3.17")
-    testImplementation( "com.github.SUPERCILEX.poi-android:poi:3.17")
     implementation("com.github.SUPERCILEX.poi-android:proguard:3.17")
-
-    compileOnly( "org.apache.poi:poi-ooxml:3.17")
-
 }
 
 val secretConfigFile = file ("$projectDir/secret_config.gradle")
 if (secretConfigFile.exists()) {
     apply(from = file ("$projectDir/secret_config.gradle"))
 }
-
-
+//
+//tasks.withType<Test> {
+//    useJUnitPlatform()
+//
+//    systemProperty( "org.apache.poi.javax.xml.stream.XMLInputFactory",
+//        "com.fasterxml.aalto.stax.InputFactoryImpl")
+//    systemProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory",
+//        "com.fasterxml.aalto.stax.OutputFactoryImpl")
+//    systemProperty("org.apache.poi.javax.xml.stream.XMLEventFactory",
+//        "com.fasterxml.aalto.stax.EventFactoryImpl")
+//
+//}

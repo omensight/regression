@@ -1,4 +1,4 @@
-package com.alphemsoft.education.regression.dataexporter
+package com.alphemsoft.education.regression.dataexporter.exportbehaviour
 
 import android.net.Uri
 import com.alphemsoft.education.regression.data.model.SheetEntry
@@ -9,7 +9,8 @@ import java.io.OutputStream
 class XlsxExportBehaviour(
     private val workbook: Workbook,
     private val outputStream: OutputStream,
-    uri: Uri
+    uri: Uri,
+    private val hasToWriteTheFile: Boolean = true
 ) : ExportBehaviour(uri) {
 
     private val sheet: Sheet = workbook.createSheet("Data")
@@ -31,7 +32,7 @@ class XlsxExportBehaviour(
                 yCell.setCellValue(sheetEntry.y?.toDouble()!!)
             }
         }
-        if (validData){
+        if (validData && hasToWriteTheFile){
             workbook.write(outputStream)
         }
         return validData

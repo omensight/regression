@@ -7,7 +7,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.webkit.MimeTypeMap
 
-object OutPutStreamGenerator {
+class OutPutStreamGenerator {
 
     fun getUri(fileName: String, extension: String, contentResolver: ContentResolver): Uri? {
         val contentValues = ContentValues()

@@ -91,5 +91,22 @@
         <item>Lineal</item>
         <item>Potencial</item>
     </string-array>
+    <string name="subtitle_format">Formato</string>
+    <string name="export_saved_as">Ruta:</string>
+    <string name="share">Compartir</string>
+    <string name="open">Abrir</string>
+    <string name="export_saving">Guardando</string>
+    <string name="export_problem_saving_error_21">"No se pudo exportar - Código 21 "</string>
+    <string name="export_problem_saving_error_22">No se pudo exportar - Código 22</string>
+    <string name="export_sheet_information">Información de hoja de datos</string>
+    <string name="export_sheet_results">Resultados</string>
+    <string name="action_create_report">Crear reporte</string>
+    <string name="name">Nombre</string>
+    <string name="created">Creado en</string>
+    <string name="regression_type">Tipo</string>
+    <string name="x_label">Etiqueta de X</string>
+    <string name="y_label">Etiqueta de Y</string>
+    <string name="sheet_type_power">Potencial</string>
+    <string name="export_error_no_application_to_open_file">Por favor, instale alguna aplicación para abrir este archivo</string>
 
 </resources>

@@ -61,7 +61,7 @@ class SheetListFragment : AbstractSheetListFragment() {
                 sheetPagingAdapter.submitData(newItems)
             }
         }
-        coroutineHandler.backgroundScope.launch {
+        coroutineHandler.foregroundScope.launch {
             viewModel.sheetItemCount.collectLatest {count ->
                 dataBinding.layoutEmptyViewSheets.root.visibility = if (count == 0L){
                     View.VISIBLE

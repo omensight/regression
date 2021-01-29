@@ -1,11 +1,11 @@
-package com.alphemsoft.education.regression.dataexporter
+package com.alphemsoft.education.regression.dataexporter.exportbehaviour
 
 import android.net.Uri
 import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.dataexporter.testfactory.SheetEntryFactory
-import com.alphemsoft.education.regression.helper.mock
-import com.alphemsoft.education.regression.helper.whenever
 import com.google.common.truth.Truth
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.xssf.usermodel.XSSFCell
@@ -21,13 +21,14 @@ import java.math.BigDecimal
 
 class XlsxExportBehaviourTest {
     private lateinit var xlsxExportBehaviour: XlsxExportBehaviour
-
     private lateinit var outputStream: OutputStream
+
     private lateinit var workbook: XSSFWorkbook
     private lateinit var sheet: XSSFSheet
     private lateinit var sheetEntries: List<SheetEntry>
     private lateinit var rows: MutableList<Row>
     private lateinit var cells: MutableList<Cell>
+    private lateinit var uri: Uri
 
     val corruptedData = listOf(SheetEntry(0, 0, null, BigDecimal("1.2")))
 
@@ -50,7 +51,7 @@ class XlsxExportBehaviourTest {
         workbook = mock()
         sheet = mock()
         whenever(workbook.createSheet(anyString())).thenReturn(sheet)
-        val uri: Uri = mock()
+        uri = mock()
         xlsxExportBehaviour = XlsxExportBehaviour(workbook, outputStream, uri)
         rows = ArrayList()
         cells = ArrayList()
@@ -135,4 +136,13 @@ class XlsxExportBehaviourTest {
         xlsxExportBehaviour.export(corruptedData)
         verify(workbook, never()).write(any())
     }
+
+    @Test
+    fun whenExporting_notCallToSaveIfTheFileNotEnds(){
+        xlsxExportBehaviour = XlsxExportBehaviour(workbook, outputStream, uri, false)
+        setupAnswerOfMockedRows()
+        xlsxExportBehaviour.export(sheetEntries)
+        verify(workbook, never()).write(any())
+    }
+
 }

@@ -1,13 +1,12 @@
-package com.alphemsoft.education.regression.dataexporter
+package com.alphemsoft.education.regression.dataexporter.exportbehaviour
 
 import com.alphemsoft.education.regression.dataexporter.testfactory.SheetEntryFactory
-import com.alphemsoft.education.regression.helper.mock
-import com.alphemsoft.education.regression.helper.whenever
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers.*
-import org.mockito.Mockito
+import org.mockito.ArgumentMatchers.anyList
 
 class ExportBehaviourTest{
     lateinit var fileName: String
