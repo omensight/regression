@@ -27,9 +27,9 @@ abstract class AbstractSaveReportBottomSheetFragment
 )
 
 @AndroidEntryPoint
-class SaveReportBottomSheetFragment : AbstractSaveReportBottomSheetFragment() {
+class ExportCompleteReportBottomSheetFragment : AbstractSaveReportBottomSheetFragment() {
     override val viewModel: SaveReportViewModel by viewModels()
-    private val args: SaveReportBottomSheetFragmentArgs by navArgs()
+    private val args: ExportCompleteReportBottomSheetFragmentArgs by navArgs()
     private lateinit var sheetExporter: SheetExporter
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -39,6 +39,7 @@ class SaveReportBottomSheetFragment : AbstractSaveReportBottomSheetFragment() {
     }
 
     private fun setupUi() {
+        isCancelable = false
         dataBinding.lifecycleOwner = this
         coroutineHandler.foregroundScope.launch {
             val date = Date().getSimpleFormatted()
@@ -53,6 +54,8 @@ class SaveReportBottomSheetFragment : AbstractSaveReportBottomSheetFragment() {
             coroutineHandler.backgroundScope.launch {
                 coroutineHandler.foregroundScope.launch {
                     dataBinding.btExport.text = getString(R.string.export_saving)
+                    dataBinding.btExport.isEnabled = false
+                    dataBinding.btCancel.isEnabled = false
                 }
                 viewModel.fileNameLiveData.value?.let { fileName ->
                     sheetExporter.initialize(fileName)?.let { uri ->
@@ -70,7 +73,7 @@ class SaveReportBottomSheetFragment : AbstractSaveReportBottomSheetFragment() {
                                 if (saved) {
                                     coroutineHandler.foregroundScope.launch {
                                         val destination =
-                                            SaveReportBottomSheetFragmentDirections.actionDestinationExportCompleteReportToDestinationExportResult(
+                                            ExportCompleteReportBottomSheetFragmentDirections.actionDestinationExportCompleteReportToDestinationExportResult(
                                                 uri,
                                                 fileName
                                             )

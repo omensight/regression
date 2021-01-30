@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.alphemsoft.education.regression.BR
 import com.alphemsoft.education.regression.R
+import com.alphemsoft.education.regression.constants.PREMIUM_REQUEST_FEATURE_EXPORT_COMPLETE_REPORT
 import com.alphemsoft.education.regression.data.model.NativeAdEntity
 import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.data.regression.RegressionFactory
@@ -24,7 +25,6 @@ import com.alphemsoft.education.regression.ui.base.BaseFragment
 import com.alphemsoft.education.regression.viewmodel.ResultViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -52,7 +52,7 @@ class ResultFragment : AbstractResultFragment(),
         setupPreferences()
         coroutineHandler.foregroundScope.launch {
             viewModel.getSubscription().collectLatest {
-                val hasActiveSubscription = when(it.subscriptionState){
+                val hasActiveSubscription = when (it.subscriptionState) {
                     PremiumSubscriptionState.NOT_SUBSCRIBED, PremiumSubscriptionState.TEMPORARY_ACCESS -> false
                     PremiumSubscriptionState.SUBSCRIBED, PremiumSubscriptionState.CANCELLED -> true
                 }
@@ -76,9 +76,9 @@ class ResultFragment : AbstractResultFragment(),
 
     private suspend fun refreshResultList(hasActiveSubscription: Boolean) {
         viewModel.getDataPointsFlow(args.regressionId).collectLatest { data ->
-            if (hasActiveSubscription){
+            if (hasActiveSubscription) {
                 loadResults(data, null, true)
-            }else{
+            } else {
                 var unifiedNativeNativeAds = nativeAdDispatcher.fetchAds()
                 loadResults(data, unifiedNativeNativeAds, false)
                 delay(10000)
@@ -104,9 +104,9 @@ class ResultFragment : AbstractResultFragment(),
             val results = regression.getResults(decimalRoundCount)
             val resultsWithAds: MutableList<Any> = ArrayList()
             var adIndex = 0
-            if (hasPremiumSubscription){
+            if (hasPremiumSubscription) {
                 resultsWithAds.addAll(results)
-            }else{
+            } else {
                 unifiedNativeNativeAds?.let {
                     results.forEachIndexed { index, result ->
                         if (index % 5 == 0 && index > 0) {
@@ -143,11 +143,17 @@ class ResultFragment : AbstractResultFragment(),
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.println(Log.DEBUG,"ItemSelected", "onOptionsItemSelected: ${item.itemId}")
-        val result =  when (item.itemId) {
+        Log.println(Log.DEBUG, "ItemSelected", "onOptionsItemSelected: ${item.itemId}")
+        val result = when (item.itemId) {
             R.id.action_create_report -> {
-                val action = ResultFragmentDirections.actionDestinationResultToDestinationExportCompleteReport(args.regressionId)
-                findNavController().navigate(action)
+                coroutineHandler.foregroundScope.launch {
+                    if (viewModel.hasAnActiveSubscription()){
+                        val action = ResultFragmentDirections.actionDestinationResultToDestinationExportCompleteReport(args.regressionId)
+                        findNavController().navigate(action)
+                    }else{
+                        showSubscribeDialog()
+                    }
+                }
                 true
             }
             R.id.action_show_plot -> {
@@ -160,11 +166,40 @@ class ResultFragment : AbstractResultFragment(),
         return result
     }
 
+    private fun showSubscribeDialog() {
+        val premiumFeatureDialogFragment = PremiumFeatureDialogFragment()
+        premiumFeatureDialogFragment.show(
+            parentFragmentManager,
+            object : PremiumFeatureDialogFragment.OnPremiumDecisionListener {
+                override suspend fun onGetASubscriptionSelected(featureId: Int) {
+                    val destinationPurchaseSubscription = ResultFragmentDirections.actionPurchaseSubscription()
+                    coroutineHandler.foregroundScope.launch {
+                        requireActivity()
+                            .findNavController(R.id.main_nav_host_fragment)
+                            .navigate(destinationPurchaseSubscription)
+                    }
+                }
+
+                override fun onRewardedVideoWatched(featureId: Int) {
+                    val action = ResultFragmentDirections.actionDestinationResultToDestinationExportCompleteReport(args.regressionId)
+                    findNavController().navigate(action)
+                }
+
+            },
+            PREMIUM_REQUEST_FEATURE_EXPORT_COMPLETE_REPORT,
+            R.string.title_premium_feature_export_complete_report
+        )
+    }
+
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         if (key == getString(R.string.key_preference_decimal_count)) {
             coroutineHandler.backgroundScope.launch {
                 val ads = nativeAdDispatcher.fetchAds()
-                loadResults(viewModel.getDataPoints(args.regressionId), ads, viewModel.hasAnActiveSubscription())
+                loadResults(
+                    viewModel.getDataPoints(args.regressionId),
+                    ads,
+                    viewModel.hasAnActiveSubscription()
+                )
             }
         }
     }

@@ -91,8 +91,8 @@
     <string name="share">Share</string>
     <string name="open">Open</string>
     <string name="export_saving">Saving</string>
-    <string name="export_problem_saving_error_21">Problem exporting - Code 21 </string>
-    <string name="export_problem_saving_error_22">Problem exporting - Code 22 </string>
+    <string name="export_problem_saving_error_21">"Problem saving - Code 21 "</string>
+    <string name="export_problem_saving_error_22">"Problem saving - Code 22 "</string>
     <string name="export_sheet_information">Sheet information</string>
     <string name="export_sheet_results">Sheet results</string>
     <string name="export_error_no_application_to_open_file">Please install an app to open this file</string>
@@ -103,6 +103,7 @@
     <string name="x_label">X label</string>
     <string name="y_label">Y label</string>
     <string name="sheet_type_power">Power</string>
+    <string name="title_premium_feature_export_complete_report">Create report</string>
 
     <string-array name="regression_types">
         <item>Linear</item>

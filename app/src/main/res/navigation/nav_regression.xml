@@ -66,6 +66,9 @@
         <action
             android:id="@+id/action_destination_result_to_destination_export__complete_report"
             app:destination="@id/destination_export__complete_report" />
+        <action
+            android:id="@+id/action_purchase_subscription"
+            app:destination="@id/destination_purchase_subscription" />
 
     </fragment>
     <fragment
@@ -129,7 +132,7 @@
     </dialog>
     <dialog
         android:id="@+id/destination_export__complete_report"
-        android:name="com.alphemsoft.education.regression.ui.fragment.SaveReportBottomSheetFragment"
+        android:name="com.alphemsoft.education.regression.ui.fragment.ExportCompleteReportBottomSheetFragment"
         android:label="SaveReportBottomSheetFragment"
         tools:layout="@layout/dialog_fragment_export_report">
         <argument
