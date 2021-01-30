@@ -23,9 +23,6 @@ import java.io.OutputStream
 @RunWith(PowerMockRunner::class)
 class CsvExportBehaviourUnitTest {
 
-    @get:Rule
-    val mockitoRule = MockitoJUnit.rule()
-
     lateinit var csvExportBehaviour: CsvExportBehaviour
 
     lateinit var contentValues: ContentValues

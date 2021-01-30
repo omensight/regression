@@ -2,6 +2,8 @@ package com.alphemsoft.education.regression.ui.fragment
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -32,6 +34,11 @@ class ExportCompleteReportBottomSheetFragment : AbstractSaveReportBottomSheetFra
     private val args: ExportCompleteReportBottomSheetFragmentArgs by navArgs()
     private lateinit var sheetExporter: SheetExporter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_BottomSheetDialogFragment)
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         setupUi()
@@ -50,7 +57,19 @@ class ExportCompleteReportBottomSheetFragment : AbstractSaveReportBottomSheetFra
             dismiss()
         }
 
+        dataBinding.etPath.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()){
+                dataBinding.tilPath.error = getString(R.string.export_error_empty_filename)
+            }else{
+                dataBinding.tilPath.error = null
+            }
+        }
+
         dataBinding.btExport.setOnClickListener {
+            val fileName = dataBinding.etPath.text
+            if (fileName.isNullOrEmpty()){
+                return@setOnClickListener
+            }
             coroutineHandler.backgroundScope.launch {
                 coroutineHandler.foregroundScope.launch {
                     dataBinding.btExport.text = getString(R.string.export_saving)
@@ -75,7 +94,7 @@ class ExportCompleteReportBottomSheetFragment : AbstractSaveReportBottomSheetFra
                                         val destination =
                                             ExportCompleteReportBottomSheetFragmentDirections.actionDestinationExportCompleteReportToDestinationExportResult(
                                                 uri,
-                                                fileName
+                                                "$fileName.xlsx"
                                             )
                                         val controller =
                                             requireActivity().findNavController(R.id.main_nav_host_fragment)

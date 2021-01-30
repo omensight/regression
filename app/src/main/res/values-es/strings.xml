@@ -72,8 +72,8 @@
     <string name="buy_subscription_offer_message">¿No quieres ver los anuncios? Disfruta usando de regresión sin ellos.</string>
 <!-- Not translatable   <string name="generic_x_label">X</string>-->
 <!-- Not translatable   <string name="generic_y_label">Y</string>-->
-    <string name="preference_visible_decimals">Redondear a</string>
-    <string name="settings_visible_decimals_description">Únicamente para los resultados de salida</string>
+    <string name="preference_decimal_rounding">Redondear a</string>
+    <string name="settings_visible_decimals_description">Únicamente para los resultados de salida (Actualmente %d)</string>
     <string name="_settings_buy_subscription_description">Disfruta de Regression sin ningún tipo de anuncios</string>
     <string name="category_title_application_settings">Aplicación</string>
     <string name="subscription_pay_as_you_go">Paga sobre la marcha, cancela cuando quieras</string>
@@ -108,5 +108,7 @@
     <string name="y_label">Etiqueta de Y</string>
     <string name="sheet_type_power">Potencial</string>
     <string name="export_error_no_application_to_open_file">Por favor, instale alguna aplicación para abrir este archivo</string>
+    <string name="title_premium_feature_export_complete_report">Crear reporte</string>
+    <string name="export_error_empty_filename">Debe especificar un nombre</string>
 
 </resources>

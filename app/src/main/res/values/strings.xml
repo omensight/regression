@@ -72,8 +72,8 @@
     <string name="buy_subscription_offer_message">Don\'t you want to see the ads? Enjoy using Regression without any of them</string>
     <string name="generic_x_label" translatable="false">X</string>
     <string name="generic_y_label" translatable="false">Y</string>
-    <string name="preference_visible_decimals">Visible decimals</string>
-    <string name="settings_visible_decimals_description">This only works for the result views, not for the input data.</string>
+    <string name="preference_decimal_rounding">Decimal rounding</string>
+    <string name="settings_visible_decimals_description">This only works for the result views, not for the input data. (Currently %d)</string>
     <string name="_settings_buy_subscription_description">Enjoy Regression without ads and many other features</string>
     <string name="category_title_application_settings">Application</string>
     <string name="subscription_pay_as_you_go">Pay as you go, cancel anytime</string>
@@ -104,6 +104,7 @@
     <string name="y_label">Y label</string>
     <string name="sheet_type_power">Power</string>
     <string name="title_premium_feature_export_complete_report">Create report</string>
+    <string name="export_error_empty_filename">Empty file name</string>
 
     <string-array name="regression_types">
         <item>Linear</item>

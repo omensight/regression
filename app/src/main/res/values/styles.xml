@@ -16,7 +16,7 @@
         <item name="actionModeCloseButtonStyle">@style/ActionModeCloseButtonStyle</item>
         <item name="titleTextColor">@android:color/white</item>
         <item name="android:actionBarStyle">@style/Widget.MaterialComponents.Toolbar.Primary.Modern</item>
-
+        <item name="bottomSheetStyle">@style/AppTheme.BottomSheetDialogFragment</item>
     </style>
 
     <style name="Widget.MaterialComponents.Toolbar.Primary.Modern" parent="Widget.MaterialComponents.Toolbar.Primary">
@@ -57,10 +57,13 @@
         <item name="colorControlActivated">#008798</item>
     </style>
     
-    <style name="App.Theme.BottomSheetDialogFragment" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+    <style name="AppTheme.BottomSheetDialogFragment" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="android:windowIsFloating">false</item>
-        <item name="colorPrimaryDark">?android:colorPrimaryDark</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryColor</item>
+        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="colorError">@color/color_on_error</item>
     </style>
     
     <style name="App.Theme.ButtonAccept" parent="Widget.MaterialComponents.Button">

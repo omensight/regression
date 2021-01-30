@@ -46,7 +46,9 @@
                 android:layout_height="match_parent"
                 android:singleLine="true"
                 android:text="@={dialog_fragment_export_viewmodel.exportNameLiveData}"
-                android:lines="1" />
+                android:lines="1"
+                android:imeOptions="actionSend|flagNoEnterAction"
+                />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton

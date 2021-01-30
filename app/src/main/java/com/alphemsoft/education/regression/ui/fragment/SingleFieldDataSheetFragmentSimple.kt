@@ -18,7 +18,7 @@ class SingleFieldDataSheetFragmentSimple:BaseSimpleBottomSheetDialogFragment<Bot
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.App_Theme_BottomSheetDialogFragment)
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.AppTheme_BottomSheetDialogFragment)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

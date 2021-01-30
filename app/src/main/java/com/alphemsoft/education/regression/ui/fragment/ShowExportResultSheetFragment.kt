@@ -82,8 +82,7 @@ class ShowExportResultSheetFragment : AbstractShowExportResultSheetFragment() {
         }
 
         dataBinding.btOk.setOnClickListener {
-            requireActivity().findNavController(R.id.main_nav_host_fragment)
-                .popBackStack()
+            dismiss()
         }
     }
 
