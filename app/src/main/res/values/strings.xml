@@ -105,6 +105,8 @@
     <string name="sheet_type_power">Power</string>
     <string name="title_premium_feature_export_complete_report">Create report</string>
     <string name="export_error_empty_filename">Empty file name</string>
+    <string name="a_error">A error</string>
+    <string name="b_error">B error</string>
 
     <string-array name="regression_types">
         <item>Linear</item>

@@ -110,5 +110,7 @@
     <string name="export_error_no_application_to_open_file">Por favor, instale alguna aplicación para abrir este archivo</string>
     <string name="title_premium_feature_export_complete_report">Crear reporte</string>
     <string name="export_error_empty_filename">Debe especificar un nombre</string>
+    <string name="a_error">Error de A</string>
+    <string name="b_error">Error de B</string>
 
 </resources>

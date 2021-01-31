@@ -1,10 +1,13 @@
 package com.alphemsoft.education.regression.data.regression
 
+import android.util.Log
 import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.data.model.secondary.LineData
 import com.alphemsoft.education.regression.data.model.secondary.Result
 import org.apache.commons.math3.stat.regression.SimpleRegression
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 class LinearRegression : Regression {
 
@@ -48,17 +51,30 @@ class LinearRegression : Regression {
         val sXX = sumOfSquaresOfX / simpleRegression.n - xAverage * xAverage
         val sYY = sumOfSquaresOfY / simpleRegression.n - yAverage * yAverage
         val sXY = sumOfCrossXY / simpleRegression.n - xAverage * yAverage
-        val sign = if (parameterEstimates[1] < 0) "" else "+"
+        val a = parameterEstimates[0]
+        val b = parameterEstimates[1]
+        val sign = if (b < 0) "" else "+"
+        val squareOfDiscrepancies = data.map { pair ->
+            (pair.second - (a + b * pair.first)).pow(2)
+        }.sum()
+        val n = data.size
+        val squareOfSigma = squareOfDiscrepancies/(n -2)
+        val delta = n*sumOfSquaresOfX - (sumOfX.pow(2))
+        val aError = sqrt((squareOfSigma*sumOfSquaresOfX)/delta)
+        val bError = sqrt((squareOfSigma*n)/delta)
+        Log.println(Log.DEBUG, "RegressionErrors", "$aError,$bError")
         result.add(Result(R.string.formula_fit_line_linear,
-            "$$\\hat y = ${latexConverter.toLatex(parameterEstimates[0])} $sign ${latexConverter.toLatex(parameterEstimates[1])}x $$",
+            "$$\\hat y = ${latexConverter.toLatex(a)} $sign ${latexConverter.toLatex(b)}x $$",
             null))
         result.add(Result(R.string.a,
-            "$$ A = \\bar {y} - B \\bar x = ${latexConverter.toLatex(parameterEstimates[0])}$$",
-            parameterEstimates[0]))
+            "$$ A = \\bar {y} - B \\bar x = ${latexConverter.toLatex(a)}$$",
+            a
+        ))
 
         result.add(Result(R.string.b,
-            "$$ B = \\frac{Sxy}{Sxx} = ${latexConverter.toLatex(parameterEstimates[1])}$$",
-            parameterEstimates[1]))
+            "$$ B = \\frac{Sxy}{Sxx} = ${latexConverter.toLatex(b)}$$",
+            b
+        ))
 
         val r = simpleRegression.r
         result.add(Result(R.string.r,
@@ -70,7 +86,7 @@ class LinearRegression : Regression {
             r * r))
 
         result.add(Result(R.string.n,
-            "$$ n = ${simpleRegression.n.toDouble()} $$",
+            "$$ n = ${simpleRegression.n} $$",
             simpleRegression.n.toDouble()))
         result.add(Result(R.string.sXX,
             "$$ Sxx = \\frac {\\sum x^2}{n} - \\bar{x}^2 = ${latexConverter.toLatex(sXX)}$$",
@@ -101,6 +117,16 @@ class LinearRegression : Regression {
         result.add(Result(R.string.sum_of_squares_of_y,
             "$$ \\sum {Y^2} = ${latexConverter.toLatex(sumOfSquaresOfY)}$$",
             sumOfSquaresOfY))
+        result.add(Result(
+            R.string.a_error,
+            "$$ \\sigma_A = $aError",
+            aError
+        ))
+        result.add(Result(
+            R.string.b_error,
+            "$$ \\sigma_B = $bError",
+            bError
+        ))
         return result
     }
 
