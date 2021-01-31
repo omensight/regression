@@ -4,7 +4,6 @@ import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.data.model.secondary.LineData
 import com.alphemsoft.education.regression.data.model.secondary.Result
-import com.alphemsoft.education.regression.extensions.roundedNumber
 import org.apache.commons.math3.stat.regression.SimpleRegression
 import kotlin.math.absoluteValue
 import kotlin.math.ln
@@ -38,7 +37,7 @@ class PowerRegression : Regression {
     private lateinit var yColumn: DoubleArray
     private var n: Int = 0
     private lateinit var result: MutableList<Result>
-
+    private val latexConverter: LatexConverter = LatexConverter()
 
     override suspend fun setData(entryData: List<SheetEntry>) {
         dataSettled = true
@@ -68,12 +67,13 @@ class PowerRegression : Regression {
     }
 
     override suspend fun getResults(decimals: Int): List<Result> {
+        latexConverter.decimalCount = decimals
         result.add(Result(R.string.formula_fit_line, "$$ y = Ax^B $$", sYY))
 
         result.add(
             Result(
                 R.string.formula_fit_line,
-                "$$ y = ${a.roundedNumber(decimals)}x^{${b.roundedNumber(decimals)}}$$",
+                "$$ y = ${latexConverter.toLatex(a)}x^{${latexConverter.toLatex(b)}}$$",
                 null
             )
         )
@@ -81,28 +81,28 @@ class PowerRegression : Regression {
         result.add(
             Result(
                 R.string.a,
-                "$$ A = e^{\\overline{lny}-B\\overline{lnx}} = ${a.roundedNumber(decimals)}$$",
+                "$$ A = e^{\\overline{lny}-B\\overline{lnx}} = ${latexConverter.toLatex(a)}$$",
                 a
             )
         )
         result.add(
             Result(
                 R.string.b,
-                "$$ B = \\frac{Sxy}{Sxx} = ${b.roundedNumber(decimals)}$$",
+                "$$ B = \\frac{Sxy}{Sxx} = ${latexConverter.toLatex(a)}$$",
                 b
             )
         )
         result.add(
             Result(
                 R.string.r,
-                "$$ R = \\frac{Sxy}{\\sqrt{Sxx}\\sqrt{Syy}} = ${r.roundedNumber(decimals)}$$",
+                "$$ R = \\frac{Sxy}{\\sqrt{Sxx}\\sqrt{Syy}} = ${latexConverter.toLatex(r)}$$",
                 r
             )
         )
         result.add(
             Result(
                 R.string.square_of_r,
-                "$$ R^2 = ${squareOfR.roundedNumber(decimals)}",
+                "$$ R^2 = ${latexConverter.toLatex(squareOfR)}",
                 squareOfR
             )
         )
@@ -116,14 +116,14 @@ class PowerRegression : Regression {
         result.add(
             Result(
                 R.string.sXX,
-                "$$ Sxx = \\frac{\\sum{Lnx^2}}{n}-\\overline{Lnx}^2 = ${sXX.roundedNumber(decimals)}$$",
+                "$$ Sxx = \\frac{\\sum{Lnx^2}}{n}-\\overline{Lnx}^2 = ${latexConverter.toLatex(sXX)}$$",
                 sXX
             )
         )
         result.add(
             Result(
                 R.string.sYY,
-                "$$ Syy = \\frac{\\sum{Lny^2}}{n}-\\overline{Lny}^2 = ${sYY.roundedNumber(decimals)}$$",
+                "$$ Syy = \\frac{\\sum{Lny^2}}{n}-\\overline{Lny}^2 = ${latexConverter.toLatex(sYY)}$$",
                 sYY
             )
         )
@@ -131,9 +131,7 @@ class PowerRegression : Regression {
             Result(
                 R.string.sXY,
                 "$$ Sxy = \\frac{\\sum (Lnx*Lny)}{n}-\\overline{Lnx}\\overline{Lny} = ${
-                    sXY.roundedNumber(
-                        decimals
-                    )
+                    latexConverter.toLatex(sXY)
                 }$$",
                 sXY
             )
@@ -141,35 +139,35 @@ class PowerRegression : Regression {
         result.add(
             Result(
                 R.string.ln_x_average,
-                "$$\\overline{Lnx} = \\frac{\\sum {Lnx}}{n} = ${lnXAverage.roundedNumber(decimals)}$$",
+                "$$\\overline{Lnx} = \\frac{\\sum {Lnx}}{n} = ${latexConverter.toLatex(lnXAverage)}$$",
                 lnXAverage
             )
         )
         result.add(
             Result(
                 R.string.ln_y_average,
-                "$$\\overline{Lny} = \\frac{\\sum {Lny}}{n} = ${lnYAverage.roundedNumber(decimals)}$$",
+                "$$\\overline{Lny} = \\frac{\\sum {Lny}}{n} = ${latexConverter.toLatex(lnYAverage)}$$",
                 lnYAverage
             )
         )
         result.add(
             Result(
                 R.string.sum_of_ln_x,
-                "$$\\sum {Lnx} = ${sumOfLnX.roundedNumber(decimals)}$$",
+                "$$\\sum {Lnx} = ${latexConverter.toLatex(sumOfLnX)}$$",
                 sumOfLnX
             )
         )
         result.add(
             Result(
                 R.string.sum_of_ln_y,
-                "$$\\sum {Lny} = ${sumOfLnY.roundedNumber(decimals)}$$",
+                "$$\\sum {Lny} = ${latexConverter.toLatex(sumOfLnY)}$$",
                 sumOfLnY
             )
         )
         result.add(
             Result(
                 R.string.sum_of_ln_x_ln_y_products,
-                "$$\\sum {Lnx*Lny} = ${sumOfLnXLnYProduct.roundedNumber(decimals)}$$",
+                "$$\\sum {Lnx*Lny} = ${latexConverter.toLatex(sumOfLnXLnYProduct)}$$",
                 sumOfLnXLnYProduct
             )
         )

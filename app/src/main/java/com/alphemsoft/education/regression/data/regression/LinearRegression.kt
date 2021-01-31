@@ -4,7 +4,6 @@ import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.data.model.SheetEntry
 import com.alphemsoft.education.regression.data.model.secondary.LineData
 import com.alphemsoft.education.regression.data.model.secondary.Result
-import com.alphemsoft.education.regression.extensions.roundedNumber
 import org.apache.commons.math3.stat.regression.SimpleRegression
 
 class LinearRegression : Regression {
@@ -14,6 +13,8 @@ class LinearRegression : Regression {
     private lateinit var yColumn: DoubleArray
     private val simpleRegression = SimpleRegression()
     private var dataSettled = false
+    private val latexConverter: LatexConverter = LatexConverter()
+
     override suspend fun setData(entryData: List<SheetEntry>) {
         simpleRegression.clear()
         dataSettled = true
@@ -32,10 +33,10 @@ class LinearRegression : Regression {
 
     override suspend fun getResults(decimals: Int): List<Result> {
         require(dataSettled) { "Data not settled" }
+        latexConverter.decimalCount = decimals
         val result = ArrayList<Result>()
         val regressionResults = simpleRegression.regress()
         val parameterEstimates = regressionResults.parameterEstimates
-        val sign = if (parameterEstimates[1] > 0) '+' else '-'
 
         val xAverage = xColumn.average()
         val yAverage = yColumn.average()
@@ -47,58 +48,58 @@ class LinearRegression : Regression {
         val sXX = sumOfSquaresOfX / simpleRegression.n - xAverage * xAverage
         val sYY = sumOfSquaresOfY / simpleRegression.n - yAverage * yAverage
         val sXY = sumOfCrossXY / simpleRegression.n - xAverage * yAverage
-
+        val sign = if (parameterEstimates[1] < 0) "" else "+"
         result.add(Result(R.string.formula_fit_line_linear,
-            "$$\\hat y = ${parameterEstimates[0].roundedNumber(decimals)} $sign ${parameterEstimates[1].roundedNumber(decimals)}x $$",
+            "$$\\hat y = ${latexConverter.toLatex(parameterEstimates[0])} $sign ${latexConverter.toLatex(parameterEstimates[1])}x $$",
             null))
         result.add(Result(R.string.a,
-            "$$ A = \\bar {y} - B \\bar x = ${parameterEstimates[0].roundedNumber(decimals)}$$",
+            "$$ A = \\bar {y} - B \\bar x = ${latexConverter.toLatex(parameterEstimates[0])}$$",
             parameterEstimates[0]))
 
         result.add(Result(R.string.b,
-            "$$ B = \\frac{Sxy}{Sxx} = ${parameterEstimates[1].roundedNumber(decimals)}$$",
+            "$$ B = \\frac{Sxy}{Sxx} = ${latexConverter.toLatex(parameterEstimates[1])}$$",
             parameterEstimates[1]))
 
         val r = simpleRegression.r
         result.add(Result(R.string.r,
-            "$$ R = \\frac{Sxy}{\\sqrt{Sxx} \\sqrt{Syy}} = ${r.roundedNumber(decimals)}$$",
+            "$$ R = \\frac{Sxy}{\\sqrt{Sxx} \\sqrt{Syy}} = ${latexConverter.toLatex(r)}$$",
             r))
 
         result.add(Result(R.string.square_of_r,
-            "$$ R^2 = ${(r * r).roundedNumber(decimals)} $$",
+            "$$ R^2 = ${latexConverter.toLatex(r * r)} $$",
             r * r))
 
         result.add(Result(R.string.n,
             "$$ n = ${simpleRegression.n.toDouble()} $$",
             simpleRegression.n.toDouble()))
         result.add(Result(R.string.sXX,
-            "$$ Sxx = \\frac {\\sum x^2}{n} - \\bar{x}^2 = ${sXX.roundedNumber(decimals)}$$",
+            "$$ Sxx = \\frac {\\sum x^2}{n} - \\bar{x}^2 = ${latexConverter.toLatex(sXX)}$$",
             sXX))
         result.add(Result(R.string.sYY,
-            "$$ Syy = \\frac {\\sum y^2}{n} - \\bar{y}^2 = ${sYY.roundedNumber(decimals)} $$", sYY))
+            "$$ Syy = \\frac {\\sum y^2}{n} - \\bar{y}^2 = ${latexConverter.toLatex(sYY)} $$", sYY))
         result.add(Result(R.string.sXY,
-            "$$ Syy = \\frac {\\sum y^2}{n} - \\bar{y}^2 = ${sXY.roundedNumber(decimals)} $$",
+            "$$ Syy = \\frac {\\sum y^2}{n} - \\bar{y}^2 = ${latexConverter.toLatex(sXY)} $$",
             sXY))
         result.add(Result(R.string.x_average,
-            "$$\\bar x = ${xAverage.roundedNumber(decimals)}$$",
+            "$$\\bar x = ${latexConverter.toLatex(xAverage)}$$",
             xAverage))
         result.add(Result(R.string.y_average,
-            "$$\\bar y = ${yAverage.roundedNumber(decimals)}$$",
+            "$$\\bar y = ${latexConverter.toLatex(yAverage)}$$",
             yAverage))
         result.add(Result(R.string.sum_of_x,
-            "$$\\sum x = ${sumOfX.roundedNumber(decimals)}$$",
+            "$$\\sum x = ${latexConverter.toLatex(sumOfX)}$$",
             sumOfX))
         result.add(Result(R.string.sum_of_y,
-            "$$\\sum x = ${sumOfY.roundedNumber(decimals)}$$",
+            "$$\\sum x = ${latexConverter.toLatex(sumOfY)}$$",
             sumOfY))
         result.add(Result(R.string.sum_of_xy_products,
-            "$$ \\sum (x*y) = ${sumOfCrossXY.roundedNumber(decimals)}$$",
+            "$$ \\sum (x*y) = ${latexConverter.toLatex(sumOfCrossXY)}$$",
             sumOfCrossXY))
         result.add(Result(R.string.sum_of_squares_of_x,
-            "$$ \\sum {X^2} = ${sumOfSquaresOfX.roundedNumber(decimals)}$$",
+            "$$ \\sum {X^2} = ${latexConverter.toLatex(sumOfSquaresOfX)}$$",
             sumOfSquaresOfX))
         result.add(Result(R.string.sum_of_squares_of_y,
-            "$$ \\sum {Y^2} = ${sumOfSquaresOfY.roundedNumber(decimals)}$$",
+            "$$ \\sum {Y^2} = ${latexConverter.toLatex(sumOfSquaresOfY)}$$",
             sumOfSquaresOfY))
         return result
     }
