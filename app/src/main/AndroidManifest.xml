@@ -17,8 +17,7 @@
         android:name="com.alphemsoft.education.regression.RegressionApp"
         android:usesCleartextTraffic="true">
 
-        <activity android:name="com.alphemsoft.education.regression.ui.activity.MainActivity"
-            android:windowSoftInputMode="stateVisible|adjustResize">
+        <activity android:name="com.alphemsoft.education.regression.ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

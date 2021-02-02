@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 class PremiumFeatureDialogFragment : BaseDialogFragment<DialogFragmentOfferPremiumFeatureBinding>(
     R.layout.dialog_fragment_offer_premium_feature
 ) {
+    private var earned: Boolean = false
     private lateinit var rewardedAd: RewardedAd
     private lateinit var onPremiumDecisionListener: OnPremiumDecisionListener
     private var featureId: Int = -1
@@ -49,17 +50,19 @@ class PremiumFeatureDialogFragment : BaseDialogFragment<DialogFragmentOfferPremi
         rewardedAdCallback = object : RewardedAdCallback() {
             override fun onUserEarnedReward(rewardItem: RewardItem) {
                 super.onRewardedAdClosed()
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.user_earned_reward),
-                    Toast.LENGTH_LONG
-                ).show()
-                onPremiumDecisionListener.onRewardedVideoWatched(featureId)
-
+                earned = true
             }
 
             override fun onRewardedAdClosed() {
                 super.onRewardedAdClosed()
+                if (earned){
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.user_earned_reward),
+                        Toast.LENGTH_LONG
+                    ).show()
+                    onPremiumDecisionListener.onRewardedVideoWatched(featureId)
+                }
                 dismiss()
             }
         }

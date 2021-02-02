@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -360,8 +361,8 @@ class DataSheetFragment : BaseDataSheetFragment(),
             val exportDataDestination = DataSheetFragmentDirections.actionExportData()
             coroutineHandler.foregroundScope.launch {
                 viewModel.startDataExport(args.sheetId)
+                requireActivity().findNavController(R.id.main_nav_host_fragment).navigate(exportDataDestination)
             }
-            findNavController().navigate(exportDataDestination)
         } else {
             var dialog: AlertDialog? = null
             val dialogBuilder = AlertDialog.Builder(requireContext(), R.style.AlertDialog)

@@ -29,13 +29,6 @@ class SheetItemViewHolder(viewBinding: ItemSheetBinding, navController: NavContr
         } else{
             R.color.color_data_odd_position
         }
-        val backgroundColor = ContextCompat.getColor(context, backgroundColorResource)
-//        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q){
-//            val backgroundView =mDataBinding.llContainer
-//            backgroundView.background.setTint(backgroundColor)
-//        }else{
-//            mDataBinding.llContainer.background.colorFilter = BlendModeColorFilter(backgroundColor, BlendMode.MULTIPLY)
-//        }
         mDataBinding.llContainer.setOnClickListener {
             item?.let {
                 val action = SheetListFragmentDirections.actionDataSheetDetailFromSheetList(it.id)

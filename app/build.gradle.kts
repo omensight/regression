@@ -17,7 +17,7 @@ android {
         applicationId = "com.alphemsoft.education.regression"
         minSdkVersion(21)
         targetSdkVersion(30)
-        versionCode = 16
+        versionCode = 17
         versionName = "3.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -29,8 +29,8 @@ android {
 
     buildTypes {
         getByName("debug") {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -104,6 +104,8 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.3.0")
     testImplementation("com.google.truth:truth:1.1.2")
     testImplementation("com.google.truth.extensions:truth-java8-extension:1.1.2")
+    androidTestImplementation("com.google.truth:truth:1.1.2")
+    androidTestImplementation("com.google.truth.extensions:truth-java8-extension:1.1.2")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     testImplementation("org.robolectric:robolectric:4.4")
 
