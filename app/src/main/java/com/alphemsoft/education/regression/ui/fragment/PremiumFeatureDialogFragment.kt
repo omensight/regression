@@ -49,33 +49,20 @@ class PremiumFeatureDialogFragment : BaseDialogFragment<DialogFragmentOfferPremi
             "ca-app-pub-3940256099942544/5224354917")
         rewardedAdCallback = object : RewardedAdCallback() {
             override fun onUserEarnedReward(rewardItem: RewardItem) {
-                super.onRewardedAdClosed()
                 earned = true
             }
 
             override fun onRewardedAdClosed() {
                 super.onRewardedAdClosed()
-                if (earned){
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.user_earned_reward),
-                        Toast.LENGTH_LONG
-                    ).show()
-                    onPremiumDecisionListener.onRewardedVideoWatched(featureId)
-                }
                 dismiss()
             }
         }
-
         rewardedAdLoadCallback = object : RewardedAdLoadCallback() {
 
             override fun onRewardedAdLoaded() {
                 dataBinding.btWatchVideo.isEnabled = true
+                dataBinding.btWatchVideo.text = getString(R.string.watch_video)
                 super.onRewardedAdLoaded()
-            }
-
-            override fun onRewardedAdFailedToLoad(p0: LoadAdError?) {
-                super.onRewardedAdFailedToLoad(p0)
             }
         }
 
@@ -105,5 +92,17 @@ class PremiumFeatureDialogFragment : BaseDialogFragment<DialogFragmentOfferPremi
     interface OnPremiumDecisionListener {
         suspend fun onGetASubscriptionSelected(featureId: Int)
         fun onRewardedVideoWatched(featureId: Int)
+    }
+
+    override fun dismiss() {
+        if (earned){
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.user_earned_reward),
+                Toast.LENGTH_LONG
+            ).show()
+            onPremiumDecisionListener.onRewardedVideoWatched(featureId)
+        }
+        super.dismiss()
     }
 }

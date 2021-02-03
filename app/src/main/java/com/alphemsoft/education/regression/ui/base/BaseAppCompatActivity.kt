@@ -34,7 +34,7 @@ abstract class BaseAppCompatActivity<VDB: ViewDataBinding>(
 
     private fun setupTestDevices() {
         val requestConfiguration = RequestConfiguration.Builder().setTestDeviceIds(
-            listOf("D3484AF43801E1CF73820384BB0C59CD", "CFC70192E835A0F0714E977AEE31B582")
+            listOf("D3484AF43801E1CF73820384BB0C59CD", "CFC70192E835A0F0714E977AEE31B582","840BB6FE704F56203B968257A60B5FFB")
         ).build()
         MobileAds.setRequestConfiguration(requestConfiguration)
     }

@@ -112,5 +112,6 @@
     <string name="export_error_empty_filename">Debe especificar un nombre</string>
     <string name="a_error">Error de A</string>
     <string name="b_error">Error de B</string>
+    <string name="loading">Cargando</string>
 
 </resources>

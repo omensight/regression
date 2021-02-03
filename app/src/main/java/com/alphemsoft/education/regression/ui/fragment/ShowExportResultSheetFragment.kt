@@ -49,7 +49,7 @@ class ShowExportResultSheetFragment : AbstractShowExportResultSheetFragment() {
         setupAds()
     }
 
-    private fun getExtras(){
+    private fun getExtras() {
         viewModel.initialize(args.fileName, args.fileUri)
     }
 
@@ -64,9 +64,9 @@ class ShowExportResultSheetFragment : AbstractShowExportResultSheetFragment() {
                 }
         }
         coroutineHandler.foregroundScope.launch {
-            dataBinding.adTemplateView.visibility = if (viewModel.hasPremiumSubscription()){
+            dataBinding.adTemplateView.visibility = if (viewModel.hasPremiumSubscription()) {
                 View.GONE
-            }else{
+            } else {
                 View.VISIBLE
             }
         }
@@ -94,17 +94,29 @@ class ShowExportResultSheetFragment : AbstractShowExportResultSheetFragment() {
                 intent.type = type
                 intent.data = fileUri
                 requireActivity().startActivity(intent)
-            }catch (e: ActivityNotFoundException){
-                Toast.makeText(requireContext(), getString(R.string.export_error_no_application_to_open_file), Toast.LENGTH_SHORT).show()
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.export_error_no_application_to_open_file),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
         dataBinding.btShare.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SEND)
-            val type = requireActivity().contentResolver.getType(fileUri)
-            intent.type = type
-            intent.putExtra(Intent.EXTRA_STREAM, fileUri)
-            requireActivity().startActivity(intent)
+            try {
+                val intent = Intent(Intent.ACTION_SEND)
+                val type = requireActivity().contentResolver.getType(fileUri)
+                intent.type = type
+                intent.putExtra(Intent.EXTRA_STREAM, fileUri)
+                requireActivity().startActivity(intent)
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.export_error_no_application_to_open_file),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
 
         coroutineHandler.foregroundScope.launch {

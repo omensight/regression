@@ -107,6 +107,7 @@
     <string name="export_error_empty_filename">Empty file name</string>
     <string name="a_error">A error</string>
     <string name="b_error">B error</string>
+    <string name="loading">Loading</string>
 
     <string-array name="regression_types">
         <item>Linear</item>

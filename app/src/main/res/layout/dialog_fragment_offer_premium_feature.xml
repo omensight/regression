@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@color/color_selector_reward_button"
             android:enabled="false"
-            android:text="@string/watch_video"
+            android:text="@string/loading"
             android:textAlignment="textStart"
             android:textColor="@android:color/white"
             app:iconSize="16dp"
