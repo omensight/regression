@@ -17,7 +17,7 @@ android {
         applicationId = "com.alphemsoft.education.regression"
         minSdkVersion(21)
         targetSdkVersion(30)
-        versionCode = 17
+        versionCode = 18
         versionName = "3.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
