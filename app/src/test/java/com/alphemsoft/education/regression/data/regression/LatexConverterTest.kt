@@ -2,6 +2,7 @@ package com.alphemsoft.education.regression.data.regression
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
+import java.math.BigDecimal
 
 class LatexConverterTest {
     private val originalNumber = 123456.123456789
@@ -47,5 +48,21 @@ class LatexConverterTest {
         val simpleNumber = 10.0
         val latex = latexConverter.toLatex(simpleNumber)
         assertThat(latex).contains("\\times 10^1")
+    }
+
+    private val smallNumber =  "-0.00000000000000023257404273"
+
+    @Test
+    fun whenRounding_aSmallNumberRoundedIsNotZero(){
+        val bigDecimal = BigDecimal(smallNumber)
+        val rounded = latexConverter.roundedNumber(bigDecimal.toDouble())
+        assertThat(rounded).isNotEqualTo("-0")
+    }
+
+    @Test
+    fun whenConverting_containsNegativeExponent(){
+        val bigDecimal = BigDecimal(smallNumber)
+        val rounded = latexConverter.toLatex(bigDecimal.toDouble())
+        assertThat(rounded).contains("\\times 10^{-16}")
     }
 }

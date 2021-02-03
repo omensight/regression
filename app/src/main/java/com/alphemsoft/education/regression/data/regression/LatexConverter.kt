@@ -9,7 +9,7 @@ class LatexConverter(var decimalCount: Int = 5){
         val nonScientificPattern = "0.${"#".repeat(decimalCount)}"
         val nonScientificFormat = DecimalFormat(nonScientificPattern)
         return when{
-            number >= 10 -> {
+            number >= 10 || number < 0 -> {
                 decimalFormatter.format(number)
             }
             else -> nonScientificFormat.format(number)
@@ -18,6 +18,14 @@ class LatexConverter(var decimalCount: Int = 5){
 
     fun toLatex(number: Double): String {
         val rounded = roundedNumber(number)
-        return rounded.replace("E","\\times 10^")
+        var latex = rounded.replace("E","\\times 10^")
+        val indexOfExponentialSymbol = latex.indexOf('^')
+        if (indexOfExponentialSymbol != -1){
+            val isNegative = latex[indexOfExponentialSymbol+1] == '-'
+            if (isNegative){
+                latex = latex.replace("^","^{").plus('}')
+            }
+        }
+        return latex
     }
 }
