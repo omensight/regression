@@ -11,6 +11,7 @@ import com.alphemsoft.education.regression.ui.activity.NativeAdDispatcher
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.formats.UnifiedNativeAd
 import kotlinx.coroutines.Job
+import com.alphemsoft.education.regression.R
 
 abstract class BaseAppCompatActivity<VDB: ViewDataBinding>(
     private val layoutId: Int
@@ -34,7 +35,7 @@ abstract class BaseAppCompatActivity<VDB: ViewDataBinding>(
 
     private fun setupTestDevices() {
         val requestConfiguration = RequestConfiguration.Builder().setTestDeviceIds(
-            listOf("D3484AF43801E1CF73820384BB0C59CD", "CFC70192E835A0F0714E977AEE31B582","840BB6FE704F56203B968257A60B5FFB")
+            resources.getStringArray(R.array.test_devices).toList()
         ).build()
         MobileAds.setRequestConfiguration(requestConfiguration)
     }

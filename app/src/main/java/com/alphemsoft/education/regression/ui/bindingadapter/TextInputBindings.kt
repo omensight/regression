@@ -48,6 +48,10 @@ class TextInputBindings {
                 ""
             }
             editText.setText(value)
+            val length = editText.text?.length?:0
+            if (length > 0){
+                editText.setSelection(length)
+            }
         }
 
         @InverseBindingAdapter(attribute = "realValue")
