@@ -94,7 +94,7 @@ class LinearRegression : Regression {
         result.add(Result(R.string.sYY,
             "$$ Syy = \\frac {\\sum y^2}{n} - \\bar{y}^2 = ${latexConverter.toLatex(sYY)} $$", sYY))
         result.add(Result(R.string.sXY,
-            "$$ Syy = \\frac {\\sum y^2}{n} - \\bar{y}^2 = ${latexConverter.toLatex(sXY)} $$",
+            "$$ Sxy = \\frac{\\sum xy}{n} - \\bar{x} \\bar{y} = ${latexConverter.toLatex(sXY)} $$",
             sXY))
         result.add(Result(R.string.x_average,
             "$$\\bar x = ${latexConverter.toLatex(xAverage)}$$",
