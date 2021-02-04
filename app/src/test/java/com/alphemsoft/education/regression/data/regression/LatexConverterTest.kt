@@ -33,7 +33,7 @@ class LatexConverterTest {
     fun whenRounding_roundNumberSmallerThanOneToFiveDecimals(){
         val simpleNumber = 0.99999
         val rounded = latexConverter.roundedNumber(simpleNumber)
-        assertThat(rounded).isEqualTo("0.99999")
+        assertThat(rounded).isEqualTo("9.9999E-1")
     }
 
     @Test

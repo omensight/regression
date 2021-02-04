@@ -119,12 +119,12 @@ class LinearRegression : Regression {
             sumOfSquaresOfY))
         result.add(Result(
             R.string.a_error,
-            "$$ \\sigma_A = $aError",
+            "$$ \\sigma_A = ${latexConverter.toLatex(aError)}",
             aError
         ))
         result.add(Result(
             R.string.b_error,
-            "$$ \\sigma_B = $bError",
+            "$$ \\sigma_B = ${latexConverter.toLatex(bError)}",
             bError
         ))
         return result
