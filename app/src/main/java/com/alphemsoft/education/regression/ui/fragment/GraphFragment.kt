@@ -41,6 +41,14 @@ class GraphFragment : AbstractGraphFragment() {
         coroutineHandler.foregroundScope.launch {
             viewModel.getDataPointsFlow(args.sheetId).collectLatest { originalDataPoints ->
                 val sheet = viewModel.getSheet(args.sheetId)
+                sheet?.let {
+                    if (sheet.xLabel.isNotEmpty()){
+                        dataBinding.tvXLabel.text = sheet?.xLabel
+                    }
+                    if (sheet.yLabel.isNotEmpty()){
+                        dataBinding.tvXLabel.text = sheet?.yLabel
+                    }
+                }
                 val regression = RegressionFactory.generateRegression(sheet?.type!!)
                 regression.setData(originalDataPoints)
                 val originalEntries = regression.getOriginalDataLine().dataPoints.map {
@@ -76,7 +84,6 @@ class GraphFragment : AbstractGraphFragment() {
                 lineData.addDataSet(originalLineDataSet)
                 lineData.addDataSet(calculatedDataSet)
                 dataBinding.lineChartGraph.data = lineData
-                dataBinding.lineChartGraph.invalidate()
 
             }
         }
