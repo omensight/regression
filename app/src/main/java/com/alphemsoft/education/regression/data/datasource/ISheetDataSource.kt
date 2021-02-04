@@ -9,4 +9,5 @@ interface ISheetDataSource :
     BaseDataSource<Sheet, Long> {
     fun findAll(): Pager<Int, Sheet>
     fun getSheetItemCount(): Flow<Long>
+    suspend fun remove(sheetId: Long)
 }

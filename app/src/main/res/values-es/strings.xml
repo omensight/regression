@@ -113,5 +113,8 @@
     <string name="a_error">Error de A</string>
     <string name="b_error">Error de B</string>
     <string name="loading">Cargando</string>
+    <string name="remove">Eliminar</string>
+    <string name="proposal_sheet_remove">Eliminar hoja de datos</string>
+    <string name="message_sheet_remove">¿Está seguro de que quiere eliminar esta hoja de datos?</string>
 
 </resources>

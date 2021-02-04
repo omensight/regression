@@ -55,17 +55,26 @@ class SheetListFragment : AbstractSheetListFragment() {
 
     private fun setupSheetList() {
 
-        sheetPagingAdapter = SheetPagingAdapter(findNavController())
+        sheetPagingAdapter = SheetPagingAdapter(
+            findNavController(),
+            object : SheetPagingAdapter.OnSheetItemActionListener {
+                override fun remove(sheetId: Long) {
+                    coroutineHandler.backgroundScope.launch {
+                        viewModel.removeSheet(sheetId)
+                    }
+                }
+
+            })
         coroutineHandler.foregroundScope.launch {
-            viewModel.getAllSheets().collectLatest {newItems: PagingData<Sheet> ->
+            viewModel.getAllSheets().collectLatest { newItems: PagingData<Sheet> ->
                 sheetPagingAdapter.submitData(newItems)
             }
         }
         coroutineHandler.foregroundScope.launch {
-            viewModel.sheetItemCount.collectLatest {count ->
-                dataBinding.layoutEmptyViewSheets.root.visibility = if (count == 0L){
+            viewModel.sheetItemCount.collectLatest { count ->
+                dataBinding.layoutEmptyViewSheets.root.visibility = if (count == 0L) {
                     View.VISIBLE
-                }else{
+                } else {
                     View.GONE
                 }
             }

@@ -108,6 +108,9 @@
     <string name="a_error">A error</string>
     <string name="b_error">B error</string>
     <string name="loading">Loading</string>
+    <string name="remove">Remove</string>
+    <string name="proposal_sheet_remove">Remove Sheet</string>
+    <string name="message_sheet_remove">Are you sure you want to remove this sheet?</string>
 
     <string-array name="regression_types">
         <item>Linear</item>

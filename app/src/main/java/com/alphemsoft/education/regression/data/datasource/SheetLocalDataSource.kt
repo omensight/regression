@@ -38,4 +38,10 @@ class SheetLocalDataSource @Inject constructor(private val sheetDao: SheetDao) :
     override fun getSheetItemCount(): Flow<Long> {
         return sheetDao.getSheetCount()
     }
+
+    override suspend fun remove(sheetId: Long) {
+        find(sheetId)?.let {sheet->
+            sheetDao.delete(sheet)
+        }
+    }
 }

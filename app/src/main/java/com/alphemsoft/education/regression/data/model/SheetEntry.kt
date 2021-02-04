@@ -9,7 +9,8 @@ import java.math.BigDecimal
     foreignKeys = [ForeignKey(
         entity = Sheet::class,
         parentColumns = ["sheet_id"],
-        childColumns = ["fk_sheet_id"]
+        childColumns = ["fk_sheet_id"],
+        onDelete = ForeignKey.CASCADE
     )]
 )
 data class SheetEntry constructor(

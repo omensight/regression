@@ -201,4 +201,8 @@ class DataSheetViewModel @ViewModelInject constructor(
         val availableEntryCount = entryCount - deletedCount
         return availableEntryCount >= 3
     }
+
+    suspend fun removeSheet(sheetId: Long) {
+        sheetDataSource.remove(sheetId)
+    }
 }
