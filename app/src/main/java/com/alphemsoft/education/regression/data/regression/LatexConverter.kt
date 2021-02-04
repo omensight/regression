@@ -18,7 +18,7 @@ class LatexConverter(var decimalCount: Int = 5){
 
     fun toLatex(number: Double): String {
         val rounded = roundedNumber(number)
-        var latex = ""
+        var latex: String
         if (!rounded.contains("E0")){
             latex = rounded.replace("E","\\times 10^")
             val indexOfExponentialSymbol = latex.indexOf('^')
@@ -29,7 +29,7 @@ class LatexConverter(var decimalCount: Int = 5){
                 }
             }
         }else{
-            rounded.replace("E","\\times 10^")
+            latex = rounded.replace("E","\\times 10^")
         }
         return latex
     }

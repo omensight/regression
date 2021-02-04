@@ -65,4 +65,11 @@ class LatexConverterTest {
         val rounded = latexConverter.toLatex(bigDecimal.toDouble())
         assertThat(rounded).contains("\\times 10^{-16}")
     }
+
+    @Test
+    fun whenConverting_resultIsNotEmpty(){
+        val bigDecimal = BigDecimal("-2.804603558558707")
+        val rounded = latexConverter.toLatex(bigDecimal.toDouble())
+        assertThat(rounded).isNotEmpty()
+    }
 }

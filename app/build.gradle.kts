@@ -17,7 +17,7 @@ android {
         applicationId = "com.alphemsoft.education.regression"
         minSdkVersion(21)
         targetSdkVersion(30)
-        versionCode = 20
+        versionCode = 21
         versionName = "3.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -166,15 +166,3 @@ val secretConfigFile = file ("$projectDir/secret_config.gradle")
 if (secretConfigFile.exists()) {
     apply(from = file ("$projectDir/secret_config.gradle"))
 }
-//
-//tasks.withType<Test> {
-//    useJUnitPlatform()
-//
-//    systemProperty( "org.apache.poi.javax.xml.stream.XMLInputFactory",
-//        "com.fasterxml.aalto.stax.InputFactoryImpl")
-//    systemProperty("org.apache.poi.javax.xml.stream.XMLOutputFactory",
-//        "com.fasterxml.aalto.stax.OutputFactoryImpl")
-//    systemProperty("org.apache.poi.javax.xml.stream.XMLEventFactory",
-//        "com.fasterxml.aalto.stax.EventFactoryImpl")
-//
-//}
