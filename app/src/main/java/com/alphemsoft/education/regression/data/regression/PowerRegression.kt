@@ -109,7 +109,7 @@ class PowerRegression : Regression {
         result.add(
             Result(
                 R.string.n,
-                "$$ n = ${simpleRegression.n}",
+                "$$ n = $n",
                 simpleRegression.n.toDouble()
             )
         )
@@ -201,6 +201,6 @@ class PowerRegression : Regression {
 
     override suspend fun getOriginalDataLine(): LineData {
         val originalData = xColumn.zip(yColumn)
-        return LineData(R.string.formula_fit_line, originalData)
+        return LineData(R.string.formula_fit_line, originalData.sortedBy { it.first })
     }
 }

@@ -43,10 +43,10 @@ class GraphFragment : AbstractGraphFragment() {
                 val sheet = viewModel.getSheet(args.sheetId)
                 sheet?.let {
                     if (sheet.xLabel.isNotEmpty()){
-                        dataBinding.tvXLabel.text = sheet?.xLabel
+                        dataBinding.tvXLabel.text = sheet.xLabel
                     }
                     if (sheet.yLabel.isNotEmpty()){
-                        dataBinding.tvXLabel.text = sheet?.yLabel
+                        dataBinding.tvXLabel.text = sheet.yLabel
                     }
                 }
                 val regression = RegressionFactory.generateRegression(sheet?.type!!)
@@ -84,6 +84,7 @@ class GraphFragment : AbstractGraphFragment() {
                 lineData.addDataSet(originalLineDataSet)
                 lineData.addDataSet(calculatedDataSet)
                 dataBinding.lineChartGraph.data = lineData
+                dataBinding.lineChartGraph.invalidate()
 
             }
         }
