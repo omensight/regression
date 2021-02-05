@@ -91,8 +91,6 @@ class SheetExporter(
             currentResult.value?.let {
                 valueCell.setCellValue(it)
             }
-            val latexCell = row.createCell(2)
-            latexCell.setCellValue(currentResult.formula)
         }
     }
 

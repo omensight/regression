@@ -239,7 +239,7 @@ class SheetExporterTest {
         initializeSheetExporter()
         sheetExporter.export(results)
         rows.forEach{
-            verify(it, times(3)).createCell(anyInt())
+            verify(it, times(2)).createCell(anyInt())
         }
     }
 
