@@ -46,7 +46,7 @@ class GraphFragment : AbstractGraphFragment() {
                         dataBinding.tvXLabel.text = sheet.xLabel
                     }
                     if (sheet.yLabel.isNotEmpty()){
-                        dataBinding.tvXLabel.text = sheet.yLabel
+                        dataBinding.tvYLabel.text = sheet.yLabel
                     }
                 }?: kotlin.run {
                     return@collectLatest
