@@ -48,8 +48,10 @@ class GraphFragment : AbstractGraphFragment() {
                     if (sheet.yLabel.isNotEmpty()){
                         dataBinding.tvXLabel.text = sheet.yLabel
                     }
+                }?: kotlin.run {
+                    return@collectLatest
                 }
-                val regression = RegressionFactory.generateRegression(sheet?.type!!)
+                val regression = RegressionFactory.generateRegression(sheet.type)
                 regression.setData(originalDataPoints)
                 val originalEntries = regression.getOriginalDataLine().dataPoints.map {
                     Entry(it.first.toFloat(), it.second.toFloat())

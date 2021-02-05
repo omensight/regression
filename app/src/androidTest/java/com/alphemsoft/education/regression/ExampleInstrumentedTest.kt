@@ -19,5 +19,4 @@ class ExampleInstrumentedTest {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         assertEquals("com.alphemsoft.education.regression", appContext.packageName)
     }
-
 }

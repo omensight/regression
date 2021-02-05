@@ -1,9 +1,7 @@
 package com.alphemsoft.education.regression.data.regression
 
 import com.alphemsoft.education.regression.data.model.SheetEntry
-import com.google.common.truth.Truth
 import com.google.common.truth.Truth.assertThat
-import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
