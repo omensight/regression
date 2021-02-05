@@ -6,6 +6,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 val kotlin_version = "1.4.10"
@@ -17,7 +18,7 @@ android {
         applicationId = "com.alphemsoft.education.regression"
         minSdkVersion(21)
         targetSdkVersion(30)
-        versionCode = 24
+        versionCode = 25
         versionName = "3.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -160,6 +161,10 @@ dependencies {
     //POI Android
     implementation( "com.github.SUPERCILEX.poi-android:poi:3.17")
     implementation("com.github.SUPERCILEX.poi-android:proguard:3.17")
+    //Firebase
+    implementation(platform("com.google.firebase:firebase-bom:26.4.0"))
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-analytics")
 }
 
 val secretConfigFile = file ("$projectDir/secret_config.gradle")
