@@ -2,4 +2,6 @@
 <resources>
     <integer name="default_decimal_count">3</integer>
     <integer name="ad_duration">30</integer>
+    <integer name="firebase_analytics_id_regression_type">0</integer>
+    <integer name="firebase_analytics_id_data_size">1</integer>
 </resources>

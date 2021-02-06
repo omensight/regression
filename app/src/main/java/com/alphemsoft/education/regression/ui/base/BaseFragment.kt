@@ -2,6 +2,7 @@ package com.alphemsoft.education.regression.ui.base
 
 import android.os.Bundle
 import android.view.*
+import androidx.annotation.IntegerRes
 import androidx.annotation.LayoutRes
 import androidx.annotation.MenuRes
 import androidx.databinding.DataBindingUtil
@@ -12,6 +13,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.alphemsoft.education.regression.coroutines.CoroutineHandler
 import com.alphemsoft.education.regression.ui.activity.NativeAdDispatcher
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import kotlinx.coroutines.Job
 
 abstract class BaseFragment<VDB : ViewDataBinding, VM : ViewModel>(
@@ -26,6 +29,7 @@ abstract class BaseFragment<VDB : ViewDataBinding, VM : ViewModel>(
     private lateinit var viewModelProvider: ViewModelProvider
     protected lateinit var mActivity: BaseAppCompatActivity<ViewDataBinding>
         private set
+    protected lateinit var firebaseAnalytics: FirebaseAnalytics
     protected lateinit var nativeAdDispatcher: NativeAdDispatcher
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +42,7 @@ abstract class BaseFragment<VDB : ViewDataBinding, VM : ViewModel>(
         savedInstanceState: Bundle?
     ): View? {
         mActivity = requireActivity() as BaseAppCompatActivity<ViewDataBinding>
+        firebaseAnalytics = mActivity.firebaseAnalytics
         nativeAdDispatcher = mActivity.nativeAdDispatcher
         viewModelProvider = ViewModelProvider(requireActivity(), defaultViewModelProviderFactory)
         dataBinding = generateDataBinding(inflater, container)
@@ -57,6 +62,23 @@ abstract class BaseFragment<VDB : ViewDataBinding, VM : ViewModel>(
             inflater.inflate(resourceId, menu)
         } ?: run {
             super.onCreateOptionsMenu(menu, inflater)
+        }
+    }
+
+    protected fun logAnyValue(@IntegerRes eventId: Int, eventName: String, value: Any) {
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.ADD_PAYMENT_INFO) {
+            param(
+                FirebaseAnalytics.Param.ITEM_ID,
+                resources.getInteger(eventId).toLong()
+            )
+            param(
+                FirebaseAnalytics.Param.ITEM_NAME,
+                eventName
+            )
+            param(
+                FirebaseAnalytics.Param.VALUE,
+                "$value"
+            )
         }
     }
 }

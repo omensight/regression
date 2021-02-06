@@ -164,7 +164,7 @@ dependencies {
     //Firebase
     implementation(platform("com.google.firebase:firebase-bom:26.4.0"))
     implementation("com.google.firebase:firebase-crashlytics")
-    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-analytics-ktx")
 }
 
 val secretConfigFile = file ("$projectDir/secret_config.gradle")

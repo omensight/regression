@@ -87,6 +87,11 @@ class DataSheetFragment : BaseDataSheetFragment(),
         return when (item.itemId) {
             R.id.action_validate_and_save -> {
                 if (viewModel.thereIsEnoughDataEntries()) {
+                    logAnyValue(
+                        R.integer.firebase_analytics_id_data_size,
+                        getString(R.string.action_data_size),
+                        (viewModel.dataEntries.value?.size)?.toLong()?:0
+                    )
                     coroutineHandler.backgroundScope.launch {
                         val saved: Boolean = viewModel.validateAndSaveData()
                         if (saved) {

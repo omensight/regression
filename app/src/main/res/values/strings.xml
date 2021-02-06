@@ -112,6 +112,7 @@
     <string name="proposal_sheet_remove">Remove Sheet</string>
     <string name="message_sheet_remove">Are you sure you want to remove this sheet?</string>
     <string name="subscription_not_supported_message">We are so sorry, but your device does not support subscriptions</string>
+    <string name="action_data_size" translatable="false">Data size</string>
 
     <string-array name="regression_types">
         <item>Linear</item>

@@ -13,6 +13,8 @@ import com.alphemsoft.education.regression.data.model.SheetType
 import com.alphemsoft.education.regression.databinding.FragmentCreateSheetBinding
 import com.alphemsoft.education.regression.ui.base.BaseFragment
 import com.alphemsoft.education.regression.viewmodel.CreateSheetViewModel
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -38,9 +40,10 @@ class CreateSheetFragment : AbstractCreateSheetFragment() {
             R.layout.item_simple_dropdown,
             requireContext().resources.getStringArray(R.array.regression_types)
         )
-        dataBinding.tilType.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
+        dataBinding.tilType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                viewModel.newSheet.value = viewModel.newSheet.value?.copy(type = SheetType.values()[position])
+                viewModel.newSheet.value =
+                    viewModel.newSheet.value?.copy(type = SheetType.values()[position])
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -62,20 +65,24 @@ class CreateSheetFragment : AbstractCreateSheetFragment() {
         }
     }
 
-    private suspend fun validateAndInsert(){
+    private suspend fun validateAndInsert() {
         val sheet = viewModel.newSheet.value
         require(sheet != null)
-        if (sheet.name.isNotEmpty()){
+        if (sheet.name.isNotEmpty()) {
             val id = viewModel.insertNewSheet()
             coroutineHandler.foregroundScope.launch {
                 val action = CreateSheetFragmentDirections.actionDataSheetDetailFromCreateSheet(id)
                 dataBinding.etLabel.isEnabled = false
                 dataBinding.etXLabel.isEnabled = false
                 dataBinding.etYLabel.isEnabled = false
+                logAnyValue(R.integer.firebase_analytics_id_regression_type,
+                    getString(R.string.regression_type),
+                    sheet.type.type
+                )
                 findNavController().navigate(action)
             }
-        }else{
-            requireActivity().runOnUiThread{
+        } else {
+            requireActivity().runOnUiThread {
                 dataBinding.tilLabel.error = getString(R.string.text_error_empty_field)
             }
         }
