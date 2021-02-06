@@ -24,23 +24,22 @@ class PurchaseSubscriptionViewModel @ViewModelInject constructor(
     application: Application,
     private val subscriptionDataSource: ISubscriptionDataSource,
 ) : AndroidViewModel(application), BillingClientStateListener, PurchasesUpdatedListener {
-    private lateinit var skuDetails: List<SkuDetails>
+    private var skuDetails: List<SkuDetails>? = null
 
     val subscriptionFlow = subscriptionDataSource.getUniqueSubscriptionFlow()
 
-    private val skuDetailsLiveData: MutableLiveData<List<SkuDetails>> = MutableLiveData()
+    private val skuDetailsLiveData: MutableLiveData<List<SkuDetails>?> = MutableLiveData()
     val skuDetailsFlow = skuDetailsLiveData.asFlow()
     private val coroutineHandler = CoroutineHandler(Job())
     private val billingHelper = BillingHelper()
-
-    init {
+    val supportSubscriptionLiveData = MutableLiveData<Boolean>()
+    fun initialize(){
         coroutineHandler.backgroundScope.launch {
             billingHelper.initialize(
-                application,
+                getApplication(),
                 this@PurchaseSubscriptionViewModel,
                 this@PurchaseSubscriptionViewModel
             )
-
         }
     }
 
@@ -56,7 +55,7 @@ class PurchaseSubscriptionViewModel @ViewModelInject constructor(
         dataBaseSubscription?.let {
             launched = when (dataBaseSubscription.subscriptionState) {
                 PremiumSubscriptionState.NOT_SUBSCRIBED, PremiumSubscriptionState.TEMPORARY_ACCESS -> {
-                    skuDetails.firstOrNull { it.sku == skuId }?.let { foundSkuDetails ->
+                    skuDetails?.firstOrNull { it.sku == skuId }?.let { foundSkuDetails ->
                         val billingFLowParams =
                             BillingFlowParams.newBuilder().setSkuDetails(foundSkuDetails).build()
                         billingHelper.launchBillingFlow(activity, billingFLowParams)
@@ -101,13 +100,15 @@ class PurchaseSubscriptionViewModel @ViewModelInject constructor(
             Log.d("BillingResponseCode", purchases.purchasesList.toString())
             val subscriptionHistory = billingHelper.querySubscriptionHistory()
             skuDetails = billingHelper.querySkuDetails()
-            if (skuDetails.isEmpty()) {
+            if (skuDetails?.isEmpty() == true) {
                 coroutineHandler.backgroundScope.launch {
                     delay(1000)
                     billingHelper.restartConnection(this@PurchaseSubscriptionViewModel)
                 }
             }
             skuDetailsLiveData.postValue(skuDetails)
+            val deviceSupportPurchases = billingHelper.deviceSupportPurchases()
+            supportSubscriptionLiveData.postValue(deviceSupportPurchases)
         }
     }
 

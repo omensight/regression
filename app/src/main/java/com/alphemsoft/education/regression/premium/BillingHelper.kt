@@ -3,7 +3,6 @@ package com.alphemsoft.education.regression.premium
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.android.billingclient.api.*
-import kotlinx.coroutines.CompletableDeferred
 
 class BillingHelper{
     private var skuDetails: List<SkuDetails>? = null
@@ -45,17 +44,9 @@ class BillingHelper{
         return skuDetails.skuDetailsList
     }
 
-    suspend fun querySkuDetails(): List<SkuDetails> {
-        val completableDeferred = CompletableDeferred<List<SkuDetails>>()
-        skuDetails?.let {
-            completableDeferred.complete(it)
-        } ?: run {
-            getSkuDetailsFromGoogle()?.let { queried ->
-                skuDetails = queried
-                completableDeferred.complete(queried)
-            }
-        }
-        return completableDeferred.await()
+    suspend fun querySkuDetails(): List<SkuDetails>? {
+        val completableDeferred = getSkuDetailsFromGoogle()
+        return completableDeferred
     }
 
     suspend fun querySubscriptionHistory(): PurchaseHistoryResult {
@@ -65,11 +56,14 @@ class BillingHelper{
     fun launchBillingFlow(activity: AppCompatActivity, billingFlowParams: BillingFlowParams) {
         require(this::billingClient.isInitialized) { "Billing client not initialized" }
         val code = billingClient.launchBillingFlow(activity, billingFlowParams)?.responseCode
-        code?.let {
 
-        }
     }
 
+    fun deviceSupportPurchases(): Boolean{
+        val supported = billingClient.isFeatureSupported(BillingClient.FeatureType.SUBSCRIPTIONS)
+            .responseCode == BillingClient.BillingResponseCode.OK
+        return supported
+    }
 
     enum class SubscriptionPlan(val subscriptionType: String) {
         MONTHLY_SUBSCRIPTION("premium_monthly_subscription"),

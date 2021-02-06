@@ -44,7 +44,7 @@
             app:layout_constraintLeft_toLeftOf="@id/view_background_monthly_subs"
             app:layout_constraintRight_toRightOf="@id/view_background_monthly_subs"
             app:layout_constraintTop_toBottomOf="@id/tv_title_monthly"
-            android:text="35.99 BOB"
+            android:text="-"
             android:textAlignment="center"
             android:textStyle="bold"
             style="@style/TextOnSurface"/>
@@ -97,7 +97,7 @@
             app:layout_constraintLeft_toLeftOf="@id/view_background_yearly_subs"
             app:layout_constraintRight_toRightOf="@id/view_background_yearly_subs"
             app:layout_constraintTop_toBottomOf="@id/tv_title_yearly"
-            android:text="35.99 BOB"
+            android:text="-"
             android:textAlignment="center"
             android:textStyle="bold"
             style="@style/TextOnSurface"
@@ -135,12 +135,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/medium_spacing"
             android:text="@string/buy_subscription_enjoy_title"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/materialTextView"
             app:layout_constraintLeft_toLeftOf="@id/tv_pay_as_you_go_message"
             app:layout_constraintRight_toRightOf="@+id/tv_pay_as_you_go_message"
             app:layout_constraintStart_toStartOf="@+id/tv_price_monthly"
-            app:layout_constraintTop_toBottomOf="@id/tv_pay_as_you_go_message"
-            android:textStyle="bold"
-            />
+            app:layout_constraintTop_toBottomOf="@id/tv_apologize" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_features"
@@ -154,7 +154,17 @@
             android:layout_marginBottom="@dimen/big_spacing"
             android:padding="@dimen/big_spacing"/>
 
-
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_apologize"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_pay_as_you_go_message"
+            app:layout_constraintStart_toStartOf="@id/tv_pay_as_you_go_message"
+            app:layout_constraintEnd_toEndOf="@id/tv_pay_as_you_go_message"
+            android:text="@string/subscription_not_supported_message"
+            android:gravity="center"
+            android:textAlignment="center"
+            android:visibility="gone"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
