@@ -46,7 +46,7 @@ class PremiumFeatureDialogFragment : BaseDialogFragment<DialogFragmentOfferPremi
 
     private fun setupNativeRewardedVideo() {
         rewardedAd = RewardedAd(requireContext().applicationContext,
-            "ca-app-pub-3940256099942544/5224354917")
+            getString(R.string.ad_rewarded_id))
         rewardedAdCallback = object : RewardedAdCallback() {
             override fun onUserEarnedReward(rewardItem: RewardItem) {
                 earned = true
