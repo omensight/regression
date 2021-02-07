@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.PagingData
@@ -56,7 +57,7 @@ class SheetListFragment : AbstractSheetListFragment() {
     private fun setupSheetList() {
 
         sheetPagingAdapter = SheetPagingAdapter(
-            findNavController(),
+            requireActivity().findNavController(R.id.main_nav_host_fragment),
             object : SheetPagingAdapter.OnSheetItemActionListener {
                 override fun remove(sheetId: Long) {
                     coroutineHandler.backgroundScope.launch {

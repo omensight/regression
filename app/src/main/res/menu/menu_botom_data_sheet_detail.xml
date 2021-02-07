@@ -2,29 +2,41 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
     <item android:id="@+id/action_add_data_point"
         android:title="@string/add_new_data_point"
         android:icon="@drawable/ic_add_box"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:orderInCategory="10"/>
 
     <item android:id="@+id/action_add_bunch"
         android:title="@string/action_add_empty_data_points"
         app:showAsAction="always"
+        android:orderInCategory="10"
         android:icon="@drawable/ic_add_multiple_box"/>
 
     <item android:id="@+id/action_select"
         android:title="@string/select"
         android:icon="@drawable/ic_select"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:orderInCategory="80"/>
 
     <item android:id="@+id/action_select_all"
         android:title="@string/select_all"
         android:icon="@drawable/ic_select_all"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:orderInCategory="90"/>
 
     <item android:id="@+id/action_sweep_all"
         android:title="@string/action_sweep_all"
-        app:showAsAction="always"
-        android:icon="@drawable/ic_sweep_outline"/>
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_sweep_outline"
+        android:orderInCategory="100"/>
+
+    <item android:id="@+id/action_help"
+        android:title="@string/help"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_help_circle_outline"
+        android:orderInCategory="100"/>
 
 </menu>

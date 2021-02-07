@@ -88,7 +88,7 @@
                 android:layout_height="?attr/actionBarSize"
                 app:menu="@menu/menu_botom_data_sheet_detail"
                 android:layout_gravity="bottom"
-                style="@style/BottomAppBar"/>
+                style="@style/AppTheme.BottomAppBarTheme"/>
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

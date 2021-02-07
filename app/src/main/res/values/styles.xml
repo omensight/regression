@@ -29,7 +29,6 @@
         <item name="android:tint">@android:color/white</item>
     </style>
 
-
     <style name="App.Theme.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="hintTextColor">?colorPrimaryVariant</item>
         <item name="boxStrokeColor">@color/material_text_input_layout_outline_box</item>
@@ -106,6 +105,13 @@
 
     <style name="BottomAppBar" parent="Widget.MaterialComponents.BottomAppBar">
         <item name="android:backgroundTint">@color/primaryColor</item>
+    </style>
+
+    <style name="AppTheme.BottomAppBarTheme" parent="Widget.MaterialComponents.BottomAppBar.Colored">
+        <item name="actionOverflowButtonStyle">@style/AppTheme.BottomAppBarTheme.OverFlowStyle</item>
+    </style>
+
+    <style name="AppTheme.BottomAppBarTheme.OverFlowStyle" parent="Widget.MaterialComponents.Button">
     </style>
 
 </resources>

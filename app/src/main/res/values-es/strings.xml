@@ -117,5 +117,7 @@
     <string name="proposal_sheet_remove">Eliminar hoja de datos</string>
     <string name="message_sheet_remove">¿Está seguro de que quiere eliminar esta hoja de datos?</string>
     <string name="subscription_not_supported_message">Lo sentimos, tu dispositivo no soporta el acceso a suscripciones.</string>
-
+    <string name="help">Ayuda</string>
+    <string name="help_description_import_data">Si tienes alguna duda, puedes ver el siguiente video: https://youtu.be/LgqwZ5lzJSQ</string>
+    <string name="help_description_export_data">Exporta los datos al formato de tu preferencia.</string>
 </resources>

@@ -31,10 +31,10 @@ abstract class BaseDialogFragment<VDB : ViewDataBinding> constructor(
 
     override fun onStart() {
         super.onStart()
-        dialog?.let {
-            it.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        }
+//        dialog?.let {
+//            it.window?.setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+//            it.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//        }
     }
 
     override fun onCreateView(

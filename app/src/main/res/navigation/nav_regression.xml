@@ -38,6 +38,9 @@
         <action
             android:id="@+id/action_buy_subscription"
             app:destination="@id/destination_purchase_subscription" />
+        <action
+            android:id="@+id/acion_help"
+            app:destination="@id/destination_help" />
     </fragment>
     <fragment
         android:id="@+id/destination_create_sheet"
@@ -144,6 +147,11 @@
             app:destination="@id/destination_export_result"
             app:popUpTo="@id/destination_result"/>
     </dialog>
+    <dialog
+        android:id="@+id/destination_help"
+        android:name="com.alphemsoft.education.regression.ui.fragment.HelpDialogFragment"
+        android:label="HelpDialogFragment"
+        tools:layout="@layout/dialog_fragment_help"/>
 
 
 </navigation>

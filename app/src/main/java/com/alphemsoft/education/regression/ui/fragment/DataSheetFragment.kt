@@ -188,9 +188,6 @@ class DataSheetFragment : BaseDataSheetFragment(),
                         coroutineHandler.foregroundScope.launch {
                             viewModel.deleteSelected()
                             actionMode?.finish()
-//                            delay(500)
-//                            dataPointAdapter.notifyDataSetChanged()
-//                            actionMode = null
                         }
                         true
                     }
@@ -220,6 +217,12 @@ class DataSheetFragment : BaseDataSheetFragment(),
     private fun setupBottomAppBar() {
         dataBinding.bottomAppBarController.setOnMenuItemClickListener {
             when (it.itemId) {
+                R.id.action_help -> {
+                    val helpDestination = DataSheetFragmentDirections.acionHelp()
+                    val navigation = requireActivity().findNavController(R.id.main_nav_host_fragment)
+                    navigation.navigate(helpDestination)
+                }
+
                 R.id.action_add_data_point -> {
                     coroutineHandler.backgroundScope.launch {
                         viewModel.addTemporaryPoint(args.sheetId)

@@ -113,6 +113,9 @@
     <string name="message_sheet_remove">Are you sure you want to remove this sheet?</string>
     <string name="subscription_not_supported_message">We are so sorry, but your device does not support subscriptions</string>
     <string name="action_data_size" translatable="false">Data size</string>
+    <string name="help">Help</string>
+    <string name="help_description_import_data">If you have any doubt, you can watch the next video: https://youtu.be/p-5LVxmSdIU</string>
+    <string name="help_description_export_data">Export your data to your prefer format.</string>
 
     <string-array name="regression_types">
         <item>Linear</item>
