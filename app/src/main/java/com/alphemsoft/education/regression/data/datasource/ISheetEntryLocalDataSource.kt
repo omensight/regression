@@ -9,4 +9,5 @@ interface ISheetEntryLocalDataSource: BaseDataSource<SheetEntry, Long> {
     fun getDataPointPager(sheetId: Long): Pager<Int, SheetEntry>
     suspend fun getDataPointList(sheetId: Long): List<SheetEntry>
     fun getDataPointsFlow(sheetId: Long): Flow<List<SheetEntry>>
+    suspend fun maxId(): Long
 }

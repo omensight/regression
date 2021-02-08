@@ -44,4 +44,8 @@ class SheetLocalDataSource @Inject constructor(private val sheetDao: SheetDao) :
             sheetDao.delete(sheet)
         }
     }
+
+    override suspend fun maxId(): Long {
+        return sheetDao.findMaxId()?:0
+    }
 }

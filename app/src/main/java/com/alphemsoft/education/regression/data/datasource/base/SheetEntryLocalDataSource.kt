@@ -46,4 +46,8 @@ class SheetEntryLocalDataSource @Inject constructor(
     override fun getDataPointsFlow(sheetId: Long): Flow<List<SheetEntry>> {
         return dataPointDao.findDataPointsFlowById(sheetId)
     }
+
+    override suspend fun maxId(): Long {
+        return dataPointDao.findMaxId()?:0
+    }
 }

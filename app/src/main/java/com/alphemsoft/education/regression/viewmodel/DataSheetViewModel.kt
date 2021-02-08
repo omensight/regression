@@ -5,6 +5,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.room.RoomDatabase
 import com.alphemsoft.education.regression.data.datasource.ISheetEntryLocalDataSource
 import com.alphemsoft.education.regression.data.datasource.ISheetDataSource
 import com.alphemsoft.education.regression.data.datasource.ISubscriptionDataSource
@@ -166,7 +167,7 @@ class DataSheetViewModel @ViewModelInject constructor(
     }
 
     suspend fun migrateLegacyData() {
-        legacyDataMigrationHelper.readData()
+        legacyDataMigrationHelper.readData(sheetDataSource.maxId(),sheetEntryDataSource.maxId())
         val sheetList = legacyDataMigrationHelper.sheetList
         val sheetEntries = legacyDataMigrationHelper.sheetEntries
         sheetDataSource.insert(sheetList)

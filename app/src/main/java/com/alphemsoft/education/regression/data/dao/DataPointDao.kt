@@ -31,4 +31,9 @@ interface DataPointDao: BaseDao<SheetEntry> {
         WHERE fk_sheet_id = :sheetId
     """)
     fun findDataPointsFlowById(sheetId: Long): Flow<List<SheetEntry>>
+
+    @Query("""
+        SELECT MAX(sheet_entry_id) FROM sheet_entries
+    """)
+    suspend fun findMaxId(): Long?
 }

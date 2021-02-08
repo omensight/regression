@@ -21,4 +21,7 @@ interface SheetDao: BaseDao<Sheet> {
 
     @Query("SELECT COUNT(*) FROM sheets")
     fun getSheetCount(): Flow<Long>
+
+    @Query("SELECT MAX(sheet_id) FROM sheets")
+    suspend fun findMaxId(): Long?
 }
