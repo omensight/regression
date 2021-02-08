@@ -116,10 +116,16 @@
     <string name="help">Help</string>
     <string name="help_description_import_data">If you have any doubt, you can watch the next video: https://youtu.be/p-5LVxmSdIU</string>
     <string name="help_description_export_data">Export your data to your prefer format.</string>
+    <string name="about_us">About us</string>
+    <string name="copyright_advice" translatable="false">Copyright 2017–2021</string>
+    <string name="key_preference_about_us" translatable="false">key_preference_copyright_advice</string>
+    <string name="key_preference_rate_us" translatable="false">key_preference_rate_us</string>
+    <string name="rate_us">Rate us</string>
 
     <string-array name="regression_types">
         <item>Linear</item>
         <item>Power</item>
     </string-array>
+    <string name="rate_us_summary">Rate us on Google Play</string>
 
 </resources>

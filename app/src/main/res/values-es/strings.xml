@@ -120,4 +120,7 @@
     <string name="help">Ayuda</string>
     <string name="help_description_import_data">Si tienes alguna duda, puedes ver el siguiente video: https://youtu.be/LgqwZ5lzJSQ</string>
     <string name="help_description_export_data">Exporta los datos al formato de tu preferencia.</string>
+    <string name="about_us">Acerca de</string>
+    <string name="rate_us">Calificación</string>
+    <string name="rate_us_summary">Danos una calificación en Google Play</string>
 </resources>

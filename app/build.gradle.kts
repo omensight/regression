@@ -18,7 +18,7 @@ android {
         applicationId = "com.alphemsoft.education.regression"
         minSdkVersion(21)
         targetSdkVersion(30)
-        versionCode = 30
+        versionCode = 31
         versionName = "3.0.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -165,6 +165,9 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:26.4.0"))
     implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.firebase:firebase-analytics-ktx")
+
+    //Play core
+    implementation("com.google.android.play:core-ktx:1.8.1")
 }
 
 val secretConfigFile = file ("$projectDir/secret_config.gradle")
