@@ -28,7 +28,6 @@ data class Subscription(
         val calendar = Calendar.getInstance()
         calendar.time = subscriptionTime
         return when (subscriptionPlan) {
-
             BillingHelper.SubscriptionPlan.MONTHLY_SUBSCRIPTION -> {
                 calendar.add(Calendar.MONTH, 1)
                 calendar.time
