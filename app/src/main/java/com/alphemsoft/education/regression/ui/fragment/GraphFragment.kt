@@ -10,6 +10,7 @@ import com.alphemsoft.education.regression.R
 import com.alphemsoft.education.regression.data.regression.RegressionFactory
 import com.alphemsoft.education.regression.databinding.FragmentGraphBinding
 import com.alphemsoft.education.regression.ui.base.BaseFragment
+import com.alphemsoft.education.regression.util.GraphDecimalValueFormatter
 import com.alphemsoft.education.regression.viewmodel.ResultViewModel
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.LegendEntry
@@ -17,6 +18,7 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.LargeValueFormatter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -82,10 +84,14 @@ class GraphFragment : AbstractGraphFragment() {
 
                 }
                 val lineData = LineData()
-
                 lineData.addDataSet(originalLineDataSet)
                 lineData.addDataSet(calculatedDataSet)
+                val graphDecimalValueFormatter = GraphDecimalValueFormatter()
                 dataBinding.lineChartGraph.data = lineData
+                dataBinding.lineChartGraph.xAxis.valueFormatter = graphDecimalValueFormatter
+                dataBinding.lineChartGraph.axisLeft.valueFormatter = graphDecimalValueFormatter
+                dataBinding.lineChartGraph.axisRight.setDrawLabels(false)
+                dataBinding.lineChartGraph.legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
                 dataBinding.lineChartGraph.invalidate()
 
             }
