@@ -31,7 +31,15 @@ class LinearRegression : Regression {
     }
 
     override suspend fun getOriginalDataLine(): LineData {
-        return LineData(R.string.original_data,data.sortedBy { it.first })
+        return LineData(R.string.original_data,data.sortedWith { o1, o2 ->
+            when {
+                o1.first > o2.first -> 1
+                o1.first < o2.first -> -1
+                o2.first == o1.first && o1.second > o2.second -> 1
+                o2.first == o1.first && o1.second < o2.second -> -1
+                else -> 0
+            }
+        })
     }
 
     override suspend fun getResults(decimals: Int): List<Result> {
